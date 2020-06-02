@@ -5,5 +5,11 @@
 ## master
 ##
 
+from Client.src.parse import parse
+from Client.src.network import Network
+import sys
+
 def master():
-    print("here")
+
+    param = parse(sys.argv)
+    print(param)
