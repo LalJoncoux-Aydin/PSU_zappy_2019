@@ -51,7 +51,7 @@ class GameRunner:
     def lookArround(self):
         self.sendMsg("Look")
         self.foodStock -= 7
-        print("Look => ", self.rcvMsg()
+        print("Look => ", self.rcvMsg())
 
     def letsGo(self, info, debug):
         if (debug == False):
