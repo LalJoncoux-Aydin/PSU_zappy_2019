@@ -48,10 +48,20 @@ class GameRunner:
             print (e)
             return (84)
 
+    def lookArround(self):
+        self.sendMsg("Look")
+        self.foodStock -= 7
+        print("Look => ", self.rcvMsg()
+
     def letsGo(self, info, debug):
         if (debug == False):
-            if (self.prepareShit(info) == 84)
+            if (self.prepareShit(info) == 84):
                 return (84)
         self.loadShit()
-        # while (42):
+        print("ok")
+        while (42):
+            self.lookArround()
+            if (self.foodStock < 50):
+                break
+        return (0)
 

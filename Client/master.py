@@ -14,4 +14,4 @@ def master():
 
     if (param == None) : print_help(84)
     player = GameRunner(param["name"])
-    player.letsGo(param, True)
+    return (player.letsGo(param, False))
