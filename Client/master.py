@@ -5,11 +5,13 @@
 ## master
 ##
 
-from Client.src.parse import parse
-from Client.src.network import Network
+from Client.src.parse import parse, print_help
+from Client.src.GameRunner import GameRunner
 import sys
 
 def master():
-
     param = parse(sys.argv)
-    print(param)
+
+    if (param == None) : print_help(84)
+    player = GameRunner(param["name"])
+    player.letsGo(param, True)

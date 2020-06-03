@@ -11,16 +11,16 @@ class Network:
 
     def __init__(self, host, port):
         self.socket = None
-        self.host = host
+        self.hostname = host
         self.port = port
 
     def connectClient(self):
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.socket.connect((self.host, self.port))
+            self.socket.connect((self.hostname, self.port))
             return (0)
         except Exception as e:
-            print("socket: {}".format(e))
+            print (e)
             return (-1)
 
     def disconnectClient(self):
@@ -36,7 +36,7 @@ class Network:
             msg = self.socket.recv(1024).decode()
             return (msg)
         except Exception as e:
-            print(e)
+            print (e)
             return (None)
 
     def sendMsg(self, msg):
@@ -44,5 +44,5 @@ class Network:
             self.socket.send(str.encode(msg + "\n"))
             return (0)
         except Exception as e:
-            print(e)
+            print (e)
             return (-1)

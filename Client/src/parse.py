@@ -26,15 +26,13 @@ def parse(param):
     if (len(param) == 2 and param[1] == "-h") : print_help(param[0], 0)
     if (len(param) == 2 and param[1] == "-help") : print_help(param[0], 0)
     if (len(param) < 5) : print_help(param[0], 84)
-    print(len(param))
-
     i = 1
     while (i < len(param)):
         check = 0
         while (check < len(key)):
             if (key[check].find(param[i]) != - 1):
-                print(key[check], param[i], param[i + 1])
                 infos[matching_key[check]] = param[i + 1]
             check += 1
         i += 1
+    if (infos["name"] == "" or infos["port"] == "") : return None
     return (infos)
