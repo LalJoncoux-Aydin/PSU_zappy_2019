@@ -21,6 +21,13 @@ class GameRunner:
         self.elevationRules = []
         self.currentLvl = 0
         self.stoneName = []
+        self.moveValue = ["forward", "backward", "left", "rigth"]
+        self.moveTools = {
+            "forward" : self.moveForward,
+            "backward" : self.moveBackward,
+            "left" : self.moveLeft,
+            "rigth" : self.moveRight
+        }
 
     def connectClient(self, infos):
         self.socket = Network(infos["host"], int(infos["port"]))
@@ -51,7 +58,33 @@ class GameRunner:
     def lookArround(self):
         self.sendMsg("Look")
         self.foodStock -= 7
-        print("Look => ", self.rcvMsg())
+        tmp = self.rcvMsg()
+        # print(tmp)
+        print(tmp[2:-2])
+
+    def moveRight(self):
+        self.sendMsg("Right")
+        self.foodStock -= 7
+        tmp = self.rcvMsg()
+        print("Right", tmp)
+
+    def moveLeft(self):
+        self.sendMsg("Left")
+        self.foodStock -= 7
+        tmp = self.rcvMsg()
+        print("Left", tmp)
+
+    def moveForward(self):
+        self.sendMsg("Forward")
+        self.foodStock -= 7
+        tmp = self.rcvMsg()
+        print("Forward",tmp)
+
+    def moveBackward(self):
+        self.sendMsg("Backward")
+        self.foodStock -= 7
+        tmp = self.rcvMsg()
+        print("Backward", tmp)
 
     def letsGo(self, info, debug):
         if (debug == False):
@@ -59,9 +92,13 @@ class GameRunner:
                 return (84)
         self.loadShit()
         print("ok")
+        i = 0
         while (42):
             self.lookArround()
-            if (self.foodStock < 50):
+            self.moveTools[self.moveValue[i]]()
+            if (self.foodStock < 0):
                 break
+            i += 1
+            if i > 3 : i = 0
         return (0)
 
