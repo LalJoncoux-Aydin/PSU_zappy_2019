@@ -10,6 +10,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+
 void error(char *msg);
 
 static struct addrinfo *init_addrinfo(char *port)
@@ -38,7 +39,7 @@ static void error_check_prep_server(struct addrinfo *test, int sockfd, int op)
     }
 }
 
-int get_server_socket(char *port)
+int prepare_server_socket(char *port)
 {
     struct addrinfo *res = init_addrinfo(port);
     struct addrinfo *cpy_head = res;

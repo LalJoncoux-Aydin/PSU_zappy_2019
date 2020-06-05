@@ -25,6 +25,20 @@
 #include "command.h"
 #include "tools.h"
 
+enum {
+    AI,
+    GRAPHIC
+};
+
+typedef struct server_s {
+    char *port;
+    char **teams_name;
+    int nbr_max_per_teams;
+    int x;
+    int y;
+    int freq;
+} server_t;
+
 #define MAX_NAME_LENGTH 32
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
@@ -42,7 +56,7 @@ int *tri_force(int a, int b, int c);
 void add_end_file(char *str, char *str_name);
 
 int occurrences_of_char(char c, char *str);
-int server(char *port);
-int get_server_socket(char *port);
+int server(server_t *port);
+int prepare_server_socket(char *port);
 
 #endif /* SERVER_H_ */

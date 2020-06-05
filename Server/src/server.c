@@ -6,11 +6,15 @@
 */
 
 #include "server.h"
-
-command_manager_t command_manger[NBR_OF_COMMAND] =
-    {{"002", cli_logout},
-    {"005", my_send}
-    };
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <poll.h>
+//#include <unistd.h>
+#include "server.h"
 
 /*
 client_t *get_client_by_fd( client_t *head, int fd)
@@ -23,91 +27,87 @@ client_t *get_client_by_fd( client_t *head, int fd)
     return NULL;
 }
 
-static void manage_message(fd_set *master, char *msg, int *tri_force, client_t *head)
-{
-    //int fd_max = tri_force[0];
-    //int sockfd = tri_force[1];
-    int fd_cli = tri_force[2];
-    char *buff = NULL;
 
-    for (int i = 0; i < NBR_OF_COMMAND; i++) {
-        if (msg != NULL && *msg != '\0')
-            buff = str_breaker(msg,' ',1, 0);
-        if (!buff)
-            return;
-        else if (!strcmp(buff, command_manger[i].command)){
-            command_manger[i].func(get_client_by_fd(head, fd_cli), msg);
-            break;
-        }
-    }
-}*/
+*/
 
+/*
+getaddrinfo();
+socket();
+bind();
+listen();
+accept()
+*/
 void add_cli(client_t **head, int new_fd)
 {
     client_t *buff = *head;
-    client_t *buff2;
+    char *type = malloc(50);
 
+    memset(type,0 , 50);
+    read(new_fd, type, 50);
     if (!(*head)) {
         *head = malloc(sizeof(client_t));
         (*head)->fd = new_fd;
         (*head)->next = NULL;
-        (*head)->teams_name = NULL;
-        (*head)->prev = NULL;
+        (*head)->type = strcmp(type, "type ai") ? GRAPHIC : AI;
+        free(type);
         return;
     }
     for (; buff->next != NULL ; buff = buff->next );
     buff->next = malloc(sizeof(client_t));
-    buff2 = buff;
     buff = buff->next;
-    buff->prev = buff2;
     buff->fd = new_fd;
-    buff->teams_name = NULL;
+    buff->type = strcmp(type, "type ai") ? GRAPHIC : AI;
     buff->next = NULL;
+    free(type);
     return;
 }
+static void manage_message(struct pollfd *pfds, char *msg, int *tri_force)
+{
+    int fd_count = tri_force[0];
+    int sockfd = tri_force[1];
+    int sender_fd = tri_force[2];
 
-static void manage_event(fd_set *master, int sockfd, int i, int *fd_max)
+    for (int j = 0; j < fd_count; j++)
+        if (pfds[j].fd != sockfd && pfds[j].fd != sender_fd)
+            if (send(pfds[j].fd, msg, strlen(msg), 0) == -1)
+                perror("send");
+}
+
+static void manage_event(struct pollfd *pfds, int *fd_count, int sockfd, int *fd_size)
 {
     struct sockaddr_storage cli_addr;
     socklen_t addrlen = sizeof(struct sockaddr_storage);
     int nbytes;
-    static client_t *head = NULL;
     char buff[256 * 4];
-    int new_fd;
 
-    if (i == sockfd) {
-        if ((new_fd = accept(sockfd, (struct sockaddr *)&cli_addr, &addrlen)) == -1)
-            error("accept failed that's unnacceptable");
-        FD_SET(new_fd, master);
-        *fd_max = new_fd > *fd_max ? new_fd : *fd_max;
-        add_cli(&head, new_fd);
-    } else {
-        if ((nbytes = recv(i, buff, sizeof(buff), 0)) <= 0) {
-            close(i);
-            FD_CLR(i, master);
+    for (int i = 0; i < *fd_count; i++)
+        if (pfds[i].revents & POLLIN) {
+            if (pfds[i].fd == sockfd)
+                add_new_fd(&pfds, accept(sockfd, (struct sockaddr *)&cli_addr,
+                &addrlen), fd_count, fd_size);
+            else {
+                nbytes = recv(pfds[i].fd, buff, sizeof(buff), 0);
+                if (nbytes <= 0)
+                    del_from_pfds(pfds, i, fd_count);
+                buff[nbytes] = '\0';
+                //manage_message(pfds, buff,
+                //tri_force(*fd_count, sockfd, pfds[i].fd));
+            }
         }
-        buff[nbytes] = '\0';
-        //manage_message(master, buff,tri_force(*fd_max, sockfd, i), head);
-    }
 }
 
-int server(char *port)
+int server(server_t *server_v)
 {
-    int sockfd = get_server_socket(port);
-    int fd_max;
-    fd_set master;
-    fd_set read_fds;
+    int sockfd = prepare_server_socket(server_v->port);
+    int fd_count = 1;
+    int fd_size = 5;
+    struct pollfd *pfds = malloc(sizeof(struct pollfd) * fd_size);
 
-    FD_ZERO(&master);
-    FD_ZERO(&read_fds);
-    FD_SET(sockfd, &master);
-    fd_max = sockfd;
+    pfds[0].fd = sockfd;
+    pfds[0].events = POLLIN;
     while (1) {
-        read_fds = master;
-        if (select(fd_max + 1, &read_fds, NULL, NULL, NULL) == -1)
-            error("select");
-        for (int i = 0; i <= fd_max; i++)
-            if (FD_ISSET(i, &read_fds))
-                manage_event(&master, sockfd, i, &fd_max);
+        if (poll(pfds, fd_count, -1) == -1)
+            error("poll failed");
+        manage_event(pfds, &fd_count, sockfd, &fd_size);
     }
 }

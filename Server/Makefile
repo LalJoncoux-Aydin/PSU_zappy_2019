@@ -12,7 +12,8 @@ SRC		=	get_socket_server.c \
 			tool.c 				\
 			command.c     		\
 			server.c 			\
-			str_breaker.c
+			str_breaker.c 		\
+			poll_tool.c
 
 SRC_FILE	=	$(addprefix ./src/, $(SRC))
 
