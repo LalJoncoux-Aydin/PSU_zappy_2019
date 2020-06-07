@@ -12,7 +12,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <poll.h>
 //#include <unistd.h>
 #include "server.h"
 
@@ -42,13 +41,15 @@ void add_cli(client_t **head, int new_fd)
     client_t *buff = *head;
     char *type = malloc(50);
 
-    memset(type,0 , 50);
+    printf("LOL\n");
+    memset(type, 0 , 50);
     read(new_fd, type, 50);
     if (!(*head)) {
         *head = malloc(sizeof(client_t));
         (*head)->fd = new_fd;
         (*head)->next = NULL;
         (*head)->type = strcmp(type, "type ai") ? GRAPHIC : AI;
+        printf("%d",(*head)->type);
         free(type);
         return;
     }
@@ -59,8 +60,10 @@ void add_cli(client_t **head, int new_fd)
     buff->type = strcmp(type, "type ai") ? GRAPHIC : AI;
     buff->next = NULL;
     free(type);
+    printf("%d",buff->type);
     return;
 }
+
 static void manage_message(struct pollfd *pfds, char *msg, int *tri_force)
 {
     int fd_count = tri_force[0];
@@ -79,12 +82,15 @@ static void manage_event(struct pollfd *pfds, int *fd_count, int sockfd, int *fd
     socklen_t addrlen = sizeof(struct sockaddr_storage);
     int nbytes;
     char buff[256 * 4];
+    client_t *head = NULL;
 
     for (int i = 0; i < *fd_count; i++)
         if (pfds[i].revents & POLLIN) {
-            if (pfds[i].fd == sockfd)
+            if (pfds[i].fd == sockfd) {
                 add_new_fd(&pfds, accept(sockfd, (struct sockaddr *)&cli_addr,
                 &addrlen), fd_count, fd_size);
+                add_cli(&head, pfds[i].fd);
+            }
             else {
                 nbytes = recv(pfds[i].fd, buff, sizeof(buff), 0);
                 if (nbytes <= 0)

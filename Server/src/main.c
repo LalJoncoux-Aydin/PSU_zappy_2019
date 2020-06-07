@@ -34,8 +34,7 @@ int manage_op(char op, char *opt_arg, server_t *server, char *limit)
             server->nbr_max_per_teams = atoi(opt_arg);
             break;
     }
-    if (server->port == -1)
-        exit(84);
+    return 0;
 }
 
 int main(int ac, char **av, char **env)

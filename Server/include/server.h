@@ -21,6 +21,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <poll.h>
 //Private include
 #include "command.h"
 #include "tools.h"
@@ -54,6 +55,9 @@ void error(char *msg);
 int *tri_force(int a, int b, int c);
 
 void add_end_file(char *str, char *str_name);
+
+void add_new_fd(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size);
+void del_from_pfds(struct pollfd pfds[], int i, int *fd_count);
 
 int occurrences_of_char(char c, char *str);
 int server(server_t *port);
