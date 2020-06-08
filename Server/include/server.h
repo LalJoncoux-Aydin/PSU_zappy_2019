@@ -8,6 +8,7 @@
 #ifndef SERVER_H_
 #define SERVER_H_
 
+#define DEBUG 1
 //Standard include
 #include <stddef.h>
 #include <stdlib.h>
@@ -22,21 +23,34 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <poll.h>
+#include <stdio.h>
+#include "client.h"
 //Private include
-#include "command.h"
+//#include "command.h"
 #include "tools.h"
 
 enum {
     AI,
     GRAPHIC
 };
+typedef struct tile_s {
+    int q0;
+    int q1;
+    int q2;
+    int q3;
+    int q4;
+    int q5;
+    int q6;
+} tile_t;
 
 typedef struct server_s {
+    int server_fd;
     char *port;
     char **teams_name;
     int nbr_max_per_teams;
     int x;
     int y;
+    tile_t **map;
     int freq;
 } server_t;
 
@@ -57,8 +71,10 @@ int *tri_force(int a, int b, int c);
 void add_end_file(char *str, char *str_name);
 
 void add_new_fd(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size);
-void del_from_pfds(struct pollfd pfds[], int i, int *fd_count);
+void del_from_pfds(struct pollfd pfds[], int i, int *fd_count, client_t **head);
+void del_cli(client_t **head, int fd);
 
+int get_rand_num(int min, int max);
 int occurrences_of_char(char c, char *str);
 int server(server_t *port);
 int prepare_server_socket(char *port);

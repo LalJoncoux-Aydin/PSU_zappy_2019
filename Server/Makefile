@@ -10,6 +10,7 @@ CPPFLAGS	=	-iquote include
 SRC		=	get_socket_server.c \
 			main.c				\
 			tool.c 				\
+			tool2.c 				\
 			command.c     		\
 			server.c 			\
 			str_breaker.c 		\

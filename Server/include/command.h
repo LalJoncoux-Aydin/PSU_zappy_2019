@@ -16,19 +16,27 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-
+#include "server.h"
 #include "client.h"
 #include "tools.h"
 // 001 LOGIN : NAME OF THE USER
-#define NBR_OF_COMMAND 14
 
 typedef struct command_manager_s
 {
     char *command;
-    void (*func)(client_t *cli, char *command);
+    void (*func)(int fd_cli, client_t *clis, server_t *server ,char *command);
 } command_manager_t;
 
-void my_send(client_t *cli, char *msg);
-void cli_logout(client_t *cli, char *none);
+#define NBR_OF_COMMAND 2
+
+void msz(int fd_cli, client_t *clis, server_t *server ,char *command);
+void bct(int fd_cli, client_t *clis, server_t *server ,char *command);
+
+static command_manager_t commands[NBR_OF_COMMAND] = {
+    {"msz", msz},
+    {"bct", bct},
+//    {"", }
+};
+
 
 #endif

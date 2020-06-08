@@ -6,6 +6,25 @@
 #include <getopt.h>
 #include <unistd.h>
 
+int create_map(server_t *server_v)
+{
+    if (server_v->x < 0 || server_v->y < 0)
+        return -1;
+    server_v->map = malloc(sizeof(tile_t *) * (server_v->y + 1));
+    for (int y = 0; y < server_v->y; y++) {
+        server_v->map[y] = malloc(sizeof(tile_t) * (server_v->x + 1));
+        for (int x = 0; x < server_v->x; x++) {
+            server_v->map[y][x].q0 = get_rand_num(0, 6);
+            server_v->map[y][x].q1 = get_rand_num(0, 6);
+            server_v->map[y][x].q2 = get_rand_num(0, 6);
+            server_v->map[y][x].q3 = get_rand_num(0, 6);
+            server_v->map[y][x].q4 = get_rand_num(0, 6);
+            server_v->map[y][x].q5 = get_rand_num(0, 6);
+            server_v->map[y][x].q6 = get_rand_num(0, 6);
+        }
+    }
+    return 0;
+}
 //norm ou pas nom?
 int manage_op(char op, char *opt_arg, server_t *server, char *limit)
 {
@@ -39,7 +58,7 @@ int manage_op(char op, char *opt_arg, server_t *server, char *limit)
 
 int main(int ac, char **av, char **env)
 {
-    char *buf = NULL;
+    //char *buf = NULL;
     server_t *server_v = malloc(sizeof(server_t));
     int op;
 
@@ -54,6 +73,8 @@ int main(int ac, char **av, char **env)
             break;
         manage_op(op, optarg, server_v, env[0]);
     }
+    if (create_map(server_v) == -1)
+        return(84);
     server(server_v);
     return 0;
 }
