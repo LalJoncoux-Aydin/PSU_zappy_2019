@@ -14,13 +14,13 @@ int create_map(server_t *server_v)
     for (int y = 0; y < server_v->y; y++) {
         server_v->map[y] = malloc(sizeof(tile_t) * (server_v->x + 1));
         for (int x = 0; x < server_v->x; x++) {
-            server_v->map[y][x].q0 = get_rand_num(0, 6);
-            server_v->map[y][x].q1 = get_rand_num(0, 6);
-            server_v->map[y][x].q2 = get_rand_num(0, 6);
-            server_v->map[y][x].q3 = get_rand_num(0, 6);
-            server_v->map[y][x].q4 = get_rand_num(0, 6);
-            server_v->map[y][x].q5 = get_rand_num(0, 6);
-            server_v->map[y][x].q6 = get_rand_num(0, 6);
+            server_v->map[y][x].q0 = get_rand_num(0, 6, 50);
+            server_v->map[y][x].q1 = get_rand_num(0, 6, 50);
+            server_v->map[y][x].q2 = get_rand_num(0, 6, 50);
+            server_v->map[y][x].q3 = get_rand_num(0, 6, 50);
+            server_v->map[y][x].q4 = get_rand_num(0, 6, 50);
+            server_v->map[y][x].q5 = get_rand_num(0, 6, 50);
+            server_v->map[y][x].q6 = get_rand_num(0, 6, 50);
         }
     }
     return 0;

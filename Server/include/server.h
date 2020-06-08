@@ -74,7 +74,7 @@ void add_new_fd(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size);
 void del_from_pfds(struct pollfd pfds[], int i, int *fd_count, client_t **head);
 void del_cli(client_t **head, int fd);
 
-int get_rand_num(int min, int max);
+int get_rand_num(int min, int max, int percent);
 int occurrences_of_char(char c, char *str);
 int server(server_t *port);
 int prepare_server_socket(char *port);
