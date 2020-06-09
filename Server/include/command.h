@@ -27,16 +27,21 @@ typedef struct command_manager_s
     void (*func)(int fd_cli, client_t *clis, server_t *server ,char *command);
 } command_manager_t;
 
-#define NBR_OF_COMMAND 3
+#define NBR_OF_COMMAND 4
 
 void msz(int fd_cli, client_t *clis, server_t *server ,char *command);
 void bct(int fd_cli, client_t *clis, server_t *server ,char *command);
 void mct(int fd_cli, client_t *clis, server_t *server ,char *command);
+void tna(int fd_cli, client_t *clis, server_t *server ,char *command);
+
+
+void pnw(client_t *cli);
 
 static command_manager_t commands[NBR_OF_COMMAND] = {
     {"msz", msz},
     {"bct", bct},
     {"mct", mct},
+    {"tna", tna},
 //    {"", }
 };
 

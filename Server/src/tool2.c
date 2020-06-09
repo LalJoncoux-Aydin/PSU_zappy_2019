@@ -10,7 +10,7 @@
 
 void error_s(int fd)
 {
-    char *msg =strdup("ko\n");
+    char *msg = strdup("ko\n");
     send(fd , msg, strlen(msg), 0);
     free(msg);
 }

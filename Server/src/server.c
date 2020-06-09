@@ -16,6 +16,7 @@
 #include "server.h"
 #include "client.h"
 #include "command.h"
+static int nbr_player = 0;
 /*
 client_t *get_client_by_fd( client_t *head, int fd)
 {
@@ -54,22 +55,58 @@ int str_in_str(char *needle, char *haystackt)
 int return_type(char *str)
 {
     if (DEBUG)
-        printf("CLI type : $$ %s $$ created\n", str);
+        printf("CLI of type %s connected\n",
+        (!(strlen(str) < 7) && (str[5] == 'a' && str[6] == 'i'))? "AI" : "GRAPHIC");
     if (strlen(str) < 7)
         return -1;
     if (str[5] == 'a' && str[6] == 'i')
         return AI;
     return GRAPHIC;
 }
+void add_cli_spe(client_t *cli, server_t *server_v, char *team)
+{
+    int i = 0;
 
-void add_cli(client_t **head, int new_fd)
+    if (cli->type == GRAPHIC)
+        return;
+    cli->ai = malloc(sizeof(client_t));
+    cli->ai->x = get_rand_num(0, server_v->x, 100);
+    cli->ai->y = get_rand_num(0, server_v->y, 100);
+    if (cli->ai->y > server_v->y / 2)
+        cli->ai->orientation = NORTH;
+    else
+        cli->ai->orientation = SOUTH;
+    cli->ai->player_number = nbr_player++;
+    for (i = 0; server_v->teams_name[i] ; i++) {
+        if (str_in_str(server_v->teams_name[i],team)){
+            printf("<->%s<->%s<->\n",server_v->teams_name[i], team);
+            printf("VICTOIRE\n");
+            cli->ai->team = strdup(team);
+            break;
+        }
+    }
+    cli->ai->level = 0;
+    if (!server_v->teams_name[i]) {
+        printf("%s\n",team);
+        printf("ai teams  : %s\n->not found error\n", team);
+        error_s(cli->fd);
+    }
+    pnw(cli);
+}
+
+void add_cli(client_t **head, int new_fd, server_t *server_v)
 {
     client_t *buff = *head;
     client_t *buff_prev = NULL;
     char *type = malloc(50);
+    char *team = malloc(50);
+    int size = 0;
 
     memset(type, 0 , 50);
+    memset(team, 0 , 50);
     recv(new_fd, type, 50, 0);
+    size = recv(new_fd, team, 50, 0);
+    team[size -1] = '\0';
     if (!(*head)) {
         (*head) = malloc(sizeof(client_t));
         (*head)->fd = new_fd;
@@ -77,7 +114,7 @@ void add_cli(client_t **head, int new_fd)
         (*head)->next = NULL;
         (*head)->type = return_type(type);
         free(type);
-        return;
+        return add_cli_spe((*head),server_v, team);
     }
     for (; buff->next != NULL ; buff = buff->next );
     buff->next = malloc(sizeof(client_t));
@@ -88,7 +125,7 @@ void add_cli(client_t **head, int new_fd)
     buff->next = NULL;
     buff->prev = buff_prev;
     free(type);
-    return;
+    return  add_cli_spe(buff,server_v, team);
 }
 
 static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *server)
@@ -171,7 +208,7 @@ static void manage_event(fd_set *master,server_t *server_v, int i, int *fd_max)
             error("accept failed that's unnacceptable");
         FD_SET(new_fd, master);
         *fd_max = new_fd > *fd_max ? new_fd : *fd_max;
-        add_cli(&head, new_fd);
+        add_cli(&head, new_fd, server_v);
         //printf("CLi %d added\n", head->fd);
     } else {
         if ((nbytes = recv(i, buff, sizeof(buff), 0)) <= 0) {

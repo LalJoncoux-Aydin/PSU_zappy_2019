@@ -66,6 +66,7 @@ clientsNb is the number of authorized clients per team\n\t\
 freq is the reciprocal of time unit for execution of actions\n"
 
 void error(char *msg);
+void error_s(int fd);
 int *tri_force(int a, int b, int c);
 
 void add_end_file(char *str, char *str_name);
