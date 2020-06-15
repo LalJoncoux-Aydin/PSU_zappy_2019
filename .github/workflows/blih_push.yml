@@ -35,4 +35,5 @@ jobs:
         git config --global user.email "lal.joncoux-aydin@epitech.eu"
         git config --global user.name "Lal Joncoux-Aydin - Github"
         git remote add blih "git@git.epitech.eu:/lal.joncoux-aydin@epitech.eu/`echo $GITHUB_REPOSITORY | cut -d "/" -f 2`"
+        git pull
         git push blih master
