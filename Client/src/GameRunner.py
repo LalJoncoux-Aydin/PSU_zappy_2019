@@ -7,10 +7,9 @@
 
 from random import randint
 from enum import Enum
+import json
 
 from Client.src.network import Network
-
-import json
 
 class GameRunner:
 
@@ -30,6 +29,9 @@ class GameRunner:
             "rigth" : self.moveRight
         }
         self.inventory = []
+
+    def disconnect(self):
+        self.socket.disconnect()
 
     def connectClient(self, infos):
         self.socket = Network(infos["host"], int(infos["port"]))
@@ -98,7 +100,18 @@ class GameRunner:
         self.inventory[minionsNb]["Food"] -= 7
         tmp = self.rcvMsg()
         # print(tmp)
+        self.sendMsg(self.buildMsg("Take object", minionsNb))
         print(tmp[2:-2])
+
+    def fork(self):
+        self.sendMsg(self.buildMsg("Connect_nbr", 0))
+        if (int(self.rcvMsg()) >= self.max_player_id):
+            self.sendMsg(self.buildMsg("Fork", 0))
+
+    def startIncantation(self, minionsNb):
+        if (self.inventory[minionsNb]["Food"] < 350): return
+        self.sendMsg(self.buildMsg("Incantation", minionsNb))
+        self.inventory[minionsNb]["Food"] -= 300
 
     def moveRight(self, minionsNb):
         self.sendMsg(self.buildMsg("Right", minionsNb))
