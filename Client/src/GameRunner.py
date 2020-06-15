@@ -17,10 +17,11 @@ class GameRunner:
     def __init__(self, team_name):
         self.socket = None
         self.team_name = team_name
-        self.foodStock = 100
+        self.team_id = 0
+        self.max_player_id = 0
         self.elevationRules = []
         self.currentLvl = 0
-        self.stoneName = []
+        self.stoneNames = []
         self.moveValue = ["forward", "backward", "left", "rigth"]
         self.moveTools = {
             "forward" : self.moveForward,
@@ -28,6 +29,7 @@ class GameRunner:
             "left" : self.moveLeft,
             "rigth" : self.moveRight
         }
+        self.inventory = []
 
     def connectClient(self, infos):
         self.socket = Network(infos["host"], int(infos["port"]))
@@ -39,50 +41,86 @@ class GameRunner:
     def rcvMsg(self):
         return (self.socket.rcvMsg())
 
+    def buildMsg(self, message, minionsNb):
+        return str(self.team_id) + "-" + str(minionsNb) + " " + message
+
+    def initInventory(self):
+        tmp = {}
+        for stone in self.stoneNames:
+            tmp[stone] = 0
+        tmp["Food"] = 1000
+        self.inventory.append(tmp)
+
     def loadShit(self):
         file = open("./rules/rules.json", "r")
         data = json.load(file)
         self.elevationRules = data["lvlUpRules"]
-        self.stoneName = data["stoneName"]
+        self.stoneNames = data["stoneName"]
+        self.initInventory()
+
+    def prepare(self):
+        self.sendMsg("\"type ai\n")
+        self.rcvMsg()
+        self.sendMsg("\"team " + self.team_name + "\"")
+        self.team_id = int(self.rcvMsg())
+
+    def checkElevation(self):
+        listLvlUp = []
+        i = 0
+        while i <= self.max_player_id:
+            lvl = 0
+            for lvl in self.elevationRules:
+                points = 0
+                try:
+                    for name in self.stoneNames:
+                        if (self.inventory[i][name] >= lvl[name]) : points += 1
+                    if points == len(self.stoneNames):
+                        listLvlUp.append({"minionsID" : i, "minionsElev" : lvl})
+                except:
+                    pass
+                lvl += 1
+                self.inventory[i]
+            i += 1
+        return (listLvlUp)
 
     def prepareShit(self, info):
         try:
             if (self.connectClient(info) == -1):
                 return (84)
-            self.sendMsg(self.team_name)
+            self.prepare()
             return (0)
         except Exception as e:
             print (e)
             return (84)
 
-    def lookArround(self):
-        self.sendMsg("Look")
-        self.foodStock -= 7
+    def lookArround(self, minionsNb):
+        self.sendMsg(self.buildMsg("Look", minionsNb))
+        self.inventory[minionsNb]["Food"] -= 7
         tmp = self.rcvMsg()
         # print(tmp)
         print(tmp[2:-2])
 
-    def moveRight(self):
-        self.sendMsg("Right")
-        self.foodStock -= 7
+    def moveRight(self, minionsNb):
+        self.sendMsg(self.buildMsg("Right", minionsNb))
+        self.inventory[minionsNb]["Food"] -= 7
         tmp = self.rcvMsg()
         print("Right", tmp)
 
-    def moveLeft(self):
-        self.sendMsg("Left")
-        self.foodStock -= 7
+    def moveLeft(self, minionsNb):
+        self.sendMsg(self.buildMsg("Left", minionsNb))
+        self.inventory[minionsNb]["Food"] -= 7
         tmp = self.rcvMsg()
         print("Left", tmp)
 
-    def moveForward(self):
-        self.sendMsg("Forward")
-        self.foodStock -= 7
+    def moveForward(self, minionsNb):
+        self.sendMsg(self.buildMsg("Forward", minionsNb))
+        self.inventory[minionsNb]["Food"] -= 7
         tmp = self.rcvMsg()
         print("Forward",tmp)
 
-    def moveBackward(self):
-        self.sendMsg("Backward")
-        self.foodStock -= 7
+    def moveBackward(self, minionsNb):
+        self.sendMsg(self.buildMsg("Backward", minionsNb))
+        self.inventory[minionsNb]["Food"] -= 7
         tmp = self.rcvMsg()
         print("Backward", tmp)
 
@@ -91,13 +129,11 @@ class GameRunner:
             if (self.prepareShit(info) == 84):
                 return (84)
         self.loadShit()
-        print("ok")
         i = 0
         while (42):
-            self.lookArround()
+            self.lookArround(0)
             self.moveTools[self.moveValue[i]]()
-            if (self.foodStock < 0):
-                break
+            if (self.inventory[0]["Food"] < 0): break
             i += 1
             if i > 3 : i = 0
         return (0)
