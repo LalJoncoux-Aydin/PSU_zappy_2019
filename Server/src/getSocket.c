@@ -5,13 +5,7 @@
 ** get_socket.c
 */
 
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-
-void error(char *msg);
+#include "getSocket.h"
 
 static struct addrinfo *init_addrinfo(char *port)
 {
@@ -39,13 +33,16 @@ static void error_check_prep_server(struct addrinfo *test, int sockfd, int op)
     }
 }
 
-int prepare_server_socket(char *port)
+int get_server_socket(char *port)
 {
-    struct addrinfo *res = init_addrinfo(port);
-    struct addrinfo *cpy_head = res;
+    struct addrinfo *res;
+    struct addrinfo *cpy_head;
     int sockfd;
     int yes = 1;
 
+    res = init_addrinfo(port);
+    if (res == NULL)
+        return -1;
     for (cpy_head = res; cpy_head != NULL; cpy_head = cpy_head->ai_next) {
         if((sockfd = socket(cpy_head->ai_family, cpy_head->ai_socktype, cpy_head->ai_protocol)) == -1)
             continue;

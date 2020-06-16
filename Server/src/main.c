@@ -1,12 +1,6 @@
 #include "server.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <getopt.h>
-#include <unistd.h>
 
-int create_map(server_t *server_v)
+static int create_map(server_t *server_v)
 {
     if (server_v->x < 0 || server_v->y < 0)
         return -1;
@@ -26,7 +20,7 @@ int create_map(server_t *server_v)
     return 0;
 }
 //norm ou pas nom?
-int manage_op(char op, char *opt_arg, server_t *server, char *limit)
+static int manage_op(char op, char *opt_arg, server_t *server, char *limit)
 {
     int i = 0;
 
@@ -58,23 +52,29 @@ int manage_op(char op, char *opt_arg, server_t *server, char *limit)
 
 int main(int ac, char **av, char **env)
 {
-    //char *buf = NULL;
-    server_t *server_v = malloc(sizeof(server_t));
-    int op;
+    server_t *server_v = NULL;
+    int op = 0;
 
     if ((ac > 1) && (!strcmp(av[1], "-h")  || !strcmp(av[1], "-help"))) {
         printf("%s", HELP);
         return 0;
     }
-    server_v->teams_name = malloc(sizeof(char *)* ac);
-    while (1) {
+    printf("Init server...\n");
+    server_v = initServer(server_v);
+    if (server_v == NULL)
+      return 84;
+    while (op != -1) {
         op = getopt(ac, av, "p:x:y:c:f:n:");
         if (op == -1)
             break;
         manage_op(op, optarg, server_v, env[0]);
     }
+    printf("Get all arguments DONE\n");
     if (create_map(server_v) == -1)
         return(84);
-    server(server_v);
+    printf("Create map DONE\n");
+    printf("Launch server...\n");
+    if (server(server_v) == 84)
+      return 84;
     return 0;
 }

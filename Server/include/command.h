@@ -16,9 +16,10 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include "server.h"
-#include "client.h"
+
 #include "tools.h"
+#include "server_struct.h"
+#include "client_struct.h"
 // 001 LOGIN : NAME OF THE USER
 
 typedef struct command_manager_s
