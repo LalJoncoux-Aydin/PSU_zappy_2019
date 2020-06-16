@@ -10,6 +10,8 @@ NAME_SERVER	=	zappy_server
 
 all: server ia
 
+unzip:	unzip build.zip
+
 server: 
 	make -C Server/
 	mv Server/zappy_server .
