@@ -39,6 +39,14 @@ listen();
 accept()
 */
 
+int eq_str(char *str1, char *str2)
+{
+    for (int i = 0; str1[i] && str2[i]; i++)
+        if (str1[i] != str2[i])
+            return 0;
+    return 1;
+}
+
 int str_in_str(char *needle, char *haystackt)
 {
     for (int i = 0; haystackt[i] ; i++) {
@@ -77,6 +85,7 @@ void add_cli_spe(client_t *cli, server_t *server_v, char *team)
     else
         cli->ai->orientation = SOUTH;
     cli->ai->player_number = nbr_player++;
+    TEAMS :
     for (i = 0; server_v->teams_name[i] ; i++) {
         if (str_in_str(server_v->teams_name[i],team)){
             printf("<->%s<->%s<->\n",server_v->teams_name[i], team);
@@ -90,6 +99,10 @@ void add_cli_spe(client_t *cli, server_t *server_v, char *team)
         printf("%s\n",team);
         printf("ai teams  : %s\n->not found error\n", team);
         error_s(cli->fd);
+        tna(cli->fd, cli, server_v, "error");
+        memset(team, 0 , 50);
+        recv(cli->fd, team, 50, 0);
+        goto TEAMS;
     }
     pnw(cli);
 }
