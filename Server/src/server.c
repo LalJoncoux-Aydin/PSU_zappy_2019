@@ -217,6 +217,7 @@ static void manage_event(fd_set *master,server_t *server_v, int i, int *fd_max)
     int new_fd;
 
     if (i == server_v->server_fd) {
+        printf("new cli\n");
         if ((new_fd = accept( server_v->server_fd, (struct sockaddr *)&cli_addr, &addrlen)) == -1)
             error("accept failed that's unnacceptable");
         FD_SET(new_fd, master);
