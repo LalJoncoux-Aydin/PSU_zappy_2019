@@ -31,20 +31,32 @@ class GameRunner:
         self.inventory = []
 
     def disconnect(self):
-        self.socket.disconnect()
+        try:
+            self.socket.disconnect()
+        except:
+            exit(0)
 
     def connectClient(self, infos):
-        self.socket = Network(infos["host"], int(infos["port"]))
-        return (self.socket.connectClient())
+        try:
+            self.socket = Network(infos["host"], int(infos["port"]))
+            return (self.socket.connectClient())
+        except:
+            exit(0)
 
     def sendMsg(self, msg):
-        self.socket.sendMsg(msg)
+        try:
+            self.socket.sendMsg(msg)
+        except:
+            exit(0)
 
     def rcvMsg(self):
-        return (self.socket.rcvMsg())
+        try:
+            return (self.socket.rcvMsg())
+        except:
+            exit(0)
 
     def buildMsg(self, message, minionsNb):
-        return str(self.team_id) + "-" + str(minionsNb) + " " + message
+        return str(str(minionsNb) + " " + message)
 
     def initInventory(self):
         tmp = {}
