@@ -24,7 +24,7 @@ int server(server_t *server_v)
     fd_set master;
     fd_set read_fds;
 
-    server_v->server_fd = get_server_socket(server_v->port);
+    server_v->server_fd = getSocket(server_v->port);
     if (server_v->server_fd == -1)
         return 84;
     FD_ZERO(&master);

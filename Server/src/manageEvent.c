@@ -33,17 +33,27 @@ static void add_cli_spe(client_t *cli, server_t *server_v, char *team)
 
 static void add_cli(client_t **head, int new_fd, server_t *server_v)
 {
-    client_t *buff = *head;
+    client_t *buff = NULL;
     client_t *buff_prev = NULL;
-    char *type = malloc(50);
-    char *team = malloc(50);
+    char *type = NULL;
+    char *team = NULL;
     int size = 0;
 
+    buff = *head;
+    type = malloc(sizeof(char) * 50);
+    if (type == NULL)
+      error("Malloc failed");
+    team = malloc(sizeof(char) * 50);
+    if (team == NULL)
+      error("Malloc failed");
+    printf("Start memset\n");
     memset(type, 0 , 50);
-    memset(team, 0 , 50);
     recv(new_fd, type, 50, 0);
-    size = recv(new_fd, team, 50, 0);
-    team[size -1] = '\0';
+    memset(team, 0 , 50);
+    recv(new_fd, team, 50, 0);
+    printf("caca\n");
+    team[10 -1] = '\0';
+    printf("caca\n");
     if (!(*head)) {
         (*head) = malloc(sizeof(client_t));
         (*head)->fd = new_fd;
@@ -62,6 +72,7 @@ static void add_cli(client_t **head, int new_fd, server_t *server_v)
     buff->next = NULL;
     buff->prev = buff_prev;
     free(type);
+    printf("end add cli");
     return  add_cli_spe(buff,server_v, team);
 }
 
@@ -105,13 +116,18 @@ void manage_event(fd_set *master,server_t *server_v, int i, int *fd_max)
     int new_fd;
 
     if (i == server_v->server_fd) {
+        printf("New cli\n");
         if ((new_fd = accept( server_v->server_fd, (struct sockaddr *)&cli_addr, &addrlen)) == -1)
             error("accept failed that's unnacceptable");
+        printf("??\n");
         FD_SET(new_fd, master);
+        printf("??\n");
         *fd_max = new_fd > *fd_max ? new_fd : *fd_max;
+        printf("??\n");
         add_cli(&head, new_fd, server_v);
         printf("CLIENT ADDED\n");
     } else {
+        printf("Old cli\n");
         if ((nbytes = recv(i, buff, sizeof(buff), 0)) <= 0) {
             del_cli(&head, i);
             close(i);

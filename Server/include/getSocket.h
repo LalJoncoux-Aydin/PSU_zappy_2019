@@ -15,6 +15,6 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-int get_server_socket(char *port);
+int getSocket(char *port);
 
 #endif

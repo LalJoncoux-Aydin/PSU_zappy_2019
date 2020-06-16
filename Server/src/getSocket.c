@@ -33,7 +33,7 @@ static void error_check_prep_server(struct addrinfo *test, int sockfd, int op)
     }
 }
 
-int get_server_socket(char *port)
+int getSocket(char *port)
 {
     struct addrinfo *res;
     struct addrinfo *cpy_head;

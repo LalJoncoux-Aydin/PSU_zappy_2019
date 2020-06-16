@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "client_struct.h"
+#include "getSocket.h"
 
 client_t *get_client_by_fd( client_t *head, int fd);
 
