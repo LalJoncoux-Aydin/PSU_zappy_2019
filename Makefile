@@ -15,7 +15,7 @@ server:
 	mv Server/zappy_server .
 
 ia: 
-	chmod 777 $(NAME_IA)
+	cp zappy_ai.py $(NAME_IA) && chmod 777 $(NAME_IA)
 
 clean:
 	make clean -C  Server/
@@ -24,6 +24,7 @@ clean:
 
 fclean: clean
 	rm -rf $(NAME_SERVER)
+	rm -rf $(NAME_IA)
 
 
 re: fclean all

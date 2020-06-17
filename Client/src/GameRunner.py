@@ -9,14 +9,20 @@ from random import randint
 from enum import Enum
 import json
 
+#---------------------------------------------------------- Remove
+
+import time
+
+#---------------------------------------------------------- Remove
+
 from Client.src.network import Network
 
 class GameRunner:
 
     def __init__(self, team_name):
-        self.socket = None
+        self.socket = []
+        self.info = {}
         self.team_name = team_name
-        self.team_id = 0
         self.max_player_id = 0
         self.elevationRules = []
         self.currentLvl = 0
@@ -32,28 +38,31 @@ class GameRunner:
 
 #--------------------------------------------------------------------------------------------- Network
 
-    def disconnect(self):
+    def disconnectAll(self):
         try:
-            self.socket.disconnect()
+            for socs in self.socket:
+                socs.disconnect()
         except:
             exit(0)
 
     def connectClient(self, infos):
         try:
-            self.socket = Network(infos["host"], int(infos["port"]))
-            return (self.socket.connectClient())
+            self.socket.append(Network(infos["host"], int(infos["port"])))
+            print("connection client 1 => ", self.socket[self.max_player_id].connectClient())
+            print("max_id + len socket", self.max_player_id, len(self.socket))
+            self.max_player_id += 1
         except:
             exit(0)
 
-    def sendMsg(self, msg):
+    def sendMsg(self, msg, minionsNb):
         try:
-            self.socket.sendMsg(msg)
+            self.socket[minionsNb].sendMsg(msg + "\n")
         except:
             exit(0)
 
-    def rcvMsg(self):
+    def rcvMsg(self, minionsNb):
         try:
-            return (self.socket.rcvMsg())
+            return (self.socket[minionsNb].rcvMsg())
         except:
             exit(0)
 
@@ -79,15 +88,17 @@ class GameRunner:
         self.stoneNames = data["stoneName"]
         self.initInventory()
 
-    def prepare(self):
-        self.sendMsg("type ai\n")
-        self.sendMsg("team " + self.team_name)
+    def prepare(self, minionsNb):
+        self.sendMsg("type ai\n", minionsNb)
+        print(self.rcvMsg(minionsNb))
+        self.sendMsg("team " + self.team_name, minionsNb)
+        print(self.rcvMsg(minionsNb))
 
-    def prepareShit(self, info):
+    def prepareShit(self, info, minionsNb):
         try:
             if (self.connectClient(info) == -1):
                 return (84)
-            self.prepare()
+            self.prepare(minionsNb)
             return (0)
         except Exception as e:
             print (e)
@@ -120,7 +131,7 @@ class GameRunner:
         if len(incantationPossibilites) == 0: return
         for incant in incantationPossibilites:
             if (self.inventory[incant["minionsID"]]["Food"] < 350): continue
-            self.sendMsg(self.buildMsg("Incantation", incant["minionsID"]))
+            self.sendMsg(self.buildMsg("Incantation", incant["minionsID"]), incant["minionsID"])
             self.inventory[incant["minionsID"]]["Food"] -= 300
             for name in self.stoneNames:
                 self.inventory[incant["minionsID"]][name] -= self.elevationRules[incant["minionElev"]][name]
@@ -130,50 +141,61 @@ class GameRunner:
 #--------------------------------------------------------------------------------------------- Look
 
     def lookArround(self, minionsNb):
-        self.sendMsg(self.buildMsg("Look", minionsNb))
+        self.sendMsg(self.buildMsg("Look", minionsNb), minionsNb)
         self.inventory[minionsNb]["Food"] -= 7
-        tmp = self.rcvMsg()
+        tmp = self.rcvMsg(minionsNb)
         # print(tmp)
-        self.sendMsg(self.buildMsg("Take object", minionsNb))
+        self.sendMsg(self.buildMsg("Take object", minionsNb), minionsNb)
         print(tmp[2:-2])
 
 #--------------------------------------------------------------------------------------------- Look
 
 #--------------------------------------------------------------------------------------------- Fork
 
-    def fork(self):
-        self.sendMsg(self.buildMsg("Connect_nbr", 0))
-        if (int(self.rcvMsg()) >= self.max_player_id):
-            self.sendMsg(self.buildMsg("Fork", 0))
+# """
+
+# Need to remove comment prt and check
+
+# """
+
+    def fork(self, minionsNb):
+        # self.max_player_id += 1
+        # self.sendMsg(self.buildMsg("Connect_nbr", 0), minionsNb)
+        # if (int(self.rcvMsg(minionsNb)) >= self.max_player_id):
+            self.sendMsg(self.buildMsg("Fork", 0), minionsNb)
+            print(self.rcvMsg(minionsNb))
+            self.inventory[minionsNb]["Food"] -= 42
+            self.connectClient(self.info)
+            self.prepare(minionsNb)
 
 #--------------------------------------------------------------------------------------------- Fork
 
 #--------------------------------------------------------------------------------------------- Movement basic
 
     def turnRight(self, minionsNb):
-        self.sendMsg(self.buildMsg("Right", minionsNb))
+        self.sendMsg(self.buildMsg("Right", minionsNb), minionsNb)
         self.inventory[minionsNb]["Food"] -= 7
-        tmp = self.rcvMsg()
+        tmp = self.rcvMsg(minionsNb)
         self.moveForward(minionsNb)
         print("Right", tmp)
 
     def turnLeft(self, minionsNb):
-        self.sendMsg(self.buildMsg("Left", minionsNb))
+        self.sendMsg(self.buildMsg("Left", minionsNb), minionsNb)
         self.inventory[minionsNb]["Food"] -= 7
-        tmp = self.rcvMsg()
+        tmp = self.rcvMsg(minionsNb)
         self.moveForward(minionsNb)
         print("Left", tmp)
 
     def moveForward(self, minionsNb):
-        self.sendMsg(self.buildMsg("Forward", minionsNb))
+        self.sendMsg(self.buildMsg("Forward", minionsNb), minionsNb)
         self.inventory[minionsNb]["Food"] -= 7
-        tmp = self.rcvMsg()
+        tmp = self.rcvMsg(minionsNb)
         print("Forward",tmp)
 
     def moveBackward(self, minionsNb):
-        self.sendMsg(self.buildMsg("Backward", minionsNb))
+        self.sendMsg(self.buildMsg("Backward", minionsNb), minionsNb)
         self.inventory[minionsNb]["Food"] -= 7
-        tmp = self.rcvMsg()
+        tmp = self.rcvMsg(minionsNb)
         print("Backward", tmp)
 
 #--------------------------------------------------------------------------------------------- Movement basic
@@ -205,7 +227,7 @@ class GameRunner:
         while (tmp >= index):
             self.turnLeft(minionsNb)
             tmp -= 1
-        self.sendMsg(self.buildMsg("Take object", minionsNb))
+        self.sendMsg(self.buildMsg("Take object", minionsNb), minionsNb)
         while (tmp <= tmp_save):
             self.turnRight(minionsNb)
             tmp += 1
@@ -223,8 +245,8 @@ class GameRunner:
     def checkAllArround(self, minionsNb):
         i = 0
         while (i < 4):
-            self.sendMsg(self.buildMsg("Left", minionsNb))
-            self.sendMsg(self.buildMsg("Look", minionsNb))
+            self.sendMsg(self.buildMsg("Left", minionsNb), minionsNb)
+            self.sendMsg(self.buildMsg("Look", minionsNb), minionsNb)
             self.goGetAtindex(12, minionsNb)
             i += 1
         self.inventory[minionsNb]["Food"] -= (7 * 2) * i
@@ -235,13 +257,19 @@ class GameRunner:
 
     def letsGo(self, info, debug):
         if (debug == False):
-            if (self.prepareShit(info) == 84):
+            self.info = info
+            if (self.prepareShit(info, 0) == 84):
                 return (84)
         self.loadShit()
-        print(self.rcvMsg())
-        while (42):
-            self.checkAllArround(0)
-            if (self.inventory[0]["Food"] < 0): break
+        print(self.rcvMsg(0))
+        i = 1
+        while (i < 5):
+            print(i)
+            self.fork(i)
+            i += 1
+            time.sleep(1)
+            # self.checkAllArround(0)
+            # if (self.inventory[0]["Food"] < 0): break
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
