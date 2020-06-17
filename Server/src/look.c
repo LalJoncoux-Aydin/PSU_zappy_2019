@@ -14,8 +14,8 @@ void look(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server 
     buff_cli = get_ai_by_nb(server, nb);
     if (!buff_cli || !buff)
         return error_s(fd_cli);
-    buff_cli->ai->orientation; // int orientation;
-    buff_cli->ai->x / y ;// position du jouer
-    map[buff_cli->ai->y][buff_cli->ai->x].q0; // q0 a la tile a la possition du jouer
-    map[buff_cli->ai->y][buff_cli->ai->x + 1].q0; // q0 a la tile a l'ouest de la possition du jouer
+    //buff_cli->ai->orientation; // int orientation;
+    //buff_cli->ai->x / y ;// position du jouer
+    //map[buff_cli->ai->y][buff_cli->ai->x].q0; // q0 a la tile a la possition du jouer
+    //map[buff_cli->ai->y][buff_cli->ai->x + 1].q0; // q0 a la tile a l'ouest de la possition du jouer
 }

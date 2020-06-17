@@ -56,7 +56,7 @@ static command_manager_t commands[NBR_OF_COMMAND] = {
     {"Forward", mouvement, 1},
     {"Right", mouvement, 1},
     {"Left", mouvement, 1},
-    {"Look", look, 1}
+//   {"Look", look, 1}
  //   {"pin", pin},
 //    {"", }
 };
