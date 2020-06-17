@@ -5,10 +5,20 @@
 
 enum {
     NORTH = 1,
-    ESAST,
+    EAST,
     SOUTH,
     WEST
 };
+
+typedef struct ivent_s {
+    int q0;
+    int q1;
+    int q2;
+    int q3;
+    int q4;
+    int q5;
+    int q6;
+} inventory_t;
 
 typedef struct ai_specific_s {
     int player_number;
@@ -16,6 +26,7 @@ typedef struct ai_specific_s {
     int y;
     int orientation;
     int level;
+    inventory_t *invent;
     char *team;
     struct ai_specific_s *next;
 } ai_s;

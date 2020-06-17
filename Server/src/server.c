@@ -59,6 +59,19 @@ int return_type(char *str)
         return AI;
     return GRAPHIC;
 }
+inventory_t *init_invent()
+{
+    inventory_t *ret = malloc(sizeof(inventory_t));
+
+    ret->q0 = 0;
+    ret->q1 = 0;
+    ret->q2 = 0;
+    ret->q3 = 0;
+    ret->q4 = 0;
+    ret->q5 = 0;
+    ret->q6 = 0;
+    return ret;
+}
 
 void add_cli_spe(client_t *cli, server_t *server_v, char *team)
 {
@@ -69,6 +82,7 @@ void add_cli_spe(client_t *cli, server_t *server_v, char *team)
         return;
     }
     cli->ai = malloc(sizeof(client_t));
+    cli->ai->invent = init_invent();
     cli->ai->next = NULL;
     cli->ai->x = get_rand_num(0, server_v->x, 100);
     cli->ai->y = get_rand_num(0, server_v->y, 100);
