@@ -73,14 +73,17 @@ inventory_t *init_invent()
     return ret;
 }
 
-void add_cli_spe(client_t *cli, server_t *server_v, char *team)
+void add_cli_spe(client_t *cli, server_t *server_v)
 {
     int i = 0;
+    char *team = malloc(50);
 
     if (cli->type == GRAPHIC) {
         cli->ai = NULL;
         return;
     }
+    i = recv(cli->fd, team, 50, 0);
+    team[i -1] = '\0';
     cli->ai = malloc(sizeof(client_t));
     cli->ai->invent = init_invent();
     cli->ai->next = NULL;
@@ -118,14 +121,10 @@ void add_cli(client_t **head, int new_fd, server_t *server_v)
     client_t *buff = *head;
     client_t *buff_prev = NULL;
     char *type = malloc(50);
-    char *team = malloc(50);
     int size = 0;
 
     memset(type, 0 , 50);
-    memset(team, 0 , 50);
     recv(new_fd, type, 50, 0);
-    size = recv(new_fd, team, 50, 0);
-    team[size -1] = '\0';
     if (!(*head)) {
         (*head) = malloc(sizeof(client_t));
         (*head)->fd = new_fd;
@@ -134,7 +133,7 @@ void add_cli(client_t **head, int new_fd, server_t *server_v)
         (*head)->type = return_type(type);
         server_v->head = (*head);
         free(type);
-        return add_cli_spe((*head),server_v, team);
+        return add_cli_spe((*head), server_v);
     }
     for (; buff->next != NULL ; buff = buff->next );
     buff->next = malloc(sizeof(client_t));
@@ -145,7 +144,7 @@ void add_cli(client_t **head, int new_fd, server_t *server_v)
     buff->next = NULL;
     buff->prev = buff_prev;
     free(type);
-    return  add_cli_spe(buff,server_v, team);
+    return  add_cli_spe(buff, server_v);
 }
 
 static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *server)
@@ -162,53 +161,6 @@ static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *
     }
 
 }
-
-
- //
- //static void manage_event(struct pollfd *pfds, int *fd_count, server_t *server_v, int *fd_size)
- //{
- //    struct sockaddr_storage cli_addr;
- //    socklen_t addrlen = sizeof(struct sockaddr_storage);
- //    int nbytes;
- //    char buff[256 * 4];
- //    static client_t *head = NULL;
- //
- //    for (int i = 0; i < *fd_count;printf("fd_count , fds_ssize , i : %d %d %d\n",*fd_count , *fd_size, i),i++)
- //        if (pfds[i].revents & POLLIN) {
- //            if (pfds[i].fd == server_v->server_fd) {
- //                add_new_fd(&pfds, accept(server_v->server_fd, (struct sockaddr *)&cli_addr,
- //                &addrlen), fd_count, fd_size);
- //                add_cli(&head, pfds[(*fd_count) - 1].fd);
- //            }
- //            else {
- //                memset(buff, 0, sizeof(buff));
- //                nbytes = recv(pfds[i].fd, buff, sizeof(buff), 0);
- //                if (nbytes <= 0)
- //                    del_from_pfds(pfds, i, fd_count, &head);
- //                buff[nbytes] = '\0';
- //                printf("message ressu :%s|\n", buff);
- //                manage_message(buff,
- //                tri_force(*fd_count, pfds[i].fd, 0), head, server_v);
- //            }
- //        }
- //}
- //
- //int server(server_t *server_v)
- //{
- //    server_v->server_fd = prepare_server_socket(server_v->port);
- //    int fd_count = 1;
- //    int fd_size = 10;
- //    struct pollfd *pfds = malloc(sizeof(struct pollfd) * (fd_size  + 1));
- //
- //    pfds[0].fd = server_v->server_fd;
- //    pfds[0].events = POLLIN;
- //    while (1) {
- //        if (poll(pfds, fd_count, -1) == -1)
- //            error("poll failed");
- //        manage_event(pfds, &fd_count, server_v, &fd_size);
- //    }
- //}
- //
 
 
 static void manage_event(fd_set *master,server_t *server_v, int i, int *fd_max)
@@ -234,6 +186,7 @@ static void manage_event(fd_set *master,server_t *server_v, int i, int *fd_max)
             FD_CLR(i, master);
         }
         buff[nbytes] = '\0';
+        printf("msg ressive form %d  : %s\n",i , buff);
         manage_message(buff,
         tri_force(*fd_max, i, 0), head, server_v);
     }

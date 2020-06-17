@@ -39,7 +39,7 @@ void ppo_plv_pin(int fd_cli, client_t *clis  __attribute__((unused)), server_t *
     , ai->player_number, ai->x, ai->y, ai->invent->q0, ai->invent->q1, ai->invent->q2, ai->invent->q3, ai->invent->q4, ai->invent->q5, ai->invent->q6);
     send(fd_cli, buff, strlen(buff), 0);
     if (DEBUG)
-        printf("message send : %s",buff);
+        printf("message send : %s\n",buff);
     free(buff);
 }
 
