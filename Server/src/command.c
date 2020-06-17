@@ -4,7 +4,7 @@
 ** File description:
 ** server2.c
 */
-
+#include <time.h>
 #include "command.h"
 #include "server.h"
 
@@ -27,9 +27,9 @@ void bct(int fd_cli, client_t *clis __attribute__((unused)), server_t *server ,c
     int y = atoi(str_breaker(command, ' ', 3, 0));
     tile_t *tile;// = &(server->map[y][x]);
 
+    if (x < 0 || x > server->x || y < 0 || y > server->y || !buff)
+        return error_s(fd_cli);
     memset(buff, 0, 50);
-    if (x < 0 || x > server->x || y < 0 || y > server->y)
-        error_s(fd_cli);
     tile = &(server->map[y][x]);
     sprintf(buff, "bct %d %d %d %d %d %d %d %d %d\n"
     , x, y,tile->q0, tile->q1, tile->q2, tile->q3, tile->q4, tile->q5, tile->q6);
@@ -57,7 +57,7 @@ void mct(int fd_cli, client_t *clis __attribute__((unused)), server_t *server ,c
     free(buff);
 }
 
-void tna(int fd_cli, client_t *clis __attribute__((unused)), server_t *server ,char *command  __attribute__((unused)))
+void tna(int fd_cli, client_t *none __attribute__((unused)), server_t *server ,char *none_c  __attribute__((unused)))
 {
     char *buff = malloc(50);
 
@@ -80,7 +80,11 @@ void pnw(client_t *cli)
     cli->ai->x, cli->ai->y, cli->ai->orientation, cli->ai->level, cli->ai->team);
     if (DEBUG)
         printf("%s",buff);
+    //struct timespec tim, tim2;
+    //tim.tv_sec = 1;
+    //tim.tv_nsec = 500;
+    //nanosleep(&tim , &tim2);
     for (; cli->prev ; cli = cli->prev);
-    for (; cli->next ; cli = cli->next)
+    for (; cli ; cli = cli->next)
         send(cli->fd, buff, strlen(buff), 0);
 }
