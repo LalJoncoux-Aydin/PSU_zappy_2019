@@ -9,7 +9,14 @@ CC	=	gcc
 
 NAME	=	calc
 
-SRC	=	../Server/src/tools.c
+SRC	=	../Server/src/tool.c				\
+		../Server/src/server.c				\
+		../Server/src/tool2.c				\
+		../Server/src/command.c				\
+		../Server/src/command2.c			\
+		../Server/src/str_breaker.c			\
+		../Server/src/get_socket_server.c	\
+		../Server/src/poll_tool.c			\
 
 OBJ	=	$(SRC:.c=.o)
 

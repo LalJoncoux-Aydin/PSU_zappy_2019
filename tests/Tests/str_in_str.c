@@ -6,7 +6,7 @@
 */
 
 #include <criterion/criterion.h>
-#include "tools.h"
+#include "server.h"
 
 Test(str_in_str, matching)
 {

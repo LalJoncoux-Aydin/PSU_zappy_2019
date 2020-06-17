@@ -6,7 +6,7 @@
 */
 
 #include <criterion/criterion.h>
-#include "tools.h"
+#include "server.h"
 
 Test(occurrences_of_char, char_exists)
 {

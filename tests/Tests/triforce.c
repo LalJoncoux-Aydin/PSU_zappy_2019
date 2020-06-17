@@ -5,7 +5,7 @@
 ** triforce
 */
 
-#include "tools.h"
+#include "server.h"
 #include <criterion/criterion.h>
 
 Test(Triforce, test1)

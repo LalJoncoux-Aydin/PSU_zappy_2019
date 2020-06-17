@@ -8,6 +8,7 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include "tools.h"
+#include "server.h"
 
 void setup(void)
 {

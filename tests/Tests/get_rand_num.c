@@ -6,7 +6,7 @@
 */
 
 #include <criterion/criterion.h>
-#include "tools.h"
+#include "server.h"
 
 Test(get_rand_num, error_cases)
 {

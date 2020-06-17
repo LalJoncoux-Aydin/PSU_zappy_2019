@@ -5,7 +5,7 @@
 ** error
 */
 
-#include "tools.h"
+#include "server.h"
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 
