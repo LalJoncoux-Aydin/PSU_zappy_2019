@@ -42,28 +42,32 @@ class GameRunner:
         try:
             for socs in self.socket:
                 socs.disconnect()
-        except:
+        except Exception as e:
+            print(e)
             exit(0)
 
     def connectClient(self, infos):
         try:
             self.socket.append(Network(infos["host"], int(infos["port"])))
-            print("connection client 1 => ", self.socket[self.max_player_id].connectClient())
+            print("connection client 1 => ", self.socket[-1].connectClient())
             print("max_id + len socket", self.max_player_id, len(self.socket))
             self.max_player_id += 1
-        except:
+        except Exception as e:
+            print(e)
             exit(0)
 
     def sendMsg(self, msg, minionsNb):
         try:
             self.socket[minionsNb].sendMsg(msg + "\n")
-        except:
+        except Exception as e:
+            print(e)
             exit(0)
 
     def rcvMsg(self, minionsNb):
         try:
             return (self.socket[minionsNb].rcvMsg())
-        except:
+        except Exception as e:
+            print(e)
             exit(0)
 
 #--------------------------------------------------------------------------------------------- Network
@@ -90,14 +94,14 @@ class GameRunner:
 
     def prepare(self, minionsNb):
         self.sendMsg("type ai\n", minionsNb)
-        print(self.rcvMsg(minionsNb))
+        # print(self.rcvMsg(minionsNb))
         self.sendMsg("team " + self.team_name, minionsNb)
-        print(self.rcvMsg(minionsNb))
+        # print(self.rcvMsg(minionsNb))
 
     def prepareShit(self, info, minionsNb):
         try:
             if (self.connectClient(info) == -1):
-                return (84)
+                exit(0)
             self.prepare(minionsNb)
             return (0)
         except Exception as e:
@@ -162,11 +166,13 @@ class GameRunner:
         # self.max_player_id += 1
         # self.sendMsg(self.buildMsg("Connect_nbr", 0), minionsNb)
         # if (int(self.rcvMsg(minionsNb)) >= self.max_player_id):
+            print("minions nb",minionsNb, "len socket", len(self.socket))
             self.sendMsg(self.buildMsg("Fork", 0), minionsNb)
-            print(self.rcvMsg(minionsNb))
-            self.inventory[minionsNb]["Food"] -= 42
+            # print(self.rcvMsg(minionsNb))
+            self.inventory[-1]["Food"] -= 42
             self.connectClient(self.info)
-            self.prepare(minionsNb)
+            self.prepare(minionsNb - 1)
+            self.initInventory()
 
 #--------------------------------------------------------------------------------------------- Fork
 
@@ -261,13 +267,13 @@ class GameRunner:
             if (self.prepareShit(info, 0) == 84):
                 return (84)
         self.loadShit()
-        print(self.rcvMsg(0))
-        i = 1
-        while (i < 5):
+        # print(self.rcvMsg(0))
+        i = 0
+        while (i < 10):
             print(i)
             self.fork(i)
             i += 1
-            time.sleep(1)
+            time.sleep(4)
             # self.checkAllArround(0)
             # if (self.inventory[0]["Food"] < 0): break
         return (0)
