@@ -11,10 +11,8 @@
 ai_s *get_ai_by_nb(server_t *server_v, int nb)
 {
     for (client_t *buff = server_v->head; buff; buff = buff->next)
-        if ( buff->type == AI )
-            for (ai_s *buff_ai = buff->ai; buff_ai; buff_ai = buff_ai->next)
-                if (nb == buff_ai->player_number)
-                    return buff_ai;
+        if ( buff->type == AI && nb == buff->ai->player_number)
+                    return buff->ai;
     return NULL;
 }
 //ppo //n X Y O\n ppo #n\n player’s position

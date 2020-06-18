@@ -153,13 +153,15 @@ static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *
 
     for (int i = 0; i < NBR_OF_COMMAND; i++) {
         if (str_in_str(commands[i].command, msg)) {
-            if (occurrences_of_char(' ', msg) != commands[i].nb_of_arg)
-                error_s(clis->fd);
+            if (occurrences_of_char(' ', msg) != commands[i].nb_of_arg) {
+                send(clis->fd, "sbp\n", 4, 0);
+                return;
+            }
             else
-                commands[i].func(sender_fd, clis, server, msg);
+                return commands[i].func(sender_fd, clis, server, msg);
         }
     }
-
+    send(clis->fd, "suc\n", 4, 0);
 }
 
 
@@ -184,6 +186,7 @@ static void manage_event(fd_set *master,server_t *server_v, int i, int *fd_max)
             del_cli(&head, i);
             close(i);
             FD_CLR(i, master);
+            return;
         }
         buff[nbytes] = '\0';
         printf("msg ressive form %d  : %s\n",i , buff);
