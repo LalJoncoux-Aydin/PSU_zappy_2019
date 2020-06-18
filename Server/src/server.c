@@ -51,8 +51,8 @@ int str_in_str(char *needle, char *haystackt)
 int return_type(char *str)
 {
     if (DEBUG)
-        printf("CLI of type %s connected\n",
-        (!(strlen(str) < 7) && (str[5] == 'a' && str[6] == 'i'))? "AI" : "GRAPHIC");
+        printf("CLI of type %s connected (msg recv : %s\n",
+        (!(strlen(str) < 7) && (str[5] == 'a' && str[6] == 'i'))? "AI" : "GRAPHIC", str);
     if (strlen(str) < 7)
         return -1;
     if (str[5] == 'a' && str[6] == 'i')
@@ -121,10 +121,10 @@ void add_cli(client_t **head, int new_fd, server_t *server_v)
     client_t *buff = *head;
     client_t *buff_prev = NULL;
     char *type = malloc(50);
-    int size = 0;
 
     memset(type, 0 , 50);
     recv(new_fd, type, 50, 0);
+    printf("new_fd : %d ->", new_fd);
     if (!(*head)) {
         (*head) = malloc(sizeof(client_t));
         (*head)->fd = new_fd;
