@@ -70,7 +70,7 @@ namespace Client {
             int byteSent;
 
             sender.Connect(localEndPoint);
-            sender.ReceiveTimeout = 700;
+            sender.ReceiveTimeout = 1000; // 700 MINIMUM PLUS Rapid mais plus risqué
             byteSent = sender.Send(messageSent);
             sender.Send(messageSent);
             //Thread.Sleep(50);
@@ -87,7 +87,7 @@ namespace Client {
                 string map = msg_to_server("mct", sender);
 
                 Console.WriteLine("La map est des size x : {0}; y : {0}", map_size.n_word(1), map_size.n_word(2));
-                //Console.WriteLine("map : {0}" ,map_size);
+                Console.WriteLine("map : {0}" ,map);
                 sender.Shutdown(SocketShutdown.Both);
                 sender.Close();
             }
