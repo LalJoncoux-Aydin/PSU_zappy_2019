@@ -71,6 +71,7 @@ void error_s(int fd);
 int *tri_force(int a, int b, int c);
 int str_in_str(char *needle, char *haystackt);
 int occurrences_of_char(char c, char *str);
+char *str_concat(char *con, char *cat);
 
 void add_end_file(char *str, char *str_name);
 

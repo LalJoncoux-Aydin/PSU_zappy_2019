@@ -29,3 +29,14 @@ int get_rand_num(int min, int max, int percent)
         res = rand() % max;
     return res;
 }
+
+char *str_concat(char *con, char *cat)
+{
+
+    if (!con || !cat)
+        return NULL;
+    con = realloc(con, strlen(con) + strlen(cat) + 1);
+    if (!con)
+        return NULL;
+    return strcat(con, cat);
+}
