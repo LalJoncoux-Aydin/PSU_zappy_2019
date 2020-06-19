@@ -28,7 +28,7 @@ typedef struct command_manager_s
     int nb_of_arg;
 } command_manager_t;
 
-#define NBR_OF_COMMAND 10
+#define NBR_OF_COMMAND 11
 
 ai_s *get_ai_by_nb(server_t *server_v, int nb);
 
@@ -58,10 +58,10 @@ static command_manager_t commands[NBR_OF_COMMAND] = {
     {"ppo", ppo_plv_pin, 1},
     {"plv", ppo_plv_pin, 1},
     {"pin", ppo_plv_pin, 1},
-    {"Forward", forward, 1},
-    {"Right", turn, 1},
-    {"Left", turn, 1},
-//   {"Look", look, 1}
+    {"Forward", forward, 0},
+    {"Right", turn, 0},
+    {"Left", turn, 0},
+   {"Look", look, 0}
  
 //    {"", }
 };

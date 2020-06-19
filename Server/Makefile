@@ -7,15 +7,16 @@
 
 CPPFLAGS	=	-iquote include
 
-SRC		=	get_socket_server.c \
-			main.c				\
-			tool.c 				\
-			tool2.c 			\
-			command.c     		\
-			command2.c     		\
-			server.c 			\
-			str_breaker.c 		\
-			look.c 			\
+SRC		=	get_socket_server.c 		\
+			main.c						\
+			tool.c 						\
+			tool2.c 					\
+			command.c     				\
+			command2.c     				\
+			server.c 					\
+			str_breaker.c 				\
+			look.c 						\
+			norm_is_not_a_illusion.c 	\
 			poll_tool.c
 
 SRC_FILE	=	$(addprefix ./src/, $(SRC))

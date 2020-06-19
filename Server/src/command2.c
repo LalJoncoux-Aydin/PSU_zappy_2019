@@ -41,15 +41,12 @@ void ppo_plv_pin(int fd_cli, client_t *clis  __attribute__((unused)), server_t *
     free(buff);
 }
 
-void forward(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command)
+void forward(int fd_cli, client_t *clis , server_t *server ,char *command)
 {
     char *buff = malloc(70);
-    int nb = -1;
-    ai_s *ai;
+    ai_s *ai = clis->ai;
 
     memset(buff, 0, 70);
-    nb = atoi(str_breaker(command, ' ', 2, 0));
-    ai = get_ai_by_nb(server, nb);
     if (!ai || !buff)
         return error_s(fd_cli);
     switch (ai->orientation) {
@@ -78,11 +75,9 @@ void turn(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server 
     char *buff = malloc(70);
     int nb = -1;
     int left = str_in_str("Left", command);
-    ai_s *ai;
+    ai_s *ai = clis->ai;
 
     memset(buff, 0, 70);
-    nb = atoi(str_breaker(command, ' ', 2, 0));
-    ai = get_ai_by_nb(server, nb);
     if (!ai || !buff)
         return error_s(fd_cli);
     switch (ai->orientation) {
