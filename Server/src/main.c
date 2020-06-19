@@ -4,19 +4,32 @@
 ** File description:
 ** main.c
 */
+
+#include <string.h>
 #include "server.h"
+
+static const char *flag[] = {"-h", "-p", "-x", "-y", "-n", "-c", "-f"};
 
 static bool check_arg(int ac, char **av)
 {
+    bool checker = false;
+
     if (ac > 1) {
         if (strcmp(av[1], "-help") == 0) {
             printf("%s", HELP);
             exit(0);
         }
     }
-    if (ac != 14)
-        return false;
-    // CHECK DES OPTIONS POSSIBLES
+    for (int i = 0; av[i]; i++) {
+        if (av[i][0] != '-')
+            continue;
+        checker = false;
+        for (int j = 0; checker == false && flag[j]; j++) {
+            checker = (strncmp(flag[j], av[i], strlen(flag[j])) == 0) ? true : false;
+        }
+        if (checker == false)
+            return (false);
+    }
     return true;
 }
 
