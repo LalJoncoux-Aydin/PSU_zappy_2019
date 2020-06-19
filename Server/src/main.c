@@ -50,6 +50,7 @@ int main(int ac, char **av, char **env)
     printf("Starting server...\n");
     if (server(server_v) == 84)
         return 84;
+    printf("Stoping server...\n");
     free(server_v);
     return 0;
 }
