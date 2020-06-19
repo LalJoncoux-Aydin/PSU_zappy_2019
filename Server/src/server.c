@@ -73,17 +73,34 @@ inventory_t *init_invent()
     return ret;
 }
 
+void add_cli_teams(client_t *cli, server_t *server_v)
+{
+    char *team = malloc(50);
+    int i = 0;
+
+    i = recv(cli->fd, team, 50, 0);
+    team[i -1] = '\0';
+    for (i = 0; server_v->teams_name[i] ; i++) {
+        if (str_in_str(server_v->teams_name[i],team)){
+            cli->ai->team = strdup(team);
+            break;
+        }
+    }
+    if (!server_v->teams_name[i]) {
+        error_s(cli->fd);
+        tna(cli->fd, cli, server_v, "error");
+        memset(team, 0 , 50);
+        //recv(cli->fd, team, 50, 0);
+        add_cli_teams(cli, server_v);
+    }
+}
+
 void add_cli_spe(client_t *cli, server_t *server_v)
 {
-    int i = 0;
-    char *team = malloc(50);
-
     if (cli->type == GRAPHIC) {
         cli->ai = NULL;
         return;
     }
-    i = recv(cli->fd, team, 50, 0);
-    team[i -1] = '\0';
     cli->ai = malloc(sizeof(client_t));
     cli->ai->invent = init_invent();
     cli->ai->next = NULL;
@@ -94,25 +111,8 @@ void add_cli_spe(client_t *cli, server_t *server_v)
     else
         cli->ai->orientation = SOUTH;
     cli->ai->player_number = nbr_player++;
-    TEAMS :
-    for (i = 0; server_v->teams_name[i] ; i++) {
-        if (str_in_str(server_v->teams_name[i],team)){
-          //  printf("<->%s<->%s<->\n",server_v->teams_name[i], team);
-          //  printf("VICTOIRE\n");
-            cli->ai->team = strdup(team);
-            break;
-        }
-    }
     cli->ai->level = 0;
-    if (!server_v->teams_name[i]) {
-        //printf("%s\n",team);
-        //printf("ai teams  : %s\n->not found error\n", team);
-        error_s(cli->fd);
-        tna(cli->fd, cli, server_v, "error");
-        memset(team, 0 , 50);
-        recv(cli->fd, team, 50, 0);
-        goto TEAMS;
-    }
+    add_cli_teams(cli, server_v);
     pnw(cli);
 }
 
