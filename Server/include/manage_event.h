@@ -11,6 +11,6 @@
 #include "create_client.h"
 #include "manage_client.h"
 
-void manage_event(fd_set *master, server_t *server_v, int fd_max, fd_set read);
+void manage_event(fd_set *master, server_t *server_v, int *fd_max, fd_set *read, client_t *head);
 
 #endif /* MANAGE_EVENT_H_ */

@@ -117,6 +117,7 @@ void create_client(client_t **head, int new_fd, server_t *server_v)
     if (!(*head)) {
         if (create_fst_client(head, new_fd, server_v, type) == false)
             error("Error : Creation of the first client");
+        printf("First client is created\n");
         return;
     }
     for (cli = *head; cli->next != NULL; cli = cli->next);
@@ -130,4 +131,5 @@ void create_client(client_t **head, int new_fd, server_t *server_v)
     if (create_new_client_ia(cli, server_v) == false)
         error("Error : creation new client's IA");
     free(type);
+    printf("Client is created\n");
 }
