@@ -4,6 +4,7 @@
 ** File description:
 ** map.c
 */
+
 #include "map.h"
 
 bool create_map(server_t *server_v)

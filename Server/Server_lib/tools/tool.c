@@ -4,6 +4,7 @@
 ** File description:
 ** tool.c
 */
+
 #include "tools.h"
 
 void add_end_file(char *str, char *str_name)
@@ -11,6 +12,8 @@ void add_end_file(char *str, char *str_name)
     FILE *_file = NULL;
 
     _file = fopen(str_name, "a");
+    if (_file == NULL)
+        exit(84);
     fputs(str, _file);
     fputs("\n", _file);
     fclose(_file);
@@ -55,6 +58,8 @@ int *tri_force(int a, int b, int c)
 {
     int *res = malloc(sizeof(int) * 3);
 
+    if (res == NULL)
+        error("Malloc fail");
     res[0] = a;
     res[1] = b;
     res[2] = c;
@@ -64,6 +69,9 @@ int *tri_force(int a, int b, int c)
 void error_s(int fd)
 {
     char *msg = strdup("ko\n");
+
+    if (msg == NULL)
+        error("Strdup fail");
     send(fd , msg, strlen(msg), 0);
     free(msg);
 }
@@ -161,6 +169,8 @@ void add_new_fd(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size)
     if (*fd_count == *fd_size) {
         *fd_size *= 2;
         *pfds = realloc(*pfds, sizeof(struct pollfd **) * (*fd_size));
+        if (*pfds == NULL)
+            error("Realloc fail");
     }
     (*pfds)[*fd_count].fd = newfd;
     (*pfds)[*fd_count].events = POLLIN;

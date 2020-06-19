@@ -4,6 +4,7 @@
 ** File description:
 ** ppo_plv_pin.c
 */
+
 #include "command.h"
 
 void ppo_plv_pin(int fd_cli, client_t *clis, server_t *server, char *command)
@@ -12,6 +13,8 @@ void ppo_plv_pin(int fd_cli, client_t *clis, server_t *server, char *command)
     int nb = -1;
     ai_s *ai;
 
+    if (buff == NULL)
+        exit(84);
     memset(buff, 0, 70);
     nb = atoi(str_breaker(command, ' ', 2, 0));
     ai = get_ai_by_nb(server, nb);

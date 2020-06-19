@@ -4,6 +4,7 @@
 ** File description:
 ** mct.c
 */
+
 #include "command.h"
 
 void mct(int fd_cli, client_t *clis, server_t *server, char *command)
@@ -12,6 +13,8 @@ void mct(int fd_cli, client_t *clis, server_t *server, char *command)
     char *res = malloc(50);
     tile_t *tile;
 
+    if (buff == NULL || res == NULL)
+        exit(84);
     memset(buff, 0, 50);
     memset(res, 0, 50);
     for (int y = 0; y < server->y; y++)

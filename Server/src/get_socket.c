@@ -5,12 +5,12 @@
 ** get_socket.c
 */
 
-#include "get_socket.h"
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include "get_socket.h"
 
 static struct addrinfo *init_addrinfo(char *port)
 {

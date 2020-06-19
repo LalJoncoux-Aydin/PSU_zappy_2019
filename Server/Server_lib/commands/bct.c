@@ -4,6 +4,7 @@
 ** File description:
 ** bct.c
 */
+
 #include "command.h"
 
 void bct(int fd_cli, client_t *clis, server_t *server, char *command)
