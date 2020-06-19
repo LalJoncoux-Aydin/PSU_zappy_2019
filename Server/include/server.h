@@ -33,6 +33,7 @@ freq is the reciprocal of time unit for execution of actions\n"
 #include <netinet/in.h>
 #include <netdb.h>
 #include <poll.h>
+#include <signal.h>
 
 #include "tools.h"
 #include "get_socket.h"

@@ -18,6 +18,12 @@ server_t *init_server(server_t *server_v)
     return server_v;
 }
 
+static void end_handler()
+{
+    printf("\n");
+    exit(0);
+}
+
 int server(server_t *server_v)
 {
     int fd_max;
@@ -31,6 +37,7 @@ int server(server_t *server_v)
     FD_ZERO(&read_fds);
     FD_SET(server_v->server_fd , &master);
     fd_max = server_v->server_fd;
+    signal(SIGINT, end_handler);
     while (1) {
         read_fds = master;
         if (select(fd_max + 1, &read_fds, NULL, NULL, NULL) == -1)
