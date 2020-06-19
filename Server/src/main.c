@@ -4,7 +4,6 @@
 ** File description:
 ** main.c
 */
-
 #include "server.h"
 
 static bool check_arg(int ac, char **av)
