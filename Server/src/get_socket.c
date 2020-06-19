@@ -1,17 +1,16 @@
 /*
 ** EPITECH PROJECT, 2019
-** jo
+** server
 ** File description:
 ** get_socket.c
 */
 
+#include "get_socket.h"
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-
-void error(char *msg);
 
 static struct addrinfo *init_addrinfo(char *port)
 {
@@ -32,22 +31,25 @@ static void error_check_prep_server(struct addrinfo *test, int sockfd, int op)
     if (test == NULL) {
         if (sockfd == -1)
             error("socket function failed");
-        else if(op == -1)
+        else if (op == -1)
             error("setsocktopt failed");
         else
             error("bind failed");
     }
 }
 
-int prepare_server_socket(char *port)
+int get_socket(char *port)
 {
-    struct addrinfo *res = init_addrinfo(port);
-    struct addrinfo *cpy_head = res;
+    struct addrinfo *res = NULL;
+    struct addrinfo *cpy_head = NULL;
     int sockfd;
     int yes = 1;
 
+    res = init_addrinfo(port);
+    if (res == NULL)
+        return -1;
     for (cpy_head = res; cpy_head != NULL; cpy_head = cpy_head->ai_next) {
-        if((sockfd = socket(cpy_head->ai_family, cpy_head->ai_socktype, cpy_head->ai_protocol)) == -1)
+        if ((sockfd = socket(cpy_head->ai_family, cpy_head->ai_socktype, cpy_head->ai_protocol)) == -1)
             continue;
         if ((yes = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int))) == -1)
             continue;

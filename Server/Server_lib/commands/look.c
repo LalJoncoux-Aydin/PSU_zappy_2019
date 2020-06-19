@@ -1,6 +1,10 @@
-#include "client.h"
+/*
+** EPITECH PROJECT, 2019
+** server command
+** File description:
+** look.c
+*/
 #include "command.h"
-#include "tools.h"
 
 /*
 
