@@ -18,7 +18,7 @@ server_t *init_server(server_t *server_v)
     return server_v;
 }
 
-static void end_handler(int sig)
+static void end_handler()
 {
     printf("\n");
     exit(0);
@@ -39,16 +39,10 @@ int server(server_t *server_v)
     fd_max = server_v->server_fd;
     signal(SIGINT, end_handler);
     while (1) {
-        printf("Enter main loop\n");
         read_fds = master;
-        printf("print select\n");
-        if (select(fd_max + 1, &read_fds, NULL, NULL, NULL) == -1) {
-            printf("select fail");
+        if (select(fd_max + 1, &read_fds, NULL, NULL, NULL) == -1)
             error("Error : select failed");
-        }
-        printf("Start event\n");
         manage_event(&master, server_v, fd_max, read_fds);
-        printf("end manage event\n");
     }
     return 0;
 }
