@@ -1,23 +1,29 @@
-#include "manageClient.h"
+/*
+** EPITECH PROJECT, 2019
+** server
+** File description:
+** manage_client.c
+*/
+#include "manage_client.h"
 
 static void del_cli(client_t **head, int fd)
 {
-  client_t *temp = *head;
-  client_t *prev;
+    client_t *temp = *head;
+    client_t *prev;
 
-  if (temp != NULL && temp->fd == fd) {
-      *head = temp->next;
-      free(temp);
-      return;
-  }
-  while (temp != NULL && temp->fd != fd) {
-      prev = temp;
-      temp = temp->next;
-  }
-  if (temp == NULL)
-      return;
-  prev->next = temp->next;
-  free(temp);
+    if (temp != NULL && temp->fd == fd) {
+        *head = temp->next;
+        free(temp);
+        return;
+    }
+    while (temp != NULL && temp->fd != fd) {
+        prev = temp;
+        temp = temp->next;
+    }
+    if (temp == NULL)
+        return;
+    prev->next = temp->next;
+    free(temp);
 }
 
 const command_manager_t commands[NBR_OF_COMMAND] = {
@@ -48,7 +54,7 @@ static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *
     }
 }
 
-void manageClient(client_t **head, server_t *server_v, int i, fd_set *master)
+void manage_client(client_t **head, server_t *server_v, int i, fd_set *master)
 {
     int nbytes;
     char buff[256 * 4];
@@ -60,6 +66,6 @@ void manageClient(client_t **head, server_t *server_v, int i, fd_set *master)
         return;
     }
     buff[nbytes] = '\0';
-    printf("msg ressive form %d  : %s\n",i , buff);
+    printf("msg ressive form %d  : %s\n", i, buff);
     manage_message(buff, tri_force(server_v->server_fd, i, 0), *head, server_v);
 }

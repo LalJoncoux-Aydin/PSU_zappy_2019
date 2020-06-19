@@ -7,11 +7,11 @@
 
 #include "server.h"
 
-server_t *initServer(server_t *server_v)
+server_t *init_server(server_t *server_v)
 {
     server_v = malloc(sizeof(server_t));
     if (server_v == NULL)
-      return NULL;
+        return NULL;
     server_v->teams_name = malloc(sizeof(char *) * TEAMS_NB);
     if (server_v->teams_name == NULL)
         return NULL;
@@ -23,7 +23,7 @@ int server(server_t *server_v)
     fd_set master;
     fd_set read_fds;
 
-    server_v->server_fd = getSocket(server_v->port);
+    server_v->server_fd = get_socket(server_v->port);
     if (server_v->server_fd == -1)
         return 84;
     FD_ZERO(&master);
@@ -33,7 +33,7 @@ int server(server_t *server_v)
         read_fds = master;
         if (select(server_v->server_fd + 1, &read_fds, NULL, NULL, NULL) == -1)
             error("select");
-        manageEvent(&master, server_v, &read_fds);
+        manage_event(&master, server_v, &read_fds);
     }
     return 0;
 }

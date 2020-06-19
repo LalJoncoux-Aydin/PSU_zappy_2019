@@ -1,6 +1,12 @@
+/*
+** EPITECH PROJECT, 2019
+** server command
+** File description:
+** turn.c
+*/
 #include "command.h"
 
-void turn(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command)
+void turn(int fd_cli, client_t *clis, server_t *server, char *command)
 {
     char *buff = malloc(70);
     int nb = -1;
@@ -13,16 +19,16 @@ void turn(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server 
     if (!ai || !buff)
         return error_s(fd_cli);
     switch (ai->orientation) {
-        case NORTH :
+    case NORTH :
         ai->orientation = (left ? WEST : EAST);
         break;
-        case SOUTH :
+    case SOUTH :
         ai->orientation = (!left ? WEST : EAST);
         break;
-        case EAST :
+    case EAST :
         ai->orientation = (left ? NORTH : SOUTH);
         break;
-        case WEST :
+    case WEST :
         ai->orientation = (!left ? NORTH : SOUTH);
         break;
     }

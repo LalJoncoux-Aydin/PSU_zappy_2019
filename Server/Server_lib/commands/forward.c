@@ -1,6 +1,12 @@
+/*
+** EPITECH PROJECT, 2019
+** server command
+** File description:
+** forward.c
+*/
 #include "command.h"
 
-void forward(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command)
+void forward(int fd_cli, client_t *clis, server_t *server, char *command)
 {
     char *buff = malloc(70);
     int nb = -1;
@@ -12,19 +18,19 @@ void forward(int fd_cli, client_t *clis  __attribute__((unused)), server_t *serv
     if (!ai || !buff)
         return error_s(fd_cli);
     switch (ai->orientation) {
-        case NORTH :
+    case NORTH :
         if (ai->y > 0)
             ai->y -= 1;
         break;
-        case SOUTH :
+    case SOUTH :
         if (ai->y < server->y)
             ai->y += 1;
         break;
-        case EAST :
+    case EAST :
         if (ai->x < server->x)
             ai->x += 1;
         break;
-        case WEST :
+    case WEST :
         if (ai->x > 0)
             ai->x -= 1;
         break;

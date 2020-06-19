@@ -7,12 +7,12 @@
 
 CPPFLAGS	=	-iquote include
 
-SRC		=	manageArg.c							\
-			manageEvent.c						\
-			createClient.c						\
-			manageClient.c						\
+SRC		=	manage_arg.c							\
+			manage_event.c						\
+			create_client.c						\
+			manage_client.c						\
 			map.c								\
-			getSocket.c 						\
+			get_socket.c 						\
 			server.c 							\
 			main.c								\
 

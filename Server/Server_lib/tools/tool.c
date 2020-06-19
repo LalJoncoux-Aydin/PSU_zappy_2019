@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2019
-** jo
+** server tools
 ** File description:
 ** tool.c
 */
@@ -18,7 +18,7 @@ void add_end_file(char *str, char *str_name)
 
 void error(char *msg)
 {
-    printf("%s",msg);
+    printf("%s", msg);
     exit(84);
 }
 
@@ -26,8 +26,8 @@ int occurrences_of_char(char c, char *str)
 {
     int res = 0;
 
-    for (int i = 0; str[i] ; i++)
-        if(str[i] == c)
+    for (int i = 0; str[i]; i++)
+        if (str[i] == c)
             res++;
     return res;
 }
@@ -40,14 +40,11 @@ void send_all(int fd, char *msg)
     char *buff = msg;
     int retry = 0;
 
-    while (bytes < buflen)
-    {
+    while (bytes < buflen) {
         retry = 0;
         ret = send(fd, buff + bytes, buflen - bytes, 0);
         if (ret == -1) {
-            retry += 1;
-            if (retry == 5)
-                error("send fail");
+            retry != 5 ? retry += 1 : error("send fail");
             continue;
         }
         bytes += ret;
@@ -81,7 +78,7 @@ int get_rand_num(int min, int max, int percent)
     if (min > max)
         return min;
     res = rand() % max;
-    while (res <  min)
+    while (res < min)
         res = rand() % max;
     return res;
 }
@@ -102,10 +99,9 @@ char *str_breaker(char *line, char delim, int part, int strict)
     char *res = malloc(sizeof(char) * strlen(line));
     int j;
 
-    //part = part == 0 ? 1 : part;
-    for (int i = 0; line[i] ; i++) {
-        if (pos == part){
-            for(j = 0; line[i] && line[i] != delim; i++)
+    for (int i = 0; line[i]; i++) {
+        if (pos == part) {
+            for (j = 0; line[i] && line[i] != delim; i++)
                 res[j++] = line[i];
             res[j] = '\0';
             if (!line[i] && strict == 1){
@@ -131,7 +127,7 @@ int eq_str(char *str1, char *str2)
 
 int str_in_str(char *needle, char *haystackt)
 {
-    for (int i = 0; haystackt[i] ; i++) {
+    for (int i = 0; haystackt[i]; i++) {
         for (int y = 0; needle[y] == haystackt[i]; y++) {
             if (needle[y + 1] == '\0')
                 return 1;
@@ -146,14 +142,14 @@ int return_type(char *str)
 {
     if (DEBUG)
         printf("CLI of type %s connected\n",
-        (!(strlen(str) < 7) && (str[5] == 'a' && str[6] == 'i'))? "AI" : "GRAPHIC");
+        (!(strlen(str) < 7) &&
+        (str[5] == 'a' && str[6] == 'i')) ? "AI" : "GRAPHIC");
     if (strlen(str) < 7)
         return -1;
     if (str[5] == 'a' && str[6] == 'i')
         return AI;
     return GRAPHIC;
 }
-
 
 void add_new_fd(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size)
 {
@@ -166,13 +162,12 @@ void add_new_fd(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size)
     (*fd_count)++;
 }
 
-client_t *get_client_by_fd( client_t *head, int fd)
+client_t *get_client_by_fd(client_t *head, int fd)
 {
     if (head)
         for (; head != NULL; head = head->next) {
             if (head->fd == fd)
                 return head;
         }
-    //printf("cli null %d head null ? %d\n", fd, (head == NULL));
     return NULL;
 }

@@ -1,6 +1,12 @@
+/*
+** EPITECH PROJECT, 2019
+** server
+** File description:
+** main.c
+*/
 #include "server.h"
 
-static bool checkArg(int ac, char **av)
+static bool check_arg(int ac, char **av)
 {
     if (ac > 1) {
         if (strcmp(av[1], "-help") == 0) {
@@ -14,7 +20,7 @@ static bool checkArg(int ac, char **av)
     return true;
 }
 
-static bool checkValueServeur(server_t *server_v)
+static bool check_value_server(server_t *server_v)
 {
     if (server_v->port == 0)
         return false;
@@ -31,18 +37,18 @@ int main(int ac, char **av, char **env)
 {
     server_t *server_v = NULL;
 
-    if (checkArg(ac, av) == false)
+    if (check_arg(ac, av) == false)
         return 84;
-    server_v = initServer(server_v);
+    server_v = init_server(server_v);
     if (server_v == NULL)
-      return 84;
-    manageArg(ac, av, server_v, env);
-    if (checkValueServeur(server_v) == false)
+        return 84;
+    manage_arg(ac, av, server_v, env);
+    if (check_value_server(server_v) == false)
         return 84;
     if (create_map(server_v) == false)
         return 84;
     if (server(server_v) == 84)
-      return 84;
+        return 84;
     free(server_v);
     return 0;
 }

@@ -1,3 +1,9 @@
+/*
+** EPITECH PROJECT, 2019
+** server
+** File description:
+** map.h
+*/
 #ifndef MAP_H_
 #define MAP_H_
 

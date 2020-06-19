@@ -1,10 +1,9 @@
 /*
 ** EPITECH PROJECT, 2019
-** point h
+** server
 ** File description:
-** HEADER
+** server.h
 */
-
 #ifndef SERVER_H_
 #define SERVER_H_
 
@@ -12,7 +11,8 @@
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
 #define TEAMS_NB 200
-#define HELP "USAGE: ./zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq\n\t\
+#define HELP "USAGE: ./zappy_server -p port -x width -y height -n name1 name2\
+... -c clientsNb -f freq\n\t\
 port is the port number\n\t\
 width is the width of the world\n\t\
 height is the height of the world\n\t\
@@ -34,15 +34,15 @@ freq is the reciprocal of time unit for execution of actions\n"
 #include <poll.h>
 
 #include "tools.h"
-#include "getSocket.h"
-#include "manageArg.h"
-#include "manageEvent.h"
+#include "get_socket.h"
+#include "manage_arg.h"
+#include "manage_event.h"
 #include "map.h"
 #include "server_struct.h"
 
 void del_from_pfds(struct pollfd pfds[], int i, int *fd_count, client_t **head);
 
-server_t *initServer(server_t *server_v);
+server_t *init_server(server_t *server_v);
 int server(server_t *port);
 
 #endif /* SERVER_H_ */

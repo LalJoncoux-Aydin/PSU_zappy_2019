@@ -1,6 +1,12 @@
+/*
+** EPITECH PROJECT, 2019
+** server command
+** File description:
+** msz.c
+*/
 #include "command.h"
 
-void msz(int fd_cli, client_t *clis __attribute__((unused)), server_t *server ,char *command __attribute__((unused)))
+void msz(int fd_cli, client_t *clis, server_t *server, char *command)
 {
     char *buff = malloc(20);
 
@@ -8,6 +14,6 @@ void msz(int fd_cli, client_t *clis __attribute__((unused)), server_t *server ,c
     sprintf(buff, "msz %d %d\n", server->x, server->y);
     send(fd_cli, buff, strlen(buff), 0);
     if (DEBUG)
-        printf("message send : %s",buff);
+        printf("message send : %s", buff);
     free(buff);
 }

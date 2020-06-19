@@ -1,23 +1,28 @@
-#include "createClient.h"
+/*
+** EPITECH PROJECT, 2019
+** server
+** File description:
+** create_client.c
+*/
+#include "create_client.h"
 
-static char *initBuffer(char *buff, int new_fd)
+static char *init_buffer(char *buff, int new_fd)
 {
     buff = malloc(sizeof(char) * 50);
     if (buff == NULL)
-      error("Malloc failed");
+        error("Malloc failed");
     memset(buff, 0 , 50);
     recv(new_fd, buff, 50, 0);
     return buff;
 }
 
-static inventory_t *init_invent()
+static inventory_t *init_invent(void)
 {
     inventory_t *ret = NULL;
 
     ret = malloc(sizeof(inventory_t));
     if (ret == NULL)
         return NULL;
-
     ret->q0 = 0;
     ret->q1 = 0;
     ret->q2 = 0;
@@ -28,7 +33,7 @@ static inventory_t *init_invent()
     return ret;
 }
 
-static bool createNewClientIA(client_t *cli, server_t *server_v)
+static bool create_new_client_ia(client_t *cli, server_t *server_v)
 {
     int i = 0;
     char *team = NULL;
@@ -72,7 +77,7 @@ static bool createNewClientIA(client_t *cli, server_t *server_v)
     return true;
 }
 
-static bool createFirstClient(client_t **hd, int new, server_t *serv, char *tp)
+static bool create_fst_client(client_t **hd, int new, server_t *serv, char *tp)
 {
     (*hd) = malloc(sizeof(client_t));
     if ((*hd) == NULL)
@@ -86,7 +91,7 @@ static bool createFirstClient(client_t **hd, int new, server_t *serv, char *tp)
     return true;
 }
 
-static bool createNewClient(client_t *cli, int new_fd, char *type)
+static bool create_new_client(client_t *cli, int new_fd, char *type)
 {
     client_t *cli_prev = NULL;
 
@@ -98,29 +103,29 @@ static bool createNewClient(client_t *cli, int new_fd, char *type)
     cli->fd = new_fd;
     cli->next = NULL;
     cli->prev = cli_prev;
-    cli->type  = return_type(type);
+    cli->type = return_type(type);
     return true;
 }
 
-void createClient(client_t **head, int new_fd, server_t *server_v)
+void create_client(client_t **head, int new_fd, server_t *server_v)
 {
     client_t *cli = NULL;
     char *type = NULL;
 
-    type = initBuffer(type, new_fd);
+    type = init_buffer(type, new_fd);
     if (!(*head)) {
-        if (createFirstClient(head, new_fd, server_v, type) == false)
+        if (create_fst_client(head, new_fd, server_v, type) == false)
             error("Error : Creation of the first client");
     }
     for (cli = *head; cli->next != NULL; cli = cli->next);
-    if (createNewClient(cli, new_fd, type) == false)
+    if (create_new_client(cli, new_fd, type) == false)
         error("Error : Creation new client");
     if (cli->type == GRAPHIC) {
         cli->ai = NULL;
         free(type);
         return;
     }
-    if (createNewClientIA(cli, server_v) == false)
+    if (create_new_client_ia(cli, server_v) == false)
         error("Error : creation new client's IA");
     free(type);
 }

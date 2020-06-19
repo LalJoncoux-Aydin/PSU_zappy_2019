@@ -1,3 +1,9 @@
+/*
+** EPITECH PROJECT, 2019
+** server
+** File description:
+** tools.h
+*/
 #ifndef TOOLS_H_
 #define TOOLS_H_
 
@@ -27,7 +33,7 @@ void add_end_file(char *str, char *str_name);
 int get_rand_num(int min, int max, int percent);
 int occurrences_of_char(char c, char *str);
 void add_new_fd(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size);
-client_t *get_client_by_fd( client_t *head, int fd);
+client_t *get_client_by_fd(client_t *head, int fd);
 char *str_concat(char *con, char *cat);
 int return_type(char *str);
 

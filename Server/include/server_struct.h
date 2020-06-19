@@ -1,3 +1,9 @@
+/*
+** EPITECH PROJECT, 2019
+** server
+** File description:
+** server_struct.h
+*/
 #ifndef SERVERSTRUCT_H_
 #define SERVERSTRUCT_H_
 
