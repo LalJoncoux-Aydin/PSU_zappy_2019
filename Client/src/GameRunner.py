@@ -171,7 +171,7 @@ class GameRunner:
             # print(self.rcvMsg(minionsNb))
             self.inventory[-1]["Food"] -= 42
             self.connectClient(self.info)
-            self.prepare(minionsNb - 1)
+            self.prepare(minionsNb - 2)
             self.initInventory()
 
 #--------------------------------------------------------------------------------------------- Fork
@@ -270,12 +270,12 @@ class GameRunner:
         # print(self.rcvMsg(0))
         i = 0
         while (i < 10):
-            print(i)
-            self.fork(i)
-            i += 1
-            time.sleep(4)
-            # self.checkAllArround(0)
-            # if (self.inventory[0]["Food"] < 0): break
+            # print(i)
+            # self.fork(i)
+            # i += 1
+            # time.sleep(4)
+            self.checkAllArround(0)
+            if (self.inventory[0]["Food"] < 0): break
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
