@@ -54,7 +54,7 @@ static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *
     }
 }
 
-void manage_client(client_t **head, server_t *server_v, int i, fd_set *master)
+void manage_client(fd_set *master, server_t *server_v, int i, client_t **head)
 {
     int nbytes;
     char buff[256 * 4];

@@ -47,6 +47,7 @@ int main(int ac, char **av, char **env)
         return 84;
     if (create_map(server_v) == false)
         return 84;
+    printf("Starting server...\n");
     if (server(server_v) == 84)
         return 84;
     free(server_v);

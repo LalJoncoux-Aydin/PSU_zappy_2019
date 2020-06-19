@@ -140,13 +140,18 @@ int str_in_str(char *needle, char *haystackt)
 
 int return_type(char *str)
 {
-    if (DEBUG)
-        printf("CLI of type %s connected\n",
-        (!(strlen(str) < 7) &&
-        (str[5] == 'a' && str[6] == 'i')) ? "AI" : "GRAPHIC");
+    int status = 0;
+
+    if (DEBUG) {
+        if (!(strlen(str) < 7) && str[5] == 'a' && str[6] == 'i')
+            status = 1;
+        else
+            status = 2;
+        printf("CLI of type %s connected\n", status == 1 ? "AI" : "GRAPHIC");
+    }
     if (strlen(str) < 7)
         return -1;
-    if (str[5] == 'a' && str[6] == 'i')
+    if (!(strlen(str) < 7) && str[5] == 'a' && str[6] == 'i')
         return AI;
     return GRAPHIC;
 }

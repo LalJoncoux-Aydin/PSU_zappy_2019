@@ -116,6 +116,7 @@ void create_client(client_t **head, int new_fd, server_t *server_v)
     if (!(*head)) {
         if (create_fst_client(head, new_fd, server_v, type) == false)
             error("Error : Creation of the first client");
+        return;
     }
     for (cli = *head; cli->next != NULL; cli = cli->next);
     if (create_new_client(cli, new_fd, type) == false)
