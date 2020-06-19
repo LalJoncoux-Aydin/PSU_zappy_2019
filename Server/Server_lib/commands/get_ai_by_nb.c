@@ -4,6 +4,7 @@
 ** File description:
 ** get_ai_by_nb.c
 */
+
 #include "command.h"
 
 ai_s *get_ai_by_nb(server_t *server_v, int nb)

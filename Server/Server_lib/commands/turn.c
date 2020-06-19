@@ -4,6 +4,7 @@
 ** File description:
 ** turn.c
 */
+
 #include "command.h"
 
 void turn(int fd_cli, client_t *clis, server_t *server, char *command)
@@ -13,6 +14,8 @@ void turn(int fd_cli, client_t *clis, server_t *server, char *command)
     int left = str_in_str("Left", command);
     ai_s *ai;
 
+    if (buff == NULL)
+        exit(84);
     memset(buff, 0, 70);
     nb = atoi(str_breaker(command, ' ', 2, 0));
     ai = get_ai_by_nb(server, nb);

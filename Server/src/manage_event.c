@@ -4,6 +4,7 @@
 ** File description:
 ** manage_event.c
 */
+
 #include "manage_event.h"
 
 static void add_client(client_t **head, server_t *serv, fd_set *master)

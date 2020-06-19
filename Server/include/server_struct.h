@@ -4,6 +4,7 @@
 ** File description:
 ** server_struct.h
 */
+
 #ifndef SERVERSTRUCT_H_
 #define SERVERSTRUCT_H_
 
