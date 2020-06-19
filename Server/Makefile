@@ -7,10 +7,7 @@
 
 CPPFLAGS	=	-iquote include
 
-SRC		=	tool.c 								\
-			command.c     						\
-			command2.c							\
-			manageArg.c							\
+SRC		=	manageArg.c							\
 			manageEvent.c						\
 			createClient.c						\
 			manageClient.c						\
@@ -25,22 +22,33 @@ OBJ		=	$(SRC_FILE:.c=.o)
 
 NAME		=	zappy_server
 
-LDFLAGS = -luuid
+LDFLAGS =  -L./Server_lib/commands/ -lcommand -L./Server_lib/tools/ -ltools -luuid
 
 CFLAGS		= -Wall -Wextra -g3
 
 all: $(NAME)
 
-clean:
-	rm -f $(OBJ)
+commands:
+	make -C ./Server_lib/commands/
 
-$(NAME):	$(OBJ)
-		gcc -o $(NAME) $(LDFLAGS) $(OBJ)
+tools:
+	make -C ./Server_lib/tools/
+
+$(NAME):	tools	commands	$(OBJ)
+		gcc -o $(NAME) $(OBJ) $(LDFLAGS)
 		@echo -e "\e[92;5m       ====BULDING DONE====      \e[0m"
 
-fclean:	clean
+clean:
+	rm -f $(OBJ)
+	make clean -C ./Server_lib/commands/
+	make clean -C ./Server_lib/tools/
+
+fclean:
+	rm -f $(OBJ)
 	rm -f $(NAME)
+	make fclean -C ./Server_lib/commands/
+	make fclean -C ./Server_lib/tools/
 
 re:	fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re commands tools

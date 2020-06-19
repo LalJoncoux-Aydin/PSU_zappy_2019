@@ -10,17 +10,17 @@ NAME_SERVER	=	zappy_server
 
 all: server ia
 
-server: 
+server:
 	make -C Server/
 	mv Server/zappy_server .
 
-ia: 
-	cp zappy_ai.py $(NAME_IA) && chmod 777 $(NAME_IA)
+ia:
+	cp ./Client/zappy_ai.py $(NAME_IA) && chmod +x $(NAME_IA)
 
 clean:
 	make clean -C  Server/
 	rm -rf Client/src/__pycache__/
-	rm -rf Client/__pycache__/ 
+	rm -rf Client/__pycache__/
 
 fclean: clean
 	rm -rf $(NAME_SERVER)

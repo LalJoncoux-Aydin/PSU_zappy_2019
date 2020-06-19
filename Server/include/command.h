@@ -30,6 +30,8 @@ typedef struct command_manager_s
 
 #define NBR_OF_COMMAND 10
 
+ai_s *get_ai_by_nb(server_t *server_v, int nb);
+
 void msz(int fd_cli, client_t *clis, server_t *server ,char *command);
 void bct(int fd_cli, client_t *clis, server_t *server ,char *command);
 void mct(int fd_cli, client_t *clis, server_t *server ,char *command);
