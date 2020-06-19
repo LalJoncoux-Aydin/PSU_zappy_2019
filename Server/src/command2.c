@@ -4,17 +4,13 @@
 ** File description:
 ** server2.c
 */
-#include <time.h>
 #include "command.h"
-#include "server.h"
 
 ai_s *get_ai_by_nb(server_t *server_v, int nb)
 {
     for (client_t *buff = server_v->head; buff; buff = buff->next)
-        if ( buff->type == AI )
-            for (ai_s *buff_ai = buff->ai; buff_ai; buff_ai = buff_ai->next)
-                if (nb == buff_ai->player_number)
-                    return buff_ai;
+        if ( buff->type == AI && nb == buff->ai->player_number)
+                    return buff->ai;
     return NULL;
 }
 //ppo //n X Y O\n ppo #n\n player’s position
@@ -39,7 +35,7 @@ void ppo_plv_pin(int fd_cli, client_t *clis  __attribute__((unused)), server_t *
     , ai->player_number, ai->x, ai->y, ai->invent->q0, ai->invent->q1, ai->invent->q2, ai->invent->q3, ai->invent->q4, ai->invent->q5, ai->invent->q6);
     send(fd_cli, buff, strlen(buff), 0);
     if (DEBUG)
-        printf("message send : %s",buff);
+        printf("message send : %s\n",buff);
     free(buff);
 }
 
@@ -102,6 +98,3 @@ void turn(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server 
         break;
     }
 }
-
-//plv //n L\n plv #n\n player’s level
-//pin //n X Y q0 q1 q2 q3 q4 q5 q6\n pin #n\n player’s inventory

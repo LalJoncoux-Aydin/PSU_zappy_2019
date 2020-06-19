@@ -16,10 +16,10 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include "server.h"
-#include "client.h"
+#include <time.h>
+
+#include "server_struct.h"
 #include "tools.h"
-// 001 LOGIN : NAME OF THE USER
 
 typedef struct command_manager_s
 {
@@ -34,34 +34,11 @@ void msz(int fd_cli, client_t *clis, server_t *server ,char *command);
 void bct(int fd_cli, client_t *clis, server_t *server ,char *command);
 void mct(int fd_cli, client_t *clis, server_t *server ,char *command);
 void tna(int fd_cli, client_t *clis, server_t *server ,char *command);
-// ! player command :
 void ppo_plv_pin(int fd_cli, client_t *clis, server_t *server ,char *command);
-//void pin(int fd_cli, client_t *clis, server_t *server ,char *command);
-// ! player  :
 void mouvement(int fd_cli, client_t *clis, server_t *server ,char *command);
 void look(int fd_cli, client_t *clis, server_t *server ,char *command);
 void forward(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command);
 void turn(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command);
-
 void pnw(client_t *cli);
-
-// pwn done
-
-static command_manager_t commands[NBR_OF_COMMAND] = {
-    {"msz", msz, 0},
-    {"bct", bct, 2},
-    {"mct", mct, 0},
-    {"tna", tna, 0},
-    {"ppo", ppo_plv_pin, 1},
-    {"plv", ppo_plv_pin, 1},
-    {"pin", ppo_plv_pin, 1},
-    {"Forward", forward, 1},
-    {"Right", turn, 1},
-    {"Left", turn, 1},
-//   {"Look", look, 1}
- 
-//    {"", }
-};
-
 
 #endif
