@@ -9,12 +9,14 @@ from random import randint
 from enum import Enum
 import json
 
+import time
+
 #---------------------------------------------------------- Remove
 import inspect
 from types import FrameType
 from typing import cast
 
-import time
+DEBUG = False
 
 #---------------------------------------------------------- Remove
 
@@ -29,14 +31,8 @@ class GameRunner:
         self.max_player_id = 0
         self.elevationRules = []
         self.currentLvl = 0
+        self.possibleElem = ["linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame", "food"]
         self.stoneNames = []
-        self.moveValue = ["forward", "backward", "left", "rigth"]
-        self.moveTools = {
-            "forward" : self.moveForward,
-            "backward" : self.moveBackward,
-            "left" : self.turnLeft,
-            "rigth" : self.turnRight
-        }
         self.inventory = []
 
 #--------------------------------------------------------------------------------------------- Network
@@ -67,7 +63,7 @@ class GameRunner:
             exit(0)
 
     def rcvMsg(self, minionsNb):
-        print(cast(FrameType, cast(FrameType, inspect.currentframe()).f_back).f_code.co_name)
+        if (DEBUG == True) : print(cast(FrameType, cast(FrameType, inspect.currentframe()).f_back).f_code.co_name)
         try:
             return (self.socket[minionsNb].rcvMsg())
         except Exception as e:
@@ -78,6 +74,16 @@ class GameRunner:
 
 #--------------------------------------------------------------------------------------------- Tool
 
+    def removeDuplicate(self, listOfDict):
+        seen = set()
+        new_l = []
+        for d in listOfDict:
+            t = tuple(d.items())
+            if t not in seen:
+                seen.add(t)
+                new_l.append(d)
+        return (new_l)
+
     def buildMsg(self, message, minionsNb):
         return str(message + "\n")
 
@@ -85,22 +91,21 @@ class GameRunner:
         tmp = {}
         for stone in self.stoneNames:
             tmp[stone] = 0
-        tmp["Food"] = 1000
+        tmp["food"] = 1000
         tmp["lvl"] = 0
         self.inventory.append(tmp)
 
     def loadShit(self):
-        file = open("./rules/rules.json", "r")
-        data = json.load(file)
-        self.elevationRules = data["lvlUpRules"]
-        self.stoneNames = data["stoneName"]
-        self.initInventory()
+        try:
+            file = open("./rules/rules.json", "r")
+            data = json.load(file)
+            self.elevationRules = data["lvlUpRules"]
+            self.stoneNames = data["stoneName"]
+            self.initInventory()
+        except:
+            exit(84)
 
     def prepare(self, minionsNb):
-        # self.sendMsg("type ai\n", minionsNb)
-        # print(self.rcvMsg(minionsNb))
-        # self.sendMsg("team " + self.team_name, minionsNb)
-        # print(self.rcvMsg(minionsNb))
         print(self.rcvMsg(minionsNb))
         self.sendMsg(self.team_name, minionsNb)
         print(self.rcvMsg(minionsNb))
@@ -123,8 +128,8 @@ class GameRunner:
     def checkElevation(self):
         listLvlUp = []
         i = 0
-        while i <= self.max_player_id:
-            lvl = 0
+        while i < len(self.inventory):
+            lvlup = 0
             for lvl in self.elevationRules:
                 points = 0
                 try:
@@ -134,7 +139,7 @@ class GameRunner:
                         listLvlUp.append({"minionsID" : i, "minionsElev" : lvl})
                 except:
                     pass
-                lvl += 1
+                lvlup += 1
                 self.inventory[i]
             i += 1
         print(listLvlUp)
@@ -142,13 +147,15 @@ class GameRunner:
 
     def startIncantation(self, incantationPossibilites):
         if len(incantationPossibilites) == 0: return
-        for incant in incantationPossibilites:
-            if (self.inventory[incant["minionsID"]]["Food"] < 350): continue
-            self.sendMsg(self.buildMsg("Incantation", incant["minionsID"]), incant["minionsID"])
-            self.inventory[incant["minionsID"]]["Food"] -= 300
-            for name in self.stoneNames:
-                self.inventory[incant["minionsID"]][name] -= self.elevationRules[incant["minionElev"]][name]
-
+        try:
+            for incant in incantationPossibilites:
+                if (self.inventory[incant["minionsID"]]["food"] < 350): continue
+                self.sendMsg(self.buildMsg("Incantation", incant["minionsID"]), incant["minionsID"])
+                self.inventory[incant["minionsID"]]["food"] -= 300
+                for name in self.stoneNames:
+                    self.inventory[incant["minionsID"]][name] -= self.elevationRules[incant["minionElev"]][name]
+        except:
+            pass
 #--------------------------------------------------------------------------------------------- Elevation
 
 #--------------------------------------------------------------------------------------------- Look
@@ -159,6 +166,18 @@ class GameRunner:
         return (self.rcvMsg(minionsNb))
 
 #--------------------------------------------------------------------------------------------- Look
+
+#--------------------------------------------------------------------------------------------- Take
+
+    def TakeElem(self, elem, nbElem, minionsNb):
+        elem = elem.replace(",", "")
+        print("Take \"" + elem + "\"")
+        time.sleep(1)
+        self.sendMsg(self.buildMsg("Take " + elem, minionsNb), minionsNb)
+        self.inventory[minionsNb][elem] += nbElem
+        return (self.rcvMsg(minionsNb))
+
+#--------------------------------------------------------------------------------------------- Take
 
 #--------------------------------------------------------------------------------------------- Fork
 
@@ -175,7 +194,7 @@ class GameRunner:
             print("minions nb",minionsNb, "len socket", len(self.socket))
             self.sendMsg(self.buildMsg("Fork", 0), minionsNb)
             # print(self.rcvMsg(minionsNb))
-            self.inventory[-1]["Food"] -= 42
+            self.inventory[-1]["food"] -= 42
             self.connectClient(self.info)
             self.prepare(minionsNb - 2)
             self.initInventory()
@@ -186,28 +205,25 @@ class GameRunner:
 
     def turnRight(self, minionsNb):
         self.sendMsg(self.buildMsg("Right", minionsNb), minionsNb)
-        self.inventory[minionsNb]["Food"] -= 7
-        tmp = self.rcvMsg(minionsNb)
+        self.inventory[minionsNb]["food"] -= 7
+        self.rcvMsg(minionsNb)
         self.moveForward(minionsNb)
-        print("Right", tmp)
 
     def turnLeft(self, minionsNb):
         self.sendMsg(self.buildMsg("Left", minionsNb), minionsNb)
-        self.inventory[minionsNb]["Food"] -= 7
-        tmp = self.rcvMsg(minionsNb)
+        self.inventory[minionsNb]["food"] -= 7
+        self.rcvMsg(minionsNb)
         self.moveForward(minionsNb)
-        print("Left", tmp)
 
     def moveForward(self, minionsNb):
         self.sendMsg(self.buildMsg("Forward", minionsNb), minionsNb)
-        self.inventory[minionsNb]["Food"] -= 7
-        tmp = self.rcvMsg(minionsNb)
-        print("Forward",tmp)
+        self.inventory[minionsNb]["food"] -= 7
+        self.rcvMsg(minionsNb)
 
     def moveBackward(self, minionsNb):
         self.turnLeft(minionsNb)
         self.turnLeft(minionsNb)
-        self.inventory[minionsNb]["Food"] -= 14
+        self.moveForward(minionsNb)
 
 #--------------------------------------------------------------------------------------------- Movement basic
 
@@ -238,11 +254,13 @@ class GameRunner:
         while (tmp >= index):
             self.turnLeft(minionsNb)
             tmp -= 1
-        for elem in elem_list:
+
+        for elem in self.possibleElem:
             print("try to take => ", elem)
             self.sendMsg(self.buildMsg("take " + elem, minionsNb), minionsNb)
             time.sleep(2)
             print(self.rcvMsg(minionsNb))
+
         while (tmp <= tmp_save):
             self.turnRight(minionsNb)
             tmp += 1
@@ -260,32 +278,24 @@ class GameRunner:
     def whatDoIneed(self, lookResult, minionsNb):
         lookResult = lookResult.replace("[", "")
         lookResult = lookResult.replace("]", "")
-        lookResult = lookResult.split(",")
-        tmp_max = 0
+        lookResult = lookResult.split(", ")[0].split(" ")
+        try:
+            lookResult.remove("")
+        except:
+            pass
+        try:
+            lookResult.remove("player")
+        except:
+            pass
         index = []
 
-        maxLen = len(lookResult)
-        if (self.inventory[minionsNb]["Food"] < 300):
-            tmp_max = 0
-            for i in range(0, maxLen):
-                tmp = {"index" : 0, "elem" : []}
-                tmp_result = lookResult[i].split(" ")
-                if (tmp_result.count("food") > tmp_max):
-                    tmp["index"] = i
-                    tmp["elem"] = tmp_result
-                    index.append(tmp)
-            return (index)
-        for Stone in self.stoneNames:
-            if (self.inventory[minionsNb][Stone] < 3):
-                tmp_max = 0
-                for i in range(0, maxLen):
-                    tmp = {"index" : 0, "elem" : []}
-                    tmp_result = lookResult[i].split(" ")
-                    if (tmp_result.count(Stone) > tmp_max):
-                        tmp["index"] = i
-                        tmp["elem"] = tmp_result
-                        index.append(tmp)
-        return (index)
+        if (self.inventory[minionsNb]["food"] < 400 and lookResult.count("food") > 0):
+            index.append({"elem" : "food", "nbEleme" : lookResult.count("food")})
+            lookResult.remove("food")
+        if len(lookResult) > 0:
+            for elem in lookResult:
+                index.append({"elem" : elem, "nbElem" : lookResult.count(elem)})
+        return (self.removeDuplicate(index))
 
 #--------------------------------------------------------------------------------------------- Find Need
 
@@ -294,15 +304,18 @@ class GameRunner:
     def checkAllArround(self, minionsNb):
         i = 0
         while (i < 4):
+            self.turnLeft(minionsNb)
             lookResult = self.lookArround(minionsNb)
             print("Look => ", lookResult)
             index_list = self.whatDoIneed(lookResult, minionsNb)
-            print(index_list)
+            print("need => ", index_list)
 
             for index in index_list:
-                self.goGetAtindex(index["index"], minionsNb, index["elem"])
-
-            self.turnLeft(minionsNb)
+                try:
+                    print("take Elem => " + self.TakeElem(index["elem"], index["nbElem"], minionsNb))
+                except:
+                    pass
+            self.turnRight(minionsNb)
             i += 1
 
 #--------------------------------------------------------------------------------------------- Ressources Focus
@@ -315,23 +328,10 @@ class GameRunner:
             if (self.prepareShit(info, 0) == 84):
                 return (84)
         self.loadShit()
-        i = 0
-        while (i < 10):
-            i += 10
-            # lookResult = self.lookArround(0)
-            # lookResult = lookResult.replace("[", "")
-            # lookResult = lookResult.replace("]", "")
-            # lookResult = lookResult.split(",")
 
-            # lookResult = lookResult[0].split(" ")
-            # for item in lookResult:
-            #     print(item)
-            #     self.sendMsg(self.buildMsg("Take " + item, 0), 0)
-            #     time.sleep(2)
-            #     print(self.rcvMsg(0))
+        while (42):
             self.checkAllArround(0)
             # self.startIncantation(self.checkElevation())
-            print( self.inventory[0]["Food"])
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
