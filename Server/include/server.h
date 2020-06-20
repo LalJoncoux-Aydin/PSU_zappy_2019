@@ -88,4 +88,5 @@ int prepare_server_socket(char *port);
 char *tab_to_str(char **tab);
 char *check_for_player(coor coords, server_t *server_v);
 void add_cli(client_t **head, int new_fd, server_t *server_v);
+int str_in_str(char *needle, char *haystackt);
 #endif /* SERVER_H_ */

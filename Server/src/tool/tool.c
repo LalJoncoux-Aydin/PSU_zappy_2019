@@ -30,7 +30,7 @@ int occurrences_of_char(char c, char *str)
 {
     int res = 0;
 
-    for (int i = 0; str[i] ; i++)
+    for (int i = 0; str[i]; i++)
         if (str[i] == c)
             res++;
     return res;
@@ -44,8 +44,7 @@ void send_all(int fd, char *msg)
     char *buff = msg;
     int retry = 0;
 
-    while (bytes < buflen)
-    {
+    while (bytes < buflen) {
         retry = 0;
         ret = send(fd, buff + bytes, buflen - bytes, 0);
         if (ret == -1) {

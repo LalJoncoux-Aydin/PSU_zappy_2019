@@ -48,10 +48,10 @@ int prepare_server_socket(char *port)
 
     for (cpy_head = res; cpy_head != NULL; cpy_head = cpy_head->ai_next) {
         if ((sockfd = socket(cpy_head->ai_family, cpy_head->ai_socktype,
-        cpy_head->ai_protocol)) == -1)
+            cpy_head->ai_protocol)) == -1)
             continue;
         if ((yes = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR,
-        &yes, sizeof(int))) == -1)
+            &yes, sizeof(int))) == -1)
             continue;
         if (bind(sockfd, cpy_head->ai_addr, cpy_head->ai_addrlen) == -1)
             continue;

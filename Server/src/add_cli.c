@@ -38,11 +38,13 @@ void add_cli_teams(client_t *cli, server_t *server_v)
 
     i = recv(cli->fd, team, 50, 0);
     team[i -1] = '\0';
+    printf("%s\n", team);
     for (i = 0; server_v->teams_name[i]; i++) {
         if (str_in_str(server_v->teams_name[i], team)){
             cli->ai->team = strdup(team);
             break;
         }
+        printf("->%s\n", server_v->teams_name[i]);
     }
     if (!server_v->teams_name[i]) {
         error_s(cli->fd);
@@ -75,21 +77,21 @@ void add_cli_spe(client_t *cli, server_t *server_v)
     pnw(cli);
 }
 
-void add_cli_end(client_t **head, int new_fd, server_t *server_v,  char *type)
+void add_cli_end(client_t **head, int new_fd, server_t *server_v, char *type)
 {
     client_t *buff = *head;
     client_t *buff_prev = NULL;
 
-    for (; buff->next != NULL ; buff = buff->next );
+    for (; buff->next != NULL; buff = buff->next);
     buff->next = malloc(sizeof(client_t));
     buff_prev = buff;
     buff = buff->next;
     buff->fd = new_fd;
-    buff->type  = return_type(type);
+    buff->type = return_type(type);
     buff->next = NULL;
     buff->prev = buff_prev;
     free(type);
-    return  add_cli_spe(buff, server_v);
+    return add_cli_spe(buff, server_v);
 }
 
 void add_cli(client_t **head, int new_fd, server_t *server_v)

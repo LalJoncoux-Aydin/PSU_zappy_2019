@@ -47,8 +47,7 @@ typedef struct client_s {
     struct client_s *prev;
 } client_t;
 
-client_t *get_client_by_fd( client_t *head, int fd);
-
+client_t *get_client_by_fd(client_t *head, int fd);
 
 typedef struct {
     int x;

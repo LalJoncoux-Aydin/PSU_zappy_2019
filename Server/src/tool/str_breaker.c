@@ -15,7 +15,7 @@ char *str_breaker(char *line, char delim, int part, int strict)
     char *res = malloc(sizeof(char) * strlen(line));
     int j;
 
-    for (int i = 0; line[i] ; i++) {
+    for (int i = 0; line[i]; i++) {
         if (pos == part){
             for (j = 0; line[i] && line[i] != delim; i++)
                 res[j++] = line[i];

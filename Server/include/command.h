@@ -41,10 +41,10 @@ void tna(int fd_cli, client_t *clis, server_t *server, char *command);
 void ppo_plv_pin(int fd_cli, client_t *clis, server_t *server, char *command);
 // player  :
 void mouvement(int fd_cli, client_t *clis, server_t *server, char *command);
-void look(int fd_cli, client_t *clis, server_t *server , char *command);
-void forward(int fd_cli, client_t *clis  __attribute__((unused)),
+void look(int fd_cli, client_t *clis, server_t *server, char *command);
+void forward(int fd_cli, client_t *clis __attribute__((unused)),
 server_t *server, char *command);
-void turn(int fd_cli, client_t *clis  __attribute__((unused)),
+void turn(int fd_cli, client_t *clis __attribute__((unused)),
 server_t *server, char *command);
 void take(int fd_cli, client_t *clis , server_t *server_v,
 char *command);
@@ -53,6 +53,6 @@ server_t *server, char *command);
 void brodcast(int fd_cli, client_t *clis __attribute__((unused)),
 server_t *server, char *command);
 void pnw(client_t *cli);
-
+int str_in_str(char *needle, char *haystackt);
 // pwn done
 #endif

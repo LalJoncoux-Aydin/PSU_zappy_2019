@@ -80,15 +80,15 @@ coor *x_y_available(coor *act, int orientation, coor *max)
     available[1].y = act->y + stepy[orientation];
     x_y_available2(act, orientation, available);
     for (int i = 2; i < 16; i++)
-        if (available[i].y < 0 || available[i].y >= max->y - 1)
+        if (available[i].y < 0 || available[i].y >= max->y)
             available[i].y = -1;
-        else if (available[i].x < 0 || available[i].x >= max->x -1)
+        else if (available[i].x < 0 || available[i].x >= max->x)
             available[i].x = -1;
     return available;
 }
 
 void look(int fd_cli, client_t *clis, server_t *server_v,
-char *command  __attribute__((unused)))
+char *command __attribute__((unused)))
 {
     char *buff;
 

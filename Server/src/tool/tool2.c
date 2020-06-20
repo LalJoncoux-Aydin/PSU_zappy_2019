@@ -26,7 +26,7 @@ int get_rand_num(int min, int max, int percent)
     if (min > max)
         return min;
     res = rand() % max;
-    while (res <  min)
+    while (res < min)
         res = rand() % max;
     return res;
 }
