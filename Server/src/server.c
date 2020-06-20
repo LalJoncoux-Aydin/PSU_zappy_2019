@@ -29,6 +29,7 @@ int server(server_t *server_v)
     int fd_max;
     fd_set master;
     fd_set read_fds;
+    static client_t *head = NULL;
 
     server_v->server_fd = get_socket(server_v->port);
     if (server_v->server_fd == -1)
@@ -42,7 +43,7 @@ int server(server_t *server_v)
         read_fds = master;
         if (select(fd_max + 1, &read_fds, NULL, NULL, NULL) == -1)
             error("Error : select failed");
-        manage_event(&master, server_v, fd_max, read_fds);
+        manage_event(&master, server_v, &fd_max, &read_fds, head);
     }
     return 0;
 }
