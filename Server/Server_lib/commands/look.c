@@ -7,23 +7,47 @@
 
 #include "command.h"
 
-/*
-
-void look(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command)
+static void writing_element(tile_t *cell)
 {
-    char *buff = malloc(70);
-    int nb = -1;
-    client_t *buff_cli;
-    tile_t **map = server->map;
-
-    memset(buff, 0, 70);
-    nb = atoi(str_breaker(command, ' ', 2, 0));
-    buff_cli = get_ai_by_nb(server, nb);
-    if (!buff_cli || !buff)
-        return error_s(fd_cli);
-    //buff_cli->ai->orientation; // int orientation;
-    //buff_cli->ai->x / y ;// position du jouer
-    //map[buff_cli->ai->y][buff_cli->ai->x].q0; // q0 a la tile a la possition du jouer
-    //map[buff_cli->ai->y][buff_cli->ai->x + 1].q0; // q0 a la tile a l'ouest de la possition du jouer
+    // If player
+    printf("player");
+    for (int i = cell->q0; i > 0; i--)
+        printf(", food");
+    for (int i = cell->q1; i > 0; i--)
+        printf(", linemate");
+    for (int i = cell->q2; i > 0; i--)
+        printf(", deraumere");
+    for (int i = cell->q3; i > 0; i--)
+        printf(", sibur");
+    for (int i = cell->q4; i > 0; i--)
+        printf(", mendiane");
+    for (int i = cell->q5; i > 0; i--)
+        printf(", phiras");
+    for (int i = cell->q6; i > 0; i--)
+        printf(", thystame");
 }
-*/
+//
+// static void wring_send()
+// {
+//
+// }
+
+void look(int fd_cli, client_t *clis, server_t *server,
+__attribute__((unused)) char *command)
+{
+    char buff[MESSAGE_SIZE];
+
+    printf("Look");
+	// X Y cli --> Pos ia
+	// X Y server --> Max size
+    for (int y = 0; y < server->y; y++) {
+        for (int x = 0; x < server->x; x++) {
+            writing_element(&server->map[y][x]);
+            // tile = &(server->map[y][x]);
+            // sprintf(buff, "bct %d %d %d %d %d %d %d %d %d\n", x, y, tile->q0,
+            // tile->q1, tile->q2, tile->q3, tile->q4, tile->q5, tile->q6);
+            // res = str_concat(res, buff);
+        }
+    }
+//    send(fd_cli, buff, strlen(buff), 0);
+}

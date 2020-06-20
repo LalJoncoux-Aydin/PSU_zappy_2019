@@ -18,7 +18,7 @@ const command_manager_t commands[NBR_OF_COMMAND] = {
     {"Forward", forward, 1},
     {"Right", turn, 1},
     {"Left", turn, 1},
-//   {"Look", look, 1}
+    {"Look", look, 1},
 };
 
 static void del_cli(client_t **head, int fd)

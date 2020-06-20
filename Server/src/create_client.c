@@ -7,22 +7,15 @@
 
 #include "create_client.h"
 
-static void get_team_name(client_t *cli, server_t *server_v)
+static void get_team_name(client_t *cli)
 {
     char *team = NULL;
-    int i = 0;
 
     team = malloc((sizeof(char) * 50));
     if (team == NULL)
         error("Error : malloc failed");
+    send(cli->fd, "WELCOME\n", 8, 0);
     recv(cli->fd, team, 50, 0);
-    for (i = 0; server_v->teams_name[i] != NULL; i++) {
-        if (str_in_str(server_v->teams_name[i], team)) {
-            tna(cli->fd, cli, server_v, "error");
-            get_team_name(cli, server_v);
-            return;
-        }
-    }
     cli->ai->team = strdup(team);
     if (cli->ai->team == NULL)
         error("Error : malloc failed");
@@ -62,7 +55,7 @@ static bool create_new_client_ia(client_t *cli, server_t *server_v)
         cli->ai->orientation = SOUTH;
     cli->ai->player_number = nbr_player++;
     cli->ai->level = 0;
-    get_team_name(cli, server_v);
+    get_team_name(cli);
     return true;
 }
 
