@@ -15,5 +15,5 @@ def master():
     if (param == None) : print_help(84)
     player = GameRunner(param["name"])
     player.letsGo(param, False)
-    player.disconnect()
+    player.disconnectAll()
     return (0)

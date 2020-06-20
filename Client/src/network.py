@@ -18,11 +18,9 @@ class Network:
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.hostname, self.port))
-            print("Connection : ok !")
             return (0)
         except Exception as e:
             print (e)
-            print("Connection : ko !")
             return (-1)
 
     def disconnectClient(self):
@@ -36,19 +34,15 @@ class Network:
     def rcvMsg(self):
         try:
             msg = self.socket.recv(1024).decode()
-            print("RcvMsg : ok !")
             return (msg)
         except Exception as e:
             print (e)
-            print("RcvMsg : ko !")
             return (None)
 
     def sendMsg(self, msg):
         try:
             self.socket.send(str.encode(msg + "\n"))
-            print("SendMsg : ok !")
             return (0)
         except Exception as e:
             print (e)
-            print("SendMsg : ko !")
             return (-1)
