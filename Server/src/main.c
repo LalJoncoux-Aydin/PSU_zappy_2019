@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2019
+** nom_server
+** File description:
+** main.c
+*/
+
 #include "server.h"
 #include <stdio.h>
 #include <string.h>
@@ -25,7 +32,22 @@ int create_map(server_t *server_v)
     }
     return 0;
 }
-//norm ou pas nom?
+
+void manage_op2(char op, char *opt_arg, server_t *server)
+{
+    switch (op) {
+    case 'f':
+        server->freq = atoi(opt_arg);
+        break;
+    case 'p':
+        server->port = strdup(opt_arg);
+        break;
+    case 'c':
+        server->nbr_max_per_teams = atoi(opt_arg);
+        break;
+    }
+}
+
 int manage_op(char op, char *opt_arg, server_t *server, char *limit)
 {
     int i = 0;
@@ -43,22 +65,13 @@ int manage_op(char op, char *opt_arg, server_t *server, char *limit)
         case 'y':
             server->y = atoi(opt_arg);
             break;
-        case 'f':
-            server->freq = atoi(opt_arg);
-            break;
-        case 'p':
-            server->port = strdup(opt_arg);
-            break;
-        case 'c':
-            server->nbr_max_per_teams = atoi(opt_arg);
-            break;
     }
+    manage_op2(op, opt_arg, server);
     return 0;
 }
 
 int main(int ac, char **av, char **env)
 {
-    //char *buf = NULL;
     server_t *server_v = malloc(sizeof(server_t));
     int op;
 
@@ -74,7 +87,7 @@ int main(int ac, char **av, char **env)
         manage_op(op, optarg, server_v, env[0]);
     }
     if (create_map(server_v) == -1)
-        return(84);
+        return (84);
     server(server_v);
     return 0;
 }

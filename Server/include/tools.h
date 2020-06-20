@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2019
+** nom_server
+** File description:
+** tools.h
+*/
+
 #ifndef TOOLS_H_
 #define TOOLS_H_
 

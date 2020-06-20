@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <string.h>
+#include "server.h"
 
 void error_s(int fd)
 {
@@ -39,4 +40,25 @@ char *str_concat(char *con, char *cat)
     if (!con)
         return NULL;
     return strcat(con, cat);
+}
+
+int return_type(char *str)
+{
+    if (DEBUG)
+        printf("CLI of type %s connected (msg recv : %s\n",
+        (!(strlen(str) < 7) && (str[5] == 'a' && str[6] == 'i'))
+        ? "AI" : "GRAPHIC", str);
+    if (strlen(str) < 7)
+        return -1;
+    if (str[5] == 'a' && str[6] == 'i')
+        return AI;
+    return GRAPHIC;
+}
+
+int eq_str(char *str1, char *str2)
+{
+    for (int i = 0; str1[i] && str2[i]; i++)
+        if (str1[i] != str2[i])
+            return 0;
+    return 1;
 }

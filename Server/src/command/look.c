@@ -9,12 +9,6 @@
 #include "tools.h"
 #include "server.h"
 #include <string.h>
-char *check_for_player(coor coords, server_t *server_v); // pas oublier ca la
-
-typedef struct {
-    int x;
-    int y;
-} coor;
 
 coor *coord_init(int x, int y)
 {
@@ -24,7 +18,6 @@ coor *coord_init(int x, int y)
     res->y = y;
     return res;
 }
-
 
 char *parse_available(coor *coords, server_t *server_v)
 {
@@ -50,7 +43,7 @@ char *parse_available(coor *coords, server_t *server_v)
     return tab_to_str(buff);
 }
 
-void *x_y_available2(coor *act, int orientation, coor *available)
+void x_y_available2(coor *act, int orientation, coor *available)
 {
     int xmod[5] = {-42, 1, 0, -1, 0};
     int ymod[5] = {-42, 0, -1, 0, 1};
@@ -76,8 +69,6 @@ void *x_y_available2(coor *act, int orientation, coor *available)
 coor *x_y_available(coor *act, int orientation, coor *max)
 {
     coor *available = malloc(sizeof(coor) * 16);
-    int xmod[5] = {-42, 1, 0, -1, 0};
-    int ymod[5] = {-42, 0, -1, 0, 1};
     int stepx[5] = {-42, -1, 1, 1, -1};
     int stepy[5] = {-42, -1, -1, 1, 1};
 
@@ -96,7 +87,8 @@ coor *x_y_available(coor *act, int orientation, coor *max)
     return available;
 }
 
-void look(int fd_cli, client_t *clis, server_t *server_v, char *command)
+void look(int fd_cli, client_t *clis, server_t *server_v,
+char *command  __attribute__((unused)))
 {
     char *buff;
 

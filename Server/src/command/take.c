@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2019
+** nom_server
+** File description:
+** take.c
+*/
+
 #include "client.h"
 #include "tools.h"
 #include "server.h"
@@ -48,9 +55,10 @@ void take_modifier(client_t *clis, tile_t **map, int i)
 
 void take(int fd_cli, client_t *clis, server_t *server_v, char *command)
 {
-    char *buff = malloc(70);
     char *obj = str_breaker(command, ' ', 2, 0);
 
+    if (!obj)
+        return error_s(fd_cli);
     char *keys[7] = {"food" , "linemate", "deraumere", "sibur",
     "mendiane", "phiras", "thystame"};
     for (int i = 0; i < 7; i++)
@@ -59,7 +67,9 @@ void take(int fd_cli, client_t *clis, server_t *server_v, char *command)
             take_modifier(clis, server_v->map, i);
 }
 
-void inventory(int fd_cli, client_t *clis, server_t *server, char *command)
+void inventory(int fd_cli, client_t *clis,
+server_t *server  __attribute__((unused)),
+char *command  __attribute__((unused)))
 {
     char *buff = malloc(120);
     ai_s *ai = clis->ai;
@@ -76,7 +86,8 @@ sibur %d, mendiane %d, phiras %d, thystame %d]"
     free(buff);
 }
 
-void brodcast(int fd_cli, client_t *clis, server_t *server, char *command)
+void brodcast(int fd_cli  __attribute__((unused)) , client_t *clis,
+server_t *server, char *command)
 {
     char *buff = malloc(120);
     client_t *cli = server->head;

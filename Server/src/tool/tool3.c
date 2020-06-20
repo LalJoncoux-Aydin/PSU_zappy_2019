@@ -5,6 +5,9 @@
 ** tool3.c
 */
 
+#include "client.h"
+#include "tools.h"
+#include "server.h"
 
 char *tab_to_str(char **tab)
 {

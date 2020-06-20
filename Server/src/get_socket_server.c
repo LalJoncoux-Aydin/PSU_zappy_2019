@@ -32,7 +32,7 @@ static void error_check_prep_server(struct addrinfo *test, int sockfd, int op)
     if (test == NULL) {
         if (sockfd == -1)
             error("socket function failed");
-        else if(op == -1)
+        else if (op == -1)
             error("setsocktopt failed");
         else
             error("bind failed");
@@ -47,9 +47,11 @@ int prepare_server_socket(char *port)
     int yes = 1;
 
     for (cpy_head = res; cpy_head != NULL; cpy_head = cpy_head->ai_next) {
-        if((sockfd = socket(cpy_head->ai_family, cpy_head->ai_socktype, cpy_head->ai_protocol)) == -1)
+        if ((sockfd = socket(cpy_head->ai_family, cpy_head->ai_socktype,
+        cpy_head->ai_protocol)) == -1)
             continue;
-        if ((yes = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int))) == -1)
+        if ((yes = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR,
+        &yes, sizeof(int))) == -1)
             continue;
         if (bind(sockfd, cpy_head->ai_addr, cpy_head->ai_addrlen) == -1)
             continue;

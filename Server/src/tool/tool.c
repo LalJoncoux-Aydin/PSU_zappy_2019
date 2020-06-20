@@ -22,7 +22,7 @@ void add_end_file(char *str, char *str_name)
 
 void error(char *msg)
 {
-    printf("%s",msg);
+    printf("%s", msg);
     exit(84);
 }
 
@@ -31,7 +31,7 @@ int occurrences_of_char(char c, char *str)
     int res = 0;
 
     for (int i = 0; str[i] ; i++)
-        if(str[i] == c)
+        if (str[i] == c)
             res++;
     return res;
 }

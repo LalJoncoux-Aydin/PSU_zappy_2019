@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2019
+** include
+** File description:
+** client.h
+*/
+
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
@@ -41,5 +48,12 @@ typedef struct client_s {
 } client_t;
 
 client_t *get_client_by_fd( client_t *head, int fd);
+
+
+typedef struct {
+    int x;
+    int y;
+} coor;
+
 
 #endif /* CLIENT_H_ */

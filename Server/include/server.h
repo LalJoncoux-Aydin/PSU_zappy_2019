@@ -59,7 +59,8 @@ typedef struct server_s {
 #define MAX_NAME_LENGTH 32
 #define MAX_DESCRIPTION_LENGTH 255
 #define MAX_BODY_LENGTH 512
-#define HELP "USAGE: ./zappy_server -p port -x width -y height -n name1 name2 ... -c clientsNb -f freq\n\t\
+#define HELP "USAGE: ./zappy_server -p port -x width -y \
+height -n name1 name2 ... -c clientsNb -f freq\n\t\
 port is the port number\n\t\
 width is the width of the world\n\t\
 height is the height of the world\n\t\
@@ -79,10 +80,12 @@ void add_end_file(char *str, char *str_name);
 void add_new_fd(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size);
 void del_from_pfds(struct pollfd pfds[], int i, int *fd_count, client_t **head);
 void del_cli(client_t **head, int fd);
-
+int return_type(char *str);
 int get_rand_num(int min, int max, int percent);
 int occurrences_of_char(char c, char *str);
 int server(server_t *port);
 int prepare_server_socket(char *port);
-
+char *tab_to_str(char **tab);
+char *check_for_player(coor coords, server_t *server_v);
+void add_cli(client_t **head, int new_fd, server_t *server_v);
 #endif /* SERVER_H_ */
