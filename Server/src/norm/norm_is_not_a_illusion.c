@@ -84,7 +84,6 @@ char *parse_available(coor *coords, server_t *server_v)
     tile_t *tile;
     char **buff = malloc(sizeof(char *) * 17);
     char *players_here;
-   // int x, y;
 
     for (int i = 0; i < 16; i++) {
         if (coords[i].x == -1 || coords[i].y == -1) {
@@ -95,7 +94,8 @@ char *parse_available(coor *coords, server_t *server_v)
         tile = &(server_v->map[coords[i].y][coords[i].x]);
         players_here = check_for_player(coords[i], server_v);
         sprintf(buff[i], "bct %d %d %d %d %d %d %d %d %d %s"
-        ,coords[i].x ,coords[i].y, tile->q0, tile->q1, tile->q2, tile->q3, tile->q4, tile->q5, tile->q6
+        ,coords[i].x ,coords[i].y, tile->q0, tile->q1, tile->q2, tile->q3,
+        tile->q4, tile->q5, tile->q6
         , players_here ? players_here : "\n");
         printf("%s",buff[i]);
     }
@@ -149,6 +149,10 @@ void look(int fd_cli, client_t *clis , server_t *server_v, char *command)
     if (!buff)
         return;
     send(fd_cli, buff, strlen(buff), 0);
+    //buff_cli->ai->orientation; // int orientation;
+    //buff_cli->ai->x / y ;// position du jouer
+    //map[buff_cli->ai->y][buff_cli->ai->x].q0; // q0 a la tile a la possition du jouer
+    //map[buff_cli->ai->y][buff_cli->ai->x + 1].q0; // q0 a la tile a l'ouest de la possition du jouer
 }
 
 //int main(int ac, char **av)
@@ -165,59 +169,3 @@ void look(int fd_cli, client_t *clis , server_t *server_v, char *command)
 //    for (int i = 0; i < 16; i++)
 //        printf("avais[%d] x = %d , y %d\n", i, avai[i].x, avai[i].y);
 //}
-
-void take_modifier2(client_t *clis, tile_t **map, int i)
-{
-    int y =  clis->ai->y;
-    int x =  clis->ai->x;
-
-    printf("%d\n",i);
-    switch (i) {
-        case 4:
-        clis->ai->invent->q4 += map[y][x].q4;
-        map[y][x].q4 = 0;
-        break; case 5:
-        clis->ai->invent->q5 += map[y][x].q5;
-        map[y][x].q5 = 0;
-        break; case 6:
-        clis->ai->invent->q6 += map[y][x].q6;
-        map[y][x].q6 = 0;
-        break;
-    }
-}
-
-void take_modifier(client_t *clis, tile_t **map, int i)
-{
-    int y =  clis->ai->y;
-    int x =  clis->ai->x;
-
-    switch (i) {
-        case 0:
-        clis->ai->invent->q0 += map[y][x].q0;
-        map[y][x].q0 = 0;
-        break; case 1:
-        clis->ai->invent->q1  += map[y][x].q1;
-        map[y][x].q1 = 0;
-        break; case 2:
-        clis->ai->invent->q2 += map[y][x].q2;
-        map[y][x].q2 = 0;
-        break; case 3:
-        clis->ai->invent->q3 += map[y][x].q3;
-        map[y][x].q3 = 0;
-        break;
-    }
-     if (i > 3)
-        take_modifier2(clis, map, i);
-}
-
-void take(int fd_cli, client_t *clis , server_t *server_v, char *command)
-{
-    char *buff = malloc(70);
-    char *obj = str_breaker(command, ' ', 2, 0);
-
-    char *keys[7] = {"food" , "linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
-    for(int i = 0; i < 7; i ++)
-        if (obj[0] == keys[i][0] && obj[1] == keys[i][1] && obj[2] == keys[i][2] && obj[3] == keys[i][3])
-            take_modifier(clis, server_v->map, i);
-
-}
