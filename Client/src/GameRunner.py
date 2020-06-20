@@ -330,7 +330,7 @@ class GameRunner:
             #     time.sleep(2)
             #     print(self.rcvMsg(0))
             self.checkAllArround(0)
-            self.startIncantation(self.checkElevation())
+            # self.startIncantation(self.checkElevation())
             print( self.inventory[0]["Food"])
         return (0)
 
