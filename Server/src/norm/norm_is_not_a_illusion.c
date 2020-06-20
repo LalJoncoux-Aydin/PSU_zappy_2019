@@ -169,3 +169,4 @@ void look(int fd_cli, client_t *clis , server_t *server_v, char *command)
 //    for (int i = 0; i < 16; i++)
 //        printf("avais[%d] x = %d , y %d\n", i, avai[i].x, avai[i].y);
 //}
+

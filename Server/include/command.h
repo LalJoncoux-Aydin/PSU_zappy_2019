@@ -28,7 +28,7 @@ typedef struct command_manager_s
     int nb_of_arg;
 } command_manager_t;
 
-#define NBR_OF_COMMAND 12
+#define NBR_OF_COMMAND 14
 
 ai_s *get_ai_by_nb(server_t *server_v, int nb);
 
@@ -46,7 +46,8 @@ void look(int fd_cli, client_t *clis, server_t *server ,char *command);
 void forward(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command);
 void turn(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command);
 void take(int fd_cli, client_t *clis , server_t *server_v, char *command);
-
+void inventory(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command);
+void brodcast(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command);
 void pnw(client_t *cli);
 
 // pwn done
@@ -63,7 +64,9 @@ static command_manager_t commands[NBR_OF_COMMAND] = {
     {"Right", turn, 0},
     {"Left", turn, 0},
     {"Look", look, 0},
-    {"Take", take, 1}
+    {"Take", take, 1},
+    {"Inventory", inventory, 0},
+    {"Broadcast", brodcast, -1}
  
 //    {"", }
 };

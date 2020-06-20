@@ -59,7 +59,7 @@ char *tab_to_str(char **tab)
 
     for (int i = 0; tab[i] ; i++)
         size += strlen(tab[i]);
-    res = malloc(size);
+    res = malloc(size + 3);
     for (int y = 0; tab[y] ; y++)
         for (int x = 0; tab[y][x] ; x++)
            res[index++] = tab[y][x];
@@ -220,4 +220,32 @@ void take(int fd_cli, client_t *clis , server_t *server_v, char *command)
         if (obj[0] == keys[i][0] && obj[1] == keys[i][1] && obj[2] == keys[i][2] && obj[3] == keys[i][3])
             take_modifier(clis, server_v->map, i);
 
+}
+
+void inventory(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command)
+{
+    char *buff = malloc(120);
+    ai_s *ai = clis->ai;
+
+    if (!ai || !buff)
+        return error_s(fd_cli);
+    sprintf(buff, "[food %d, linemate %d, deraumere %d, sibur %d, mendiane %d, phiras %d, thystame %d]"
+    , ai->invent->q0, ai->invent->q1, ai->invent->q2, ai->invent->q3, ai->invent->q4, ai->invent->q5, ai->invent->q6);
+    send(fd_cli, buff, strlen(buff), 0);
+    if (DEBUG)
+        printf("message send : %s\n",buff);
+    free(buff);
+}
+
+void brodcast(int fd_cli, client_t *clis  __attribute__((unused)), server_t *server ,char *command)
+{
+    char *buff = malloc(120);
+    client_t *cli = server->head;
+
+    for (;*command && *command != ' '; command += 1);
+    command += 1;
+    sprintf(buff, "mesage %d %d, %s", clis->ai->x, clis->ai->y, command);
+    for (;cli; cli = cli->next)
+        if (cli->type == AI)
+            send(cli->fd, buff, strlen(buff), 0);
 }

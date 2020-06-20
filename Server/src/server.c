@@ -146,14 +146,15 @@ void add_cli(client_t **head, int new_fd, server_t *server_v)
     free(type);
     return  add_cli_spe(buff, server_v);
 }
-
+// !! CHANGEMENT ICI -1
 static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *server)
 {
     int sender_fd = tri_force[1];
 
     for (int i = 0; i < NBR_OF_COMMAND; i++) {
         if (str_in_str(commands[i].command, msg)) {
-            if (occurrences_of_char(' ', msg) != commands[i].nb_of_arg) {
+            if (occurrences_of_char(' ', msg) != commands[i].nb_of_arg 
+            && commands[i].nb_of_arg != -1 ) {
                 send(clis->fd, "sbp\n", 4, 0);
                 return;
             }

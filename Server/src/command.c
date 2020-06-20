@@ -7,7 +7,10 @@
 #include <time.h>
 #include "command.h"
 #include "server.h"
-
+  //struct timespec tim, tim2;
+    //tim.tv_sec = 1;
+    //tim.tv_nsec = 500;
+    //nanosleep(&tim , &tim2);
 void msz(int fd_cli, client_t *clis __attribute__((unused)), server_t *server ,char *command __attribute__((unused)))
 {
     char *buff = malloc(20);
@@ -22,7 +25,7 @@ void msz(int fd_cli, client_t *clis __attribute__((unused)), server_t *server ,c
 
 void bct(int fd_cli, client_t *clis __attribute__((unused)), server_t *server ,char *command)
 {
-    char *buff = malloc(50);
+    char *buff = malloc(70);
     int x = atoi(str_breaker(command, ' ', 2, 0)); // ! CHECK if 0 < && > server->X
     int y = atoi(str_breaker(command, ' ', 3, 0));
     tile_t *tile;// = &(server->map[y][x]);
@@ -84,10 +87,6 @@ void pnw(client_t *cli)
     cli->ai->x, cli->ai->y, cli->ai->orientation, cli->ai->level, cli->ai->team);
     if (DEBUG)
         printf("%s",buff);
-    //struct timespec tim, tim2;
-    //tim.tv_sec = 1;
-    //tim.tv_nsec = 500;
-    //nanosleep(&tim , &tim2);
     for (; cli->prev ; cli = cli->prev);
     for (; cli ; cli = cli->next)
         send(cli->fd, buff, strlen(buff), 0);
