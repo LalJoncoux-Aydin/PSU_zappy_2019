@@ -57,24 +57,22 @@ static bool create_new_client_ia(client_t *cli, server_t *server_v)
     else
         cli->ai->orientation = SOUTH;
     cli->ai->player_number = nbr_player++;
-    TEAMS :
-    for (i = 0; server_v->teams_name[i] ; i++) {
-        if (str_in_str(server_v->teams_name[i],team)) {
-            cli->ai->team = strdup(team);
-            if (cli->ai->team == NULL)
-                error("Error : malloc failed");
-            break;
+    for (bool halt = false; halt != true;) {
+        halt = true;
+        for (i = 0; server_v->teams_name[i] ; i++) {
+            if (str_in_str(server_v->teams_name[i],team)) {
+                cli->ai->team = strdup(team);
+                break;
+            }
+        }
+        cli->ai->level = 0;
+        if (!server_v->teams_name[i] && !(halt = false)) {
+            error_s(cli->fd);
+            tna(cli->fd, cli, server_v, "error");
+            memset(team, 0 , 50);
+            recv(cli->fd, team, 50, 0);
         }
     }
-    cli->ai->level = 0;
-    if (!server_v->teams_name[i]) {
-        error_s(cli->fd);
-        tna(cli->fd, cli, server_v, "error");
-        memset(team, 0 , 50);
-        recv(cli->fd, team, 50, 0);
-        goto TEAMS;
-    }
-    pnw(cli);
     return true;
 }
 
