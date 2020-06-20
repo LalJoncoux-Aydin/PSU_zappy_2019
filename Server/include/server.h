@@ -25,6 +25,7 @@
 #include <poll.h>
 #include <stdio.h>
 #include "client.h"
+#include <time.h>
 //Private include
 //#include "command.h"
 #include "tools.h"

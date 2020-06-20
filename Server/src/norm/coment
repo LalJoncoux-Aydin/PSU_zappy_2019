@@ -1,0 +1,33 @@
+
+//x/y_mod -> NORTH ,EAST, SOUTH, WEST
+//// * 0,  1 2 3 ,   4 5 6 7 8 ,  9 10 11 12 13 14 15
+//
+//int get_nbs_of_players(server_t *server_v)
+//{
+//    client_t *buff = server_v->head;
+//    int i = 0;
+//
+//    for (; buff; buff = buff->next)
+//        if (buff->type == AI)
+//            i++;
+//    return i;
+//}
+//
+//coor *get_coor_of_players(server_t *server_v)
+//{
+//    coor *res = malloc(sizeof(coor) *(get_nbs_of_player(server_v)  + 1));
+//    client_t *buff = server_v->head;
+//    int i = 0;
+//    int j = 0;
+//
+//    if (!res)
+//        return NULL;
+//    for (i; buff; buff = buff->next)
+//        if (buff->type == AI) {
+//            res[j++].x = buff->ai->x;
+//            res[j++].y = buff->ai->y;
+//    }
+//    res[j].x = -84;
+//    res[j].y = -84;
+//    return res;
+//}
