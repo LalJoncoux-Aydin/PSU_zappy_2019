@@ -15,10 +15,9 @@ infos = {
 }
 
 def print_help(bin_name, code):
-    print("USAGE: " + bin_name + " -p port -n name -h machine")
+    print("USAGE: " + bin_name + " -p port -n name")
     print("\tport\t\tis the port number")
     print("\tname\ŧ\tis the name of the team")
-    print("\tmachine\t\tis the name of the machine; localhost by default")
     exit(code)
 
 def parse(param):
