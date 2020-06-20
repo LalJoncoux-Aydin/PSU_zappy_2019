@@ -8,6 +8,10 @@
 #ifndef SERVERSTRUCT_H_
 #define SERVERSTRUCT_H_
 
+#define NBR_OF_COMMAND 11
+#define MESSAGE_SIZE 128
+#define NB_CLIENT 15
+
 enum {
     NORTH = 1,
     EAST,

@@ -8,9 +8,6 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-#define NBR_OF_COMMAND 11
-#define MESSAGE_SIZE 128
-
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
