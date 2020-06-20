@@ -8,7 +8,8 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-#define NBR_OF_COMMAND 10
+#define NBR_OF_COMMAND 11
+#define MESSAGE_SIZE 128
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -30,7 +31,7 @@ typedef struct command_manager_s
     int nb_of_arg;
 } command_manager_t;
 
-ai_s *get_ai_by_nb(server_t *server_v, int nb);
+ai_t *get_ai_by_nb(server_t *server_v, int nb);
 void msz(int fd_cli, __attribute__((unused))client_t *clis,
 server_t *server, __attribute__((unused))char *command);
 void bct(int fd_cli, __attribute__((unused))client_t *clis,

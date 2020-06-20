@@ -25,7 +25,7 @@ typedef struct ivent_s {
     int q6;
 } inventory_t;
 
-typedef struct ai_specific_s {
+typedef struct ai_s {
     int player_number;
     int x;
     int y;
@@ -33,14 +33,14 @@ typedef struct ai_specific_s {
     int level;
     inventory_t *invent;
     char *team;
-    struct ai_specific_s *next;
-} ai_s;
+    struct ai_tpecific_s *next;
+} ai_t;
 
 typedef struct client_s {
     int type;
     int fd;
     char *user_name;
-    ai_s *ai;
+    ai_t *ai;
     struct client_s *next;
     struct client_s *prev;
 } client_t;

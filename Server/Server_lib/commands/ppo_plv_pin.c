@@ -11,7 +11,7 @@ void ppo_plv_pin(int fd_cli, client_t *clis, server_t *server, char *command)
 {
     char *buff = malloc(70);
     int nb = -1;
-    ai_s *ai;
+    ai_t *ai;
 
     if (buff == NULL)
         exit(84);
