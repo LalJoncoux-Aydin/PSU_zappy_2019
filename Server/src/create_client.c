@@ -7,6 +7,14 @@
 
 #include "create_client.h"
 
+static void send_player_info(client_t *cli)
+{
+    char size_map[MESSAGE_SIZE];
+
+    sprintf(size_map, "%d\n%d %d\n", NB_CLIENT, cli->ai->x, cli->ai->y);
+    send(cli->fd, size_map, strlen(size_map), 0);
+}
+
 static void get_team_name(client_t *cli)
 {
     char *team = NULL;
@@ -19,6 +27,8 @@ static void get_team_name(client_t *cli)
     cli->ai->team = strdup(team);
     if (cli->ai->team == NULL)
         error("Error : malloc failed");
+    send_player_info(cli);
+    free(team);
 }
 
 static inventory_t *init_invent(void)
