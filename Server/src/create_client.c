@@ -7,14 +7,25 @@
 
 #include "create_client.h"
 
-static char *init_buffer(char *buff, int new_fd)
+static void get_team_name(client_t *cli, server_t *server_v)
 {
-    buff = malloc(sizeof(char) * 50);
-    if (buff == NULL)
-        error("Malloc failed");
-    memset(buff, 0 , 50);
-    recv(new_fd, buff, 50, 0);
-    return buff;
+    char *team = NULL;
+    int i = 0;
+
+    team = malloc((sizeof(char) * 50));
+    if (team == NULL)
+        error("Error : malloc failed");
+    recv(cli->fd, team, 50, 0);
+    for (i = 0; server_v->teams_name[i] != NULL; i++) {
+        if (str_in_str(server_v->teams_name[i], team)) {
+            tna(cli->fd, cli, server_v, "error");
+            get_team_name(cli, server_v);
+            return;
+        }
+    }
+    cli->ai->team = strdup(team);
+    if (cli->ai->team == NULL)
+        error("Error : malloc failed");
 }
 
 static inventory_t *init_invent(void)
@@ -23,7 +34,7 @@ static inventory_t *init_invent(void)
 
     ret = malloc(sizeof(inventory_t));
     if (ret == NULL)
-        return NULL;
+        error("Error : malloc failed");
     ret->q0 = 0;
     ret->q1 = 0;
     ret->q2 = 0;
@@ -36,16 +47,9 @@ static inventory_t *init_invent(void)
 
 static bool create_new_client_ia(client_t *cli, server_t *server_v)
 {
-    int i = 0;
-    char *team = NULL;
     static int nbr_player = 0;
 
-    team = malloc((sizeof(char) * 50));
-    if (team == NULL)
-        error("Error : malloc failed");
-    i = recv(cli->fd, team, 50, 0);
-    team[i -1] = '\0';
-    cli->ai = malloc(sizeof(client_t));
+    cli->ai = malloc(sizeof(ai_t));
     if (cli->ai == NULL)
         error("Error : malloc failed");
     cli->ai->invent = init_invent();
@@ -57,26 +61,12 @@ static bool create_new_client_ia(client_t *cli, server_t *server_v)
     else
         cli->ai->orientation = SOUTH;
     cli->ai->player_number = nbr_player++;
-    for (bool halt = false; halt != true;) {
-        halt = true;
-        for (i = 0; server_v->teams_name[i] ; i++) {
-            if (str_in_str(server_v->teams_name[i],team)) {
-                cli->ai->team = strdup(team);
-                break;
-            }
-        }
-        cli->ai->level = 0;
-        if (!server_v->teams_name[i] && !(halt = false)) {
-            error_s(cli->fd);
-            tna(cli->fd, cli, server_v, "error");
-            memset(team, 0 , 50);
-            recv(cli->fd, team, 50, 0);
-        }
-    }
+    cli->ai->level = 0;
+    get_team_name(cli, server_v);
     return true;
 }
 
-static bool create_fst_client(client_t **hd, int new, server_t *serv, char *tp)
+static bool create_fst_client(client_t **hd, int new, server_t *serv)
 {
     (*hd) = malloc(sizeof(client_t));
     if ((*hd) == NULL)
@@ -84,13 +74,11 @@ static bool create_fst_client(client_t **hd, int new, server_t *serv, char *tp)
     (*hd)->fd = new;
     (*hd)->prev = NULL;
     (*hd)->next = NULL;
-    (*hd)->type = return_type(tp);
     serv->head = (*hd);
-    free(tp);
     return true;
 }
 
-static bool create_new_client(client_t *cli, int new_fd, char *type)
+static bool create_new_client(client_t *cli, int new_fd)
 {
     client_t *cli_prev = NULL;
 
@@ -102,32 +90,22 @@ static bool create_new_client(client_t *cli, int new_fd, char *type)
     cli->fd = new_fd;
     cli->next = NULL;
     cli->prev = cli_prev;
-    cli->type = return_type(type);
     return true;
 }
 
 void create_client(client_t **head, int new_fd, server_t *server_v)
 {
     client_t *cli = NULL;
-    char *type = NULL;
 
-    type = init_buffer(type, new_fd);
     if (!(*head)) {
-        if (create_fst_client(head, new_fd, server_v, type) == false)
+        if (create_fst_client(head, new_fd, server_v) == false)
             error("Error : Creation of the first client");
-        printf("First client is created\n");
-        return;
-    }
-    for (cli = *head; cli->next != NULL; cli = cli->next);
-    if (create_new_client(cli, new_fd, type) == false)
-        error("Error : Creation new client");
-    if (cli->type == GRAPHIC) {
-        cli->ai = NULL;
-        free(type);
-        return;
+        cli = *head;
+    } else {
+        for (cli = *head; cli->next != NULL; cli = cli->next);
+        if (create_new_client(cli, new_fd) == false)
+            error("Error : Creation new client");
     }
     if (create_new_client_ia(cli, server_v) == false)
         error("Error : creation new client's IA");
-    free(type);
-    printf("Client is created\n");
 }
