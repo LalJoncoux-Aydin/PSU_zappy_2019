@@ -7,31 +7,28 @@
 
 #include "command.h"
 
-void ppo_plv_pin(int fd_cli, __attribute__((unused))client_t *clis,
-server_t *server, char *command)
+void ppo_plv_pin(int fd_cli, client_t *cli, server_t *server, char *command)
 {
-    char *buff = malloc(70);
+    char *buff = NULL;
     int nb = -1;
-    ai_t *ai;
 
+    buff = malloc(sizeof(char) * MESSAGE_SIZE);
     if (buff == NULL)
-        exit(84);
-    memset(buff, 0, 70);
+        error("Error : malloc failed\n");
     nb = atoi(str_breaker(command, ' ', 2, 0));
-    ai = get_ai_by_nb(server, nb);
-    if (!ai || !buff)
+    if (!cli->ai || !buff)
         return error("Error");
     if (str_in_str("ppo", command))
-        sprintf(buff, "ppo %d %d %d %d\n", ai->player_number, ai->x
-        , ai->y, ai->orientation);
+        sprintf(buff, "ppo %d %d %d %d\n", cli->ai->player_number, cli->ai->x,
+        cli->ai->y, cli->ai->orientation);
     if (str_in_str("plv", command))
-        sprintf(buff, "plv %d %d\n", ai->player_number, ai->level);
-    if (str_in_str("pin", command))
-        sprintf(buff, "pin %d %d %d %d %d %d %d %d %d %d\n", ai->player_number,
-        ai->x, ai->y, ai->invent->q0, ai->invent->q1, ai->invent->q2,
-        ai->invent->q3, ai->invent->q4, ai->invent->q5, ai->invent->q6);
+        sprintf(buff, "plv %d %d\n", cli->ai->player_number, cli->ai->level);
+    if (str_in_str("pin", command)) {
+        sprintf(buff, "pin %d %d %d %d %d %d %d %d %d %d\n",
+        cli->ai->player_number, cli->ai->x, cli->ai->y, cli->ai->invent->q0,
+        cli->ai->invent->q1, cli->ai->invent->q2, cli->ai->invent->q3,
+        cli->ai->invent->q4, cli->ai->invent->q5, cli->ai->invent->q6);
+    }
     send(fd_cli, buff, strlen(buff), 0);
-    if (DEBUG)
-        printf("message send : %s\n", buff);
     free(buff);
 }
