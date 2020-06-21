@@ -9,7 +9,7 @@
 
 static void writing_element(tile_t *cell, int fd_cli)
 {
-    char send_look[MESSAGE_SIZE] = "[" "player";
+    char send_look[MESSAGE_SIZE * 3] = "[" "player";
     if (cell->q0 > 0) {
         for (int i = cell->q0; i > 0; i--)
             strcat(send_look, ", food");
@@ -52,7 +52,7 @@ static void writing_element(tile_t *cell, int fd_cli)
     } else {
         strcat(send_look, ",");
     }
-    strcat(send_look, "]\n");
+    strcat(send_look, "]\n\0");
     send(fd_cli, send_look, strlen(send_look), 0);
 }
 
