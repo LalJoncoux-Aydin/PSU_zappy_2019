@@ -328,7 +328,7 @@ class GameRunner:
             if (self.prepareShit(info, 0) == 84):
                 return (84)
         self.loadShit()
-
+        print(self.rcvMsg())
         while (42):
             self.checkAllArround(0)
             # self.startIncantation(self.checkElevation())
