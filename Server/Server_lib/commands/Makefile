@@ -13,6 +13,7 @@ SRC		=	bct.c			\
 			take.c			\
 			nbp.c			\
 			fork_cli.c			\
+			elevation.c		\
 
 OBJ		=	$(SRC:.c=.o)
 
