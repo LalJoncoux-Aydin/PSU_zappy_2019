@@ -34,8 +34,6 @@ char *command)
     buff = malloc(sizeof(char) * MESSAGE_SIZE);
     if (buff == NULL)
         error("Error : malloc failed\n");
-    if (!cli->ai || !buff)
-        return error("Error");
     if (strncmp(command, "Left\n", 5) == 0) {
         set_orientation(cli, LEFT_DIR, fd_cli);
     } if (strncmp(command, "Right\n", 6) == 0) {

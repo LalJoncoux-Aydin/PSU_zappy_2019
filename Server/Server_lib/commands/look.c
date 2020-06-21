@@ -56,7 +56,6 @@ __attribute__((unused)) char *command)
             strcat(buff, ",");
     }
     strcat(buff, "]\n");
-    printf("buff = %s\n", buff);
     send(fd_cli, buff, strlen(buff), 0);
     free(buff);
 }

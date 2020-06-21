@@ -16,8 +16,6 @@ void ppo_plv_pin(int fd_cli, client_t *cli, server_t *server, char *command)
     if (buff == NULL)
         error("Error : malloc failed\n");
     nb = atoi(str_breaker(command, ' ', 2, 0));
-    if (!cli->ai || !buff)
-        return error("Error");
     if (str_in_str("ppo", command))
         sprintf(buff, "ppo %d %d %d %d\n", cli->ai->player_number, cli->ai->x,
         cli->ai->y, cli->ai->orientation);
