@@ -8,7 +8,8 @@
             "mendiane": 0,
             "phiras": 0,
             "thystame": 0,
-            "nbPlayer" : 1
+            "nbPlayer" : 1,
+            "lvl" : 0
         },
         {
             "linemate": 1,
@@ -17,7 +18,8 @@
             "mendiane": 0,
             "phiras": 0,
             "thystame": 0,
-            "nbPlayer" : 2
+            "nbPlayer" : 2,
+            "lvl" : 1
         },
         {
             "linemate": 2,
@@ -26,7 +28,8 @@
             "mendiane": 0,
             "phiras": 2,
             "thystame": 0,
-            "nbPlayer" : 2
+            "nbPlayer" : 2,
+            "lvl" : 2
         },
         {
             "linemate": 1,
@@ -35,7 +38,8 @@
             "mendiane": 0,
             "phiras": 1,
             "thystame": 0,
-            "nbPlayer" : 4
+            "nbPlayer" : 4,
+            "lvl" : 3
         },
         {
             "linemate": 1,
@@ -44,7 +48,8 @@
             "mendiane": 3,
             "phiras": 0,
             "thystame": 0,
-            "nbPlayer" : 4
+            "nbPlayer" : 4,
+            "lvl" : 4
         },
         {
             "linemate": 1,
@@ -53,7 +58,8 @@
             "mendiane": 0,
             "phiras": 1,
             "thystame": 0,
-            "nbPlayer" : 6
+            "nbPlayer" : 6,
+            "lvl" : 5
         },
         {
             "linemate": 2,
@@ -62,7 +68,8 @@
             "mendiane": 2,
             "phiras": 2,
             "thystame": 1,
-            "nbPlayer" : 6
+            "nbPlayer" : 6,
+            "lvl" : 6
         }
     ]
 }
