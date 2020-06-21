@@ -15,6 +15,7 @@ server_t *init_server(server_t *server_v)
     server_v->teams_name = malloc(sizeof(char *) * TEAMS_NB);
     if (server_v->teams_name == NULL)
         return NULL;
+    server_v->nb_player = 0;
     return server_v;
 }
 
@@ -55,7 +56,6 @@ int server(server_t *server_v)
     fd_set read_fds;
     int maxfd = 0;
     static client_t *head = NULL;
-    int i = 0;
 
     server_v->server_fd = get_socket(server_v->port);
     if (server_v->server_fd == -1)
@@ -65,13 +65,11 @@ int server(server_t *server_v)
         FD_ZERO(&read_fds);
         FD_SET(server_v->server_fd, &read_fds);
         maxfd = server_v->server_fd;
-        i = 0;
         for (client_t *c = head; c; c = c->next, i++) {
             if (c->fd > 0)
                 FD_SET(c->fd, &read_fds);
             if (c->fd > maxfd)
                 maxfd = c->fd;
-            printf("i = %d\n", i);
         }
         head = manage_event(&maxfd, &read_fds, head, server_v);
         if (head == NULL)

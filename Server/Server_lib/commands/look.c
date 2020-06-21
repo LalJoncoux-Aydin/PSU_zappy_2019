@@ -9,7 +9,6 @@
 
 static void writing_element(tile_t *cell, int fd_cli)
 {
-    // If player
     char send_look[MESSAGE_SIZE] = "[" "player";
     if (cell->q0 > 0) {
         for (int i = cell->q0; i > 0; i--)

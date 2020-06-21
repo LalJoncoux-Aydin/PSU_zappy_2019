@@ -17,6 +17,7 @@ client_t *add_first_client(server_t *serv)
     if ((new = accept(serv->server_fd, (struct sockaddr *)&cli, &sockl)) == -1)
         error("accept failed that's unnacceptable");
     client = create_client(new, serv);
+    serv->nb_player += 1;
     return client;
 }
 
@@ -36,4 +37,5 @@ void add_client(server_t *serv, client_t *head)
         client->prev = cur;
         cur->next = client;
     }
+    serv->nb_player += 1;
 }

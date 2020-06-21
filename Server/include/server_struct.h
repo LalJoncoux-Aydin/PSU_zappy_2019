@@ -66,6 +66,7 @@ typedef struct server_s {
     char *port;
     char **teams_name;
     int nbr_max_per_teams;
+    int nb_player;
     int x;
     int y;
     tile_t **map;
