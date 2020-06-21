@@ -7,9 +7,9 @@
 
 #include "command.h"
 
-void take(int fd_cli, client_t *clis, server_t *server, char *command)
+void take(int fd_cli, client_t *cli, server_t *server, char *command)
 {
-    tile_t *ia_cell = &server->map[clis->ai->y][clis->ai->x];
+    tile_t *ia_cell = &server->map[cli->ai->y][cli->ai->x];
     char *type_obj = NULL;
 
     type_obj = str_breaker(command, ' ', 2, 0);

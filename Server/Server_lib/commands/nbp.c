@@ -7,7 +7,7 @@
 
 #include "command.h"
 
-void nbp(int fd_cli, __attribute__((unused))client_t *clis, server_t *server,
+void nbp(int fd_cli, __attribute__((unused))client_t *cli, server_t *server,
 __attribute__((unused))char *command)
 {
 	char *nb_player = NULL;

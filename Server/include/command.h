@@ -21,6 +21,9 @@
 #include "server_struct.h"
 #include "tools.h"
 
+#define LEFT_DIR 0
+#define RIGHT_DIR 1
+
 typedef struct command_manager_s
 {
     char *command;
@@ -29,26 +32,24 @@ typedef struct command_manager_s
 } command_manager_t;
 
 ai_t *get_ai_by_nb(server_t *server_v, int nb);
-void msz(int fd_cli, __attribute__((unused))client_t *clis,
-server_t *server, __attribute__((unused))char *command);
-void bct(int fd_cli, __attribute__((unused))client_t *clis,
+void msz(int fd_cli, client_t *clis,
 server_t *server, char *command);
-void mct(int fd_cli, __attribute__((unused))client_t *clis,
-server_t *server, __attribute__((unused))char *command);
-void tna(int fd_cli, __attribute__((unused))client_t *clis,
-server_t *server, __attribute__((unused))char *command);
-void ppo_plv_pin(int fd_cli, __attribute__((unused))client_t *clis,
+void bct(int fd_cli, client_t *clis,
+server_t *server, char *command);
+void mct(int fd_cli, client_t *clis,
+server_t *server, char *command);
+void tna(int fd_cli, client_t *clis,
+server_t *server, char *command);
+void ppo_plv_pin(int fd_cli, client_t *clis,
 server_t *server, char *command);
 void mouvement(int fd_cli, client_t *clis, server_t *server, char *command);
 void look(int fd_cli, client_t *clis, server_t *server, char *command);
-void forward(int fd_cli, __attribute__((unused))client_t *clis,
+void forward(int fd_cli, client_t *clis,
 server_t *server, char *command);
-void turn(int fd_cli, __attribute__((unused))client_t *clis,
+void turn(int fd_cli, client_t *clis,
 server_t *server, char *command);
-void take(int fd_cli, client_t *clis, server_t *server,
-__attribute__((unused)) char *command);
-void nbp(int fd_cli, client_t *clis, server_t *server,
-__attribute__((unused)) char *command);
+void take(int fd_cli, client_t *cli, server_t *server, char *command);
+void nbp(int fd_cli, client_t *cli, server_t *server, char *command);
 void pnw(client_t *cli);
 
 #endif

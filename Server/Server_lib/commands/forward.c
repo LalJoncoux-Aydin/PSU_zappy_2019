@@ -7,36 +7,38 @@
 
 #include "command.h"
 
-void forward(__attribute__((unused))int fd_cli,
-__attribute__((unused))client_t *clis, server_t *server, char *command)
+static void set_move(client_t *cli, server_t *server)
 {
-    char *buff = malloc(70);
-    int nb = -1;
-    ai_t *ai;
-
-    if (buff == NULL)
-        exit(84);
-    memset(buff, 0, 70);
-    nb = atoi(str_breaker(command, ' ', 2, 0));
-    ai = get_ai_by_nb(server, nb);
-    if (!ai || !buff)
-        return error("Error");
-    switch (ai->orientation) {
+    switch (cli->ai->orientation) {
     case NORTH :
-        if (ai->y > 0)
-            ai->y -= 1;
+        if (cli->ai->y > 0)
+            cli->ai->y -= 1;
         break;
     case SOUTH :
-        if (ai->y < server->y)
-            ai->y += 1;
+        if (cli->ai->y < server->y)
+            cli->ai->y += 1;
         break;
     case EAST :
-        if (ai->x < server->x)
-            ai->x += 1;
+        if (cli->ai->x < server->x)
+            cli->ai->x += 1;
         break;
     case WEST :
-        if (ai->x > 0)
-            ai->x -= 1;
+        if (cli->ai->x > 0)
+            cli->ai->x -= 1;
         break;
     }
+}
+
+void forward(int fd_cli, client_t *cli, server_t *server,
+__attribute__((unused))char *command)
+{
+    char *buff = NULL;
+
+    buff = malloc(sizeof(char) * MESSAGE_SIZE);
+    if (buff == NULL)
+        exit(84);
+    if (!cli->ai || !buff)
+        return error("Error");
+    set_move(cli, server);
+    send(fd_cli, "ok\n", 3, 0);
 }
