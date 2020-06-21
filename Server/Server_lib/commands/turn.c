@@ -38,7 +38,7 @@ char *command)
         return error("Error");
     if (strncmp(command, "Left\n", 5) == 0) {
         set_orientation(cli, LEFT_DIR, fd_cli);
-    } if (strncmp(command, "Right\n", 7) == 0) {
+    } if (strncmp(command, "Right\n", 6) == 0) {
         set_orientation(cli, RIGHT_DIR, fd_cli);
     }
 }

@@ -43,7 +43,7 @@ server_t *server, char *command);
 void ppo_plv_pin(int fd_cli, client_t *clis,
 server_t *server, char *command);
 void mouvement(int fd_cli, client_t *clis, server_t *server, char *command);
-void look(int fd_cli, client_t *clis, server_t *server, char *command);
+void look(int fd_cli, client_t *cli, server_t *server, char *command);
 void forward(int fd_cli, client_t *clis,
 server_t *server, char *command);
 void turn(int fd_cli, client_t *clis,

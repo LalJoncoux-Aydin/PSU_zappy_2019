@@ -56,8 +56,8 @@ static void writing_element(tile_t *cell, int fd_cli)
     send(fd_cli, send_look, strlen(send_look), 0);
 }
 
-void look(int fd_cli, client_t *clis, server_t *server,
+void look(int fd_cli, client_t *cli, server_t *server,
 __attribute__((unused)) char *command)
 {
-    writing_element(&server->map[clis->ai->y][clis->ai->x], fd_cli);
+    writing_element(&server->map[cli->ai->y][cli->ai->x], fd_cli);
 }
