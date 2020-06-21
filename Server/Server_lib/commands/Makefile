@@ -11,6 +11,7 @@ SRC		=	bct.c			\
 			tna.c			\
 			turn.c			\
 			take.c			\
+			nbp.c			\
 
 OBJ		=	$(SRC:.c=.o)
 
