@@ -20,7 +20,7 @@ server_t *server, char *command)
     nb = atoi(str_breaker(command, ' ', 2, 0));
     ai = get_ai_by_nb(server, nb);
     if (!ai || !buff)
-        return error_s(fd_cli);
+        return error("Error");
     switch (ai->orientation) {
     case NORTH :
         if (ai->y > 0)

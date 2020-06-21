@@ -16,7 +16,7 @@ char *command)
     tile_t *tile;
 
     if (x < 0 || x > server->x || y < 0 || y > server->y || !buff)
-        return error_s(fd_cli);
+        return error("Error");
     memset(buff, 0, 50);
     tile = &(server->map[y][x]);
     sprintf(buff, "bct %d %d %d %d %d %d %d %d %d\n", x, y,

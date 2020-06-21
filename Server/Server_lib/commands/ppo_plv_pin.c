@@ -20,7 +20,7 @@ server_t *server, char *command)
     nb = atoi(str_breaker(command, ' ', 2, 0));
     ai = get_ai_by_nb(server, nb);
     if (!ai || !buff)
-        return error_s(fd_cli);
+        return error("Error");
     if (str_in_str("ppo", command))
         sprintf(buff, "ppo %d %d %d %d\n", ai->player_number, ai->x
         , ai->y, ai->orientation);
