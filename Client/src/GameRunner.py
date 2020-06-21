@@ -43,7 +43,7 @@ class GameRunner:
     def prepare(self, minionsNb):
         print(self.rcvMsg(minionsNb))
         self.sendMsg(self.team_name, minionsNb)
-        print(self.rcvMsg(minionsNb))
+        self.max = int (self.rcvMsg(minionsNb).split("\n")[0])
 
 #--------------------------------------------------------------------------------------------- Network Tool
 
@@ -205,6 +205,7 @@ class GameRunner:
 
     def TakeElem(self, elem, nbElem, minionsNb):
         elem = elem.replace(",", "")
+        elem = elem.replace(",", "")
         time.sleep(1)
         self.sendMsg(self.buildMsg("Take " + elem, minionsNb), minionsNb)
         self.inventory[minionsNb][elem] += nbElem
@@ -221,10 +222,8 @@ class GameRunner:
 # """
 
     def fork(self, minionsNb):
-        # self.max_player_id += 1
         # self.sendMsg(self.buildMsg("Connect_nbr", 0), minionsNb)
         # if (int(self.rcvMsg(minionsNb)) >= self.max_player_id):
-            print("minions nb",minionsNb, "len socket", len(self.socket))
             self.sendMsg(self.buildMsg("Fork", minionsNb), minionsNb)
             status = self.rcvMsg(minionsNb)
 
@@ -318,17 +317,18 @@ class GameRunner:
         self.loadShit()
 
         while (42):
+
             i = len(self.inventory) - 1
 
             self.checkAllArround(i)
-            time.sleep(1)
-            # self.startIncantation(self.checkElevation())
+            time.sleep(2)
+            self.startIncantation(self.checkElevation())
             self.moveForward(i)
             self.moveForward(i)
-            if (i == 0):
+            if (len(self.inventory) < self.max):
                 self.fork(0)
-            self.sendMsg("Broadcast text\n", i)
-            self.rcvMsg(i)
+            # self.sendMsg("Broadcast text\n", i)
+            # print("broad cast => ", self.rcvMsg(i))
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
