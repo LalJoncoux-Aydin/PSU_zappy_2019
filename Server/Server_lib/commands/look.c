@@ -7,38 +7,58 @@
 
 #include "command.h"
 
-static void writing_element(tile_t *cell)
+static void writing_element(tile_t *cell, int fd_cli)
 {
     // If player
-    printf("player\n");
-    for (int i = cell->q0; i > 0; i--)
-        printf(", food\n");
-    for (int i = cell->q1; i > 0; i--)
-        printf(", linemate\n");
-    for (int i = cell->q2; i > 0; i--)
-        printf(", deraumere\n");
-    for (int i = cell->q3; i > 0; i--)
-        printf(", sibur\n");
-    for (int i = cell->q4; i > 0; i--)
-        printf(", mendiane\n");
-    for (int i = cell->q5; i > 0; i--)
-        printf(", phiras\n");
-    for (int i = cell->q6; i > 0; i--)
-        printf(", thystame\n");
+    char send_look[MESSAGE_SIZE] = "[" "player";
+    if (cell->q0 > 0) {
+        for (int i = cell->q0; i > 0; i--)
+            strcat(send_look, ", food");
+    } else {
+        strcat(send_look, ",");
+    }
+    if (cell->q1 > 0) {
+        for (int i = cell->q1; i > 0; i--)
+            strcat(send_look, ", linemate");
+    } else {
+        strcat(send_look, ",");
+    }
+    if (cell->q2 > 0) {
+        for (int i = cell->q2; i > 0; i--)
+            strcat(send_look, ", deraumere");
+    } else {
+        strcat(send_look, ",");
+    }
+    if (cell->q3 > 0) {
+        for (int i = cell->q3; i > 0; i--)
+            strcat(send_look, ", sibur");
+    } else {
+        strcat(send_look, ",");
+    }
+    if (cell->q4 > 0) {
+        for (int i = cell->q4; i > 0; i--)
+            strcat(send_look, ", mendiane");
+    } else {
+        strcat(send_look, ",");
+    }
+    if (cell->q5 > 0) {
+        for (int i = cell->q5; i > 0; i--)
+            strcat(send_look, ", phiras");
+    } else {
+        strcat(send_look, ",");
+    }
+    if (cell->q6 > 0) {
+        for (int i = cell->q6; i > 0; i--)
+            strcat(send_look, ", thystame");
+    } else {
+        strcat(send_look, ",");
+    }
+    strcat(send_look, "]\n");
+    send(fd_cli, send_look, strlen(send_look), 0);
 }
-//
-// static void wring_send()
-// {
-//
-// }
 
 void look(int fd_cli, client_t *clis, server_t *server,
 __attribute__((unused)) char *command)
 {
-//    char buff[MESSAGE_SIZE];
-
-    printf("Look\n");
-    printf("ai y = %d\n", clis->fd);
-//    printf("ai y = %d\n", clis->ai->x);
-//    writing_element(&server->map[clis->ai->y][clis->ai->x]);
+    writing_element(&server->map[clis->ai->y][clis->ai->x], fd_cli);
 }
