@@ -16,6 +16,6 @@
 #include "tools.h"
 #include "server_struct.h"
 
-void manage_arg(int ac, char **av, server_t *server_v, char **env);
+bool manage_arg(int ac, char **av, server_t *server_v, char **env);
 
 #endif /* MANAGE_ARG_H_ */

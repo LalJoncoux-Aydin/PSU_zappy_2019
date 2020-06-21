@@ -10,6 +10,6 @@
 
 #include "command.h"
 
-void manage_client(fd_set *master, server_t *server_v, int i, client_t **head);
+void manage_client(client_t *cli, server_t *server_v);
 
 #endif /* MANAGE_CLIENT_H_ */

@@ -19,52 +19,28 @@ const command_manager_t commands[NBR_OF_COMMAND] = {
     {"Right", turn, 1},
     {"Left", turn, 1},
     {"Look", look, 0},
+    {"Take", take, 1},
+    {"nbp", nbp, 0},
 };
 
-static void del_cli(client_t **head, int fd)
+static void manage_message(char *msg, client_t *cli, server_t *server)
 {
-    client_t *temp = *head;
-    client_t *prev;
-
-    if (temp != NULL && temp->fd == fd) {
-        *head = temp->next;
-        free(temp);
-        return;
-    }
-    while (temp != NULL && temp->fd != fd) {
-        prev = temp;
-        temp = temp->next;
-    }
-    if (temp == NULL)
-        return;
-    prev->next = temp->next;
-    free(temp);
-}
-
-static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *server)
-{
-    int sender_fd = tri_force[1];
-
     for (int i = 0; i < NBR_OF_COMMAND; i++) {
         if (str_in_str(commands[i].command, msg)) {
-            printf("Finding function ?\n");
-            commands[i].func(sender_fd, clis, server, msg);
+            commands[i].func(cli->fd, cli, server, msg);
         }
     }
 }
 
-void manage_client(fd_set *master, server_t *server_v, int i, client_t **head)
+void manage_client(client_t *cli, server_t *server_v)
 {
     int nbytes;
-    char buff[256 * 4];
+    char buff[MESSAGE_SIZE];
 
-    if ((nbytes = recv(i, buff, sizeof(buff), 0)) <= 0) {
-        del_cli(head, i);
-        close(i);
-        FD_CLR(i, master);
+    nbytes = recv(cli->fd, buff, sizeof(buff), MSG_DONTWAIT);
+    if (nbytes == -1)
         return;
-    }
     buff[nbytes] = '\0';
-    printf("msg ressive form %d  : %s\n", i, buff);
-    manage_message(buff, tri_force(server_v->server_fd, i, 0), *head, server_v);
+    printf("msg ressive form %d  : %s\r", cli->fd, buff);
+    manage_message(buff, cli, server_v);
 }

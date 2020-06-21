@@ -7,7 +7,8 @@
 
 #include "command.h"
 
-void ppo_plv_pin(int fd_cli, client_t *clis, server_t *server, char *command)
+void ppo_plv_pin(int fd_cli, __attribute__((unused))client_t *clis,
+server_t *server, char *command)
 {
     char *buff = malloc(70);
     int nb = -1;
@@ -19,7 +20,7 @@ void ppo_plv_pin(int fd_cli, client_t *clis, server_t *server, char *command)
     nb = atoi(str_breaker(command, ' ', 2, 0));
     ai = get_ai_by_nb(server, nb);
     if (!ai || !buff)
-        return error_s(fd_cli);
+        return error("Error");
     if (str_in_str("ppo", command))
         sprintf(buff, "ppo %d %d %d %d\n", ai->player_number, ai->x
         , ai->y, ai->orientation);

@@ -7,7 +7,8 @@
 
 #include "command.h"
 
-void forward(int fd_cli, client_t *clis, server_t *server, char *command)
+void forward(__attribute__((unused))int fd_cli,
+__attribute__((unused))client_t *clis, server_t *server, char *command)
 {
     char *buff = malloc(70);
     int nb = -1;
@@ -19,7 +20,7 @@ void forward(int fd_cli, client_t *clis, server_t *server, char *command)
     nb = atoi(str_breaker(command, ' ', 2, 0));
     ai = get_ai_by_nb(server, nb);
     if (!ai || !buff)
-        return error_s(fd_cli);
+        return error("Error");
     switch (ai->orientation) {
     case NORTH :
         if (ai->y > 0)

@@ -18,7 +18,8 @@ static bool manage_other(char op, char *opt_arg, server_t *server, char *limit)
             return false;
     } else if (op == 'n') {
         buff_name = opt_arg;
-        for (; *buff_name != '-' && (strcmp(limit, buff_name)); buff_name += strlen(buff_name) + 1, i++) {
+        for (; *buff_name != '-' && (strcmp(limit, buff_name));
+        buff_name += strlen(buff_name) + 1, i++) {
             server->teams_name[i] = strdup(buff_name);
         }
         server->teams_name[i] = NULL;
@@ -44,7 +45,7 @@ static void manage_nb(char op, char *opt_arg, server_t *server)
     }
 }
 
-void manage_arg(int ac, char **av, server_t *server_v, char **env)
+bool manage_arg(int ac, char **av, server_t *server_v, char **env)
 {
     int op = 0;
 
@@ -53,7 +54,8 @@ void manage_arg(int ac, char **av, server_t *server_v, char **env)
         if (op == -1)
             break;
         if (manage_other(op, optarg, server_v, env[0]) == false)
-            error("Error : Argument wrong");
+            return false;
         manage_nb(op, optarg, server_v);
     }
+    return true;
 }

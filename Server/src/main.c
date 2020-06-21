@@ -25,7 +25,8 @@ static bool check_arg(int ac, char **av)
             continue;
         checker = false;
         for (int j = 0; checker == false && flag[j]; j++) {
-            checker = (strncmp(flag[j], av[i], strlen(flag[j])) == 0) ? true : false;
+            checker = (strncmp(flag[j], av[i], strlen(flag[j])) == 0) ?
+        true : false;
         }
         if (checker == false)
             return (false);
@@ -55,7 +56,8 @@ int main(int ac, char **av, char **env)
     server_v = init_server(server_v);
     if (server_v == NULL)
         return 84;
-    manage_arg(ac, av, server_v, env);
+    if (manage_arg(ac, av, server_v, env) == false)
+        return 84;
     if (check_value_server(server_v) == false)
         return 84;
     if (create_map(server_v) == false)
@@ -63,7 +65,5 @@ int main(int ac, char **av, char **env)
     printf("Starting server...\n");
     if (server(server_v) == 84)
         return 84;
-    printf("Stoping server...\n");
-    free(server_v);
     return 0;
 }

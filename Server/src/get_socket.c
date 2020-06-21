@@ -38,6 +38,19 @@ static void error_check_prep_server(struct addrinfo *test, int sockfd, int op)
     }
 }
 
+static int execute_get_socket(int *sockfd, int *yes, struct addrinfo *cpy)
+{
+    *sockfd = socket(cpy->ai_family, cpy->ai_socktype, cpy->ai_protocol);
+    if (*sockfd == -1)
+        return -1;
+    *yes = setsockopt(*sockfd, SOL_SOCKET, SO_REUSEADDR, yes, sizeof(int));
+    if (*yes == -1)
+        return -1;
+    if (bind(*sockfd, cpy->ai_addr, cpy->ai_addrlen) == -1)
+        return -1;
+    return 0;
+}
+
 int get_socket(char *port)
 {
     struct addrinfo *res = NULL;
@@ -49,11 +62,7 @@ int get_socket(char *port)
     if (res == NULL)
         return -1;
     for (cpy_head = res; cpy_head != NULL; cpy_head = cpy_head->ai_next) {
-        if ((sockfd = socket(cpy_head->ai_family, cpy_head->ai_socktype, cpy_head->ai_protocol)) == -1)
-            continue;
-        if ((yes = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int))) == -1)
-            continue;
-        if (bind(sockfd, cpy_head->ai_addr, cpy_head->ai_addrlen) == -1)
+        if (execute_get_socket(&sockfd, &yes, cpy_head) == -1)
             continue;
         break;
     }

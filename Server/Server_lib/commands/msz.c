@@ -7,7 +7,8 @@
 
 #include "command.h"
 
-void msz(int fd_cli, client_t *clis, server_t *server, char *command)
+void msz(int fd_cli, __attribute__((unused))client_t *clis, server_t *server,
+__attribute__((unused))char *command)
 {
     char *buff = malloc(20);
 

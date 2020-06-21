@@ -8,9 +8,11 @@
 #ifndef SERVERSTRUCT_H_
 #define SERVERSTRUCT_H_
 
-#define NBR_OF_COMMAND 11
+#define NBR_OF_COMMAND 13
 #define MESSAGE_SIZE 128
 #define NB_CLIENT 15
+
+#include <stdbool.h>
 
 enum {
     NORTH = 1,
@@ -37,11 +39,11 @@ typedef struct ai_s {
     int level;
     inventory_t *invent;
     char *team;
-    struct ai_tpecific_s *next;
+    struct ai_s *next;
 } ai_t;
 
 typedef struct client_s {
-    int type;
+    bool type;
     int fd;
     char *user_name;
     ai_t *ai;
@@ -64,6 +66,7 @@ typedef struct server_s {
     char *port;
     char **teams_name;
     int nbr_max_per_teams;
+    int nb_player;
     int x;
     int y;
     tile_t **map;

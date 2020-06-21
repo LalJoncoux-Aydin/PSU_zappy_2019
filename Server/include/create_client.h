@@ -15,6 +15,8 @@
 #include "tools.h"
 #include "command.h"
 
-void create_client(client_t **head, int new_fd, server_t *server_v);
+void send_player_info(client_t *cli);
+void get_team_name(client_t *cli, server_t *server_v);
+client_t *create_client(int new_fd, server_t *server_v);
 
 #endif /* CREATE_CLIENT_H_ */
