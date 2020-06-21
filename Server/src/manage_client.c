@@ -47,10 +47,7 @@ static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *
 
     for (int i = 0; i < NBR_OF_COMMAND; i++) {
         if (str_in_str(commands[i].command, msg)) {
-            if (occurrences_of_char(' ', msg) != commands[i].nb_of_arg)
-                error_s(clis->fd);
-            else
-                commands[i].func(sender_fd, clis, server, msg);
+            commands[i].func(sender_fd, clis, server, msg);
         }
     }
 }

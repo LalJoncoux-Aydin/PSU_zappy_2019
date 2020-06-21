@@ -21,18 +21,18 @@ static void get_team_name(client_t *cli, server_t *server_v)
 
     team = malloc((sizeof(char) * 50));
     if (team == NULL)
-        error("Error : malloc failed");
+        error("Error : malloc failed\n");
     send(cli->fd, "WELCOME\n", 8, 0);
     recv(cli->fd, team, 50, 0);
-    for (int i = 0; server_v->teams_name[i] == NULL; i++) {
-        if (strcmp(server_v->teams_name[i], team) == 0) {
+    for (int i = 0; server_v->teams_name[i] != NULL; i++) {
+        if (strcmp(server_v->teams_name[i], team)) {
             cli->ai->team = strdup(team);
             if (cli->ai->team == NULL)
-                error("Error : malloc failed");
+                error("Error : malloc failed\n");
         }
     }
     if (cli->ai->team == NULL)
-        printf("Wrong team name\n");
+        error("Wrong team name\n");
     send_player_info(cli);
     free(team);
 }
