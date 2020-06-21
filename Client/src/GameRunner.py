@@ -241,21 +241,21 @@ class GameRunner:
 #--------------------------------------------------------------------------------------------- Movement basic
 
     def turnRight(self, minionsNb):
-        print("call for => ", minionsNb) 
+        print("call for => ", minionsNb)
         self.sendMsg(self.buildMsg("Right", minionsNb), minionsNb)
         self.inventory[minionsNb]["food"] -= 7
         self.rcvMsg(minionsNb)
         self.moveForward(minionsNb)
 
     def turnLeft(self, minionsNb):
-        print("call for => ", minionsNb) 
+        print("call for => ", minionsNb)
         self.sendMsg(self.buildMsg("Left", minionsNb), minionsNb)
         self.inventory[minionsNb]["food"] -= 7
         self.rcvMsg(minionsNb)
         self.moveForward(minionsNb)
 
     def moveForward(self, minionsNb):
-        print("call for => ", minionsNb) 
+        print("call for => ", minionsNb)
         self.sendMsg(self.buildMsg("Forward", minionsNb), minionsNb)
         self.inventory[minionsNb]["food"] -= 7
         self.rcvMsg(minionsNb)
