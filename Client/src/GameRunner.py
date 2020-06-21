@@ -215,26 +215,20 @@ class GameRunner:
 
 #--------------------------------------------------------------------------------------------- Fork
 
-# """
-
-# Need to remove comment prt and check
-
-# """
-
     def fork(self, minionsNb):
-        # self.sendMsg(self.buildMsg("Connect_nbr", 0), minionsNb)
-        # if (int(self.rcvMsg(minionsNb)) >= self.max_player_id):
-            self.sendMsg(self.buildMsg("Fork", minionsNb), minionsNb)
-            status = self.rcvMsg(minionsNb)
+        self.sendMsg(self.buildMsg("Fork", minionsNb), minionsNb)
+        status = self.rcvMsg(minionsNb)
 
-            if (status.find("ok") != -1):
-                childpid = os.fork()
-                if childpid == 0:
-                    self.connectClient(self.info)
-                    self.prepare(minionsNb + 1)
-                    self.initInventory()
-                else:
-                    pass
+        print("fork satus => " + status)
+        if (status.find("ok") > -1):
+            childpid = os.fork()
+            if childpid == 0:
+                self.connectClient(self.info)
+                self.prepare(minionsNb + 1)
+                self.initInventory()
+            else:
+                pass
+
 #--------------------------------------------------------------------------------------------- Fork
 
 #--------------------------------------------------------------------------------------------- Movement basic
@@ -321,14 +315,15 @@ class GameRunner:
             i = len(self.inventory) - 1
 
             self.checkAllArround(i)
-            time.sleep(2)
             self.startIncantation(self.checkElevation())
             self.moveForward(i)
             self.moveForward(i)
-            if (len(self.inventory) < self.max):
-                self.fork(0)
-            # self.sendMsg("Broadcast text\n", i)
-            # print("broad cast => ", self.rcvMsg(i))
+            try:
+                print("i =>", i, "len inventory =>", len(self.inventory), "len max =>", self.max)
+                if ((i == 0 or i == 1) and len(self.inventory) < self.max):
+                    self.fork(i)
+            except:
+                pass
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
