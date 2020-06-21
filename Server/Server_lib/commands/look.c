@@ -11,44 +11,51 @@ static void writing_element(tile_t *cell, int fd_cli)
 {
     char send_look[MESSAGE_SIZE * 3] = "[" "player";
     if (cell->q0 > 0) {
+        strcat(send_look, ",");
         for (int i = cell->q0; i > 0; i--)
-            strcat(send_look, ", food");
+            strcat(send_look, " food");
     } else {
         strcat(send_look, ",");
     }
     if (cell->q1 > 0) {
+        strcat(send_look, ",");
         for (int i = cell->q1; i > 0; i--)
-            strcat(send_look, ", linemate");
+            strcat(send_look, " linemate");
     } else {
         strcat(send_look, ",");
     }
     if (cell->q2 > 0) {
+        strcat(send_look, ",");
         for (int i = cell->q2; i > 0; i--)
-            strcat(send_look, ", deraumere");
+            strcat(send_look, " deraumere");
     } else {
         strcat(send_look, ",");
     }
     if (cell->q3 > 0) {
+        strcat(send_look, ",");
         for (int i = cell->q3; i > 0; i--)
-            strcat(send_look, ", sibur");
+            strcat(send_look, " sibur");
     } else {
         strcat(send_look, ",");
     }
     if (cell->q4 > 0) {
+        strcat(send_look, ",");
         for (int i = cell->q4; i > 0; i--)
-            strcat(send_look, ", mendiane");
+            strcat(send_look, " mendiane");
     } else {
         strcat(send_look, ",");
     }
     if (cell->q5 > 0) {
+        strcat(send_look, ",");
         for (int i = cell->q5; i > 0; i--)
-            strcat(send_look, ", phiras");
+            strcat(send_look, " phiras");
     } else {
         strcat(send_look, ",");
     }
     if (cell->q6 > 0) {
+        strcat(send_look, ",");
         for (int i = cell->q6; i > 0; i--)
-            strcat(send_look, ", thystame");
+            strcat(send_look, " thystame");
     } else {
         strcat(send_look, ",");
     }
