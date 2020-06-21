@@ -7,15 +7,13 @@
 
 #include "command.h"
 
-void ppo_plv_pin(int fd_cli, client_t *cli, server_t *server, char *command)
+static void get_sub_commands(char *command, client_t *cli, int fd_cli)
 {
     char *buff = NULL;
-    int nb = -1;
 
     buff = malloc(sizeof(char) * MESSAGE_SIZE);
     if (buff == NULL)
         error("Error : malloc failed\n");
-    nb = atoi(str_breaker(command, ' ', 2, 0));
     if (str_in_str("ppo", command))
         sprintf(buff, "ppo %d %d %d %d\n", cli->ai->player_number, cli->ai->x,
         cli->ai->y, cli->ai->orientation);
@@ -29,4 +27,23 @@ void ppo_plv_pin(int fd_cli, client_t *cli, server_t *server, char *command)
     }
     send(fd_cli, buff, strlen(buff), 0);
     free(buff);
+}
+
+void ppo_plv_pin(int fd_cli, client_t *cli, server_t *server, char *command)
+{
+    client_t *tmp = NULL;
+    int nb = -1;
+    int i = 0;
+    bool _find = false;
+
+    nb = atoi(str_breaker(command, ' ', 2, 0));
+    for (tmp = cli; tmp; tmp = tmp->next, i++) {
+        if (i == nb) {
+            get_sub_commands(command, tmp, fd_cli);
+            _find = true;
+        }
+    }
+    if (_find == false)
+        send(fd_cli, "ko\n", 3, 0);
+    free(tmp);
 }
