@@ -316,7 +316,7 @@ class GameRunner:
             if (self.prepareShit(info, 0) == 84):
                 return (84)
         self.loadShit()
-        print(self.rcvMsg())
+
         while (42):
             i = len(self.inventory) - 1
 
@@ -325,7 +325,8 @@ class GameRunner:
             self.startIncantation(self.checkElevation())
             self.moveForward(i)
             self.moveForward(i)
-            self.fork(i)
+            if (i == 0):
+                self.fork(0)
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
