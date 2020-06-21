@@ -322,11 +322,11 @@ class GameRunner:
 
             self.checkAllArround(i)
             time.sleep(1)
-            self.startIncantation(self.checkElevation())
+            # self.startIncantation(self.checkElevation())
             self.moveForward(i)
             self.moveForward(i)
-            if (i == 0):
-                self.fork(0)
+            # if (i == 0):
+            #     self.fork(0)
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
