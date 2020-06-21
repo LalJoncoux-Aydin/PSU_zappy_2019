@@ -4,28 +4,43 @@
 ## File description:
 ## Makefile
 ##
+# Mandatory
+SHELL				= /bin/sh
 
-NAME_IA	= 	zappy_ai
-NAME_SERVER	=	zappy_server
+IA_FOLDER 			= Client
+GRAPHICAL_FOLDER 	= Build
+SERVER_FOLDER 		= Server
 
-all: server ia
+NAME_FILE_IA		= zappy_ai.py
+NAME_IA				= zappy_ai
+NAME_GRAPHIC 		= Zappy.exe
+NAME_SERVER			= zappy_server
+
+all: unzip server ia
+
+unzip:
+	unzip Build.zip
+	cp $(GRAPHICAL_FOLDER)/${NAME_GRAPHIC} .
 
 server:
-	make -C Server/
-	mv Server/zappy_server .
+	make -C ${SERVER_FOLDER}/
+	mv ${SERVER_FOLDER}/${NAME_SERVER} .
 
 ia:
-	cp ./Client/zappy_ai.py $(NAME_IA) && chmod +x $(NAME_IA)
+	cp ${IA_FOLDER}/${NAME_FILE_IA} .
+	mv $(NAME_FILE_IA) $(NAME_IA)
+	chmod 777 $(NAME_IA)
 
 clean:
-	make clean -C  Server/
-	rm -rf Client/src/__pycache__/
-	rm -rf Client/__pycache__/
+	make clean -C  ${SERVER_FOLDER}/
+	rm -fr ${IA_FOLDER}/src/__pycache__/
+	rm -fr ${IA_FOLDER}/__pycache__/
 
 fclean: clean
-	rm -rf $(NAME_SERVER)
-	rm -rf $(NAME_IA)
-
+	rm -fr $(NAME_SERVER)
+	rm -fr $(NAME_IA)
+	rm -fr $(NAME_GRAPHIC)
+	rm -fr $(GRAPHICAL_FOLDER)
 
 re: fclean all
 
