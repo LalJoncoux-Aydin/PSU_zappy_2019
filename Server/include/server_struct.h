@@ -12,6 +12,8 @@
 #define MESSAGE_SIZE 128
 #define NB_CLIENT 15
 
+#include <stdbool.h>
+
 enum {
     NORTH = 1,
     EAST,
@@ -41,7 +43,7 @@ typedef struct ai_s {
 } ai_t;
 
 typedef struct client_s {
-    int type;
+    bool type;
     int fd;
     char *user_name;
     ai_t *ai;

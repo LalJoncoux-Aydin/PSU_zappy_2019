@@ -29,6 +29,12 @@ void get_team_name(client_t *cli, server_t *server_v)
             cli->ai->team = strdup(team);
         }
     }
+    if (strncmp(team, "GRAPHIQUE\n", 9) == 0) {
+        cli->type = true;
+        free(team);
+        return;
+    }
+    cli->type = false;
     if (cli->ai->team == NULL)
         error("Wrong team name\n");
     send_player_info(cli);
