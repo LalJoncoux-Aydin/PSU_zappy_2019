@@ -19,6 +19,7 @@ const command_manager_t commands[NBR_OF_COMMAND] = {
     {"Right", turn, 1},
     {"Left", turn, 1},
     {"Look", look, 0},
+    {"Take", take, 1},
 };
 
 static void manage_message(char *msg, client_t *cli, server_t *server)

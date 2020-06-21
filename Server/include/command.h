@@ -45,6 +45,8 @@ void forward(int fd_cli, __attribute__((unused))client_t *clis,
 server_t *server, char *command);
 void turn(int fd_cli, __attribute__((unused))client_t *clis,
 server_t *server, char *command);
+void take(int fd_cli, client_t *clis, server_t *server,
+__attribute__((unused)) char *command);
 void pnw(client_t *cli);
 
 #endif

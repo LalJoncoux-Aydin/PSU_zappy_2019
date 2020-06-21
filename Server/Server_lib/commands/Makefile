@@ -10,6 +10,7 @@ SRC		=	bct.c			\
 			ppo_plv_pin.c	\
 			tna.c			\
 			turn.c			\
+			take.c			\
 
 OBJ		=	$(SRC:.c=.o)
 
