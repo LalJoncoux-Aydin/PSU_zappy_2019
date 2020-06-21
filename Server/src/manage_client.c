@@ -12,9 +12,6 @@ const command_manager_t commands[NBR_OF_COMMAND] = {
     {"bct", bct, 2},
     {"mct", mct, 0},
     {"tna", tna, 0},
-    {"ppo", ppo_plv_pin, 1},
-    {"plv", ppo_plv_pin, 1},
-    {"pin", ppo_plv_pin, 1},
     {"Forward", forward, 0},
     {"Right", turn, 0},
     {"Left", turn, 0},
@@ -26,9 +23,17 @@ const command_manager_t commands[NBR_OF_COMMAND] = {
 
 static void manage_message(char *msg, client_t *cli, server_t *server)
 {
+    client_t *tmp = NULL;
+
     for (int i = 0; i < NBR_OF_COMMAND; i++) {
         if (str_in_str(commands[i].command, msg)) {
             commands[i].func(cli->fd, cli, server, msg);
+            return;
+        } else if (strncmp(msg, "ppo", 3) == 0 || strncmp(msg, "plv", 3) == 0 ||
+        strncmp(msg, "pin", 3) == 0) {
+            for (tmp = cli; tmp->prev != NULL; tmp = tmp->prev);
+            ppo_plv_pin(cli->fd, tmp, server, msg);
+            return;
         }
     }
 }

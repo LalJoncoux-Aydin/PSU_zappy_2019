@@ -10,14 +10,14 @@
 void mct(int fd_cli, __attribute__((unused))client_t *clis, server_t *server,
 __attribute__((unused))char *command)
 {
-    char *buff = malloc(50);
-    char *res = malloc(50);
+    char *buff = NULL;
+    char *res = NULL;
     tile_t *tile;
 
+    buff = malloc(sizeof(char) * MESSAGE_SIZE);
+    res = malloc(sizeof(char) * MESSAGE_SIZE);
     if (buff == NULL || res == NULL)
-        exit(84);
-    memset(buff, 0, 50);
-    memset(res, 0, 50);
+        error("Error : malloc failed\n");
     for (int y = 0; y < server->y; y++) {
         for (int x = 0; x < server->x; x++) {
             tile = &(server->map[y][x]);
@@ -26,8 +26,6 @@ __attribute__((unused))char *command)
             res = str_concat(res, buff);
         }
     }
-    if (DEBUG)
-        printf("message send : %s", res);
     send(fd_cli, res, strlen(res), 0);
     free(res);
 }

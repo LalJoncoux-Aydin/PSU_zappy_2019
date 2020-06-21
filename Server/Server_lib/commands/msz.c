@@ -10,14 +10,12 @@
 void msz(int fd_cli, __attribute__((unused))client_t *clis, server_t *server,
 __attribute__((unused))char *command)
 {
-    char *buff = malloc(20);
+    char *buff = NULL;
 
+    buff = malloc(sizeof(char) * MESSAGE_SIZE);
     if (buff == NULL)
-        exit(84);
-    memset(buff, 0, 20);
+        error("Error : malloc failed\n");
     sprintf(buff, "msz %d %d\n", server->x, server->y);
-    send(fd_cli, buff, strlen(buff), 0);
-    if (DEBUG)
-        printf("message send : %s", buff);
+    send(fd_cli, buff, strlen(buff), 0);;
     free(buff);
 }
