@@ -7,8 +7,8 @@
 
 #include "command.h"
 
-void forward(int fd_cli, __attribute__((unused))client_t *clis,
-server_t *server, char *command)
+void forward(__attribute__((unused))int fd_cli,
+__attribute__((unused))client_t *clis, server_t *server, char *command)
 {
     char *buff = malloc(70);
     int nb = -1;
