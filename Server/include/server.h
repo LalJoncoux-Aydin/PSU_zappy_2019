@@ -43,6 +43,6 @@ freq is the reciprocal of time unit for execution of actions\n"
 #include "server_struct.h"
 
 server_t *init_server(server_t *server_v);
-int server(server_t *server_v, client_t *head);
+int server(server_t *server_v);
 
 #endif /* SERVER_H_ */

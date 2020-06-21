@@ -24,17 +24,21 @@ static void end_handler(__attribute__((unused)))
     exit(0);
 }
 
-static int manage_event(int maxfd, fd_set *read_fds, client_t *head,
+static client_t *manage_event(int *maxfd, fd_set *read_fds, client_t *head,
 server_t *server_v)
 {
     int res = 0;
 
-    res = select(maxfd + 1, read_fds, NULL, NULL, NULL);
+    res = select(*maxfd + 1, read_fds, NULL, NULL, NULL);
     if (res < 0)
-        return 84;
+        return NULL;
     if (FD_ISSET(server_v->server_fd, read_fds)) {
         if (head == NULL) {
             head = add_first_client(server_v);
+            if (head->fd > 0)
+                FD_SET(head->fd, read_fds);
+            if (head->fd > *maxfd)
+                *maxfd = head->fd;
         } else
             add_client(server_v, head);
     }
@@ -43,33 +47,31 @@ server_t *server_v)
             manage_client(c, server_v);
         }
     }
-    return 0;
+    return head;
 }
 
-static void update_maxfd(int fd, fd_set *read_fds)
-{
-    if (fd > 0)
-        FD_SET(fd, read_fds);
-}
-
-int server(server_t *server_v, client_t *head)
+int server(server_t *server_v)
 {
     fd_set read_fds;
     int maxfd = 0;
+    static client_t *head = NULL;
 
     server_v->server_fd = get_socket(server_v->port);
     if (server_v->server_fd == -1)
         return 84;
     signal(SIGINT, end_handler);
+    FD_ZERO(&read_fds);
+    FD_SET(server_v->server_fd, &read_fds);
+    maxfd = server_v->server_fd;
     while (1) {
-        FD_ZERO(&read_fds);
-        FD_SET(server_v->server_fd, &read_fds);
-        maxfd = server_v->server_fd;
         for (client_t *c = head; c; c = c->next) {
-            update_maxfd(c->fd, &read_fds);
-            maxfd = (c->fd > maxfd ? c->fd : maxfd);
+            if (c->fd > 0)
+                FD_SET(c->fd, &read_fds);
+            if (c->fd > maxfd)
+                maxfd = c->fd;
         }
-        if (manage_event(maxfd, &read_fds, head, server_v) == 84)
+        head = manage_event(&maxfd, &read_fds, head, server_v);
+        if (head == NULL)
             return 84;
     }
     return 0;

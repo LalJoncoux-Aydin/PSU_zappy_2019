@@ -50,7 +50,6 @@ static bool check_value_server(server_t *server_v)
 int main(int ac, char **av, char **env)
 {
     server_t *server_v = NULL;
-    static client_t *head = NULL;
 
     if (check_arg(ac, av) == false)
         return 84;
@@ -64,7 +63,7 @@ int main(int ac, char **av, char **env)
     if (create_map(server_v) == false)
         return 84;
     printf("Starting server...\n");
-    if (server(server_v, head) == 84)
+    if (server(server_v) == 84)
         return 84;
     return 0;
 }
