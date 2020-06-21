@@ -21,6 +21,7 @@ const command_manager_t commands[NBR_OF_COMMAND] = {
     {"Look", look, 0},
     {"Take", take, 1},
     {"nbp", nbp, 0},
+    {"Fork", fork_cli, 0},
 };
 
 static void manage_message(char *msg, client_t *cli, server_t *server)

@@ -7,6 +7,8 @@
 
 #include "server.h"
 
+static client_t *head = NULL;
+
 server_t *init_server(server_t *server_v)
 {
     server_v = malloc(sizeof(server_t));
@@ -55,7 +57,6 @@ int server(server_t *server_v)
 {
     fd_set read_fds;
     int maxfd = 0;
-    static client_t *head = NULL;
 
     server_v->server_fd = get_socket(server_v->port);
     if (server_v->server_fd == -1)

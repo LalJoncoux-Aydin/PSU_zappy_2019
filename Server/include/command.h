@@ -50,6 +50,7 @@ void turn(int fd_cli, client_t *clis,
 server_t *server, char *command);
 void take(int fd_cli, client_t *cli, server_t *server, char *command);
 void nbp(int fd_cli, client_t *cli, server_t *server, char *command);
+void fork_cli(int fd_cli, client_t *cli, server_t *server, char *command);
 void pnw(client_t *cli);
 
 #endif

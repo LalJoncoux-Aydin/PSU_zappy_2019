@@ -12,6 +12,7 @@ SRC		=	bct.c			\
 			turn.c			\
 			take.c			\
 			nbp.c			\
+			fork_cli.c			\
 
 OBJ		=	$(SRC:.c=.o)
 

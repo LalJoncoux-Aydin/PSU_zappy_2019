@@ -38,6 +38,7 @@ tools:
 $(NAME):	tools	commands	$(OBJ)
 		gcc -o $(NAME) $(OBJ) $(LDFLAGS)
 		@echo -e "\e[92;5m       ====BULDING DONE====      \e[0m"
+		cp $(NAME) ../.
 
 clean:
 	rm -f $(OBJ)
