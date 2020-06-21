@@ -33,7 +33,7 @@ class Network:
 
     def rcvMsg(self):
         try:
-            msg = self.socket.recv(1024).decode()
+            msg = self.socket.recv(2048).decode()
             return (msg)
         except Exception as e:
             print (e)

@@ -325,8 +325,10 @@ class GameRunner:
             # self.startIncantation(self.checkElevation())
             self.moveForward(i)
             self.moveForward(i)
-            # if (i == 0):
-            #     self.fork(0)
+            if (i == 0):
+                self.fork(0)
+            self.sendMsg("Broadcast text\n", i)
+            self.rcvMsg(i)
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
