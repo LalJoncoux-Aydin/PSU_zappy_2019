@@ -75,16 +75,18 @@ static bool create_new_client_ia(client_t *cli, server_t *server_v)
     return true;
 }
 
-static bool create_fst_client(client_t **hd, int new, server_t *serv)
+static client_t *create_fst_client(int new, server_t *serv)
 {
-    (*hd) = malloc(sizeof(client_t));
-    if ((*hd) == NULL)
-        return false;
-    (*hd)->fd = new;
-    (*hd)->prev = NULL;
-    (*hd)->next = NULL;
-    serv->head = (*hd);
-    return true;
+    client_t *head = NULL;
+
+    head = malloc(sizeof(client_t));
+    if (head == NULL)
+        return NULL;
+    head->fd = new;
+    head->prev = NULL;
+    head->next = NULL;
+    serv->head = head;
+    return head;
 }
 
 static bool create_new_client(client_t *cli, int new_fd)
@@ -104,17 +106,17 @@ static bool create_new_client(client_t *cli, int new_fd)
 
 void create_client(client_t **head, int new_fd, server_t *server_v)
 {
-    client_t *cli = NULL;
+    client_t *tmp = *head;
 
-    if (!(*head)) {
-        if (create_fst_client(head, new_fd, server_v) == false)
+    if (tmp == NULL) {
+        tmp = create_fst_client(new_fd, server_v);
+        if (tmp == NULL)
             error("Error : Creation of the first client");
-        cli = *head;
     } else {
-        for (cli = *head; cli->next != NULL; cli = cli->next);
-        if (create_new_client(cli, new_fd) == false)
+        for (; tmp->next != NULL; tmp = tmp->next);
+        if (create_new_client(tmp, new_fd) == false)
             error("Error : Creation new client");
     }
-    if (create_new_client_ia(cli, server_v) == false)
+    if (create_new_client_ia(tmp, server_v) == false)
         error("Error : creation new client's IA");
 }

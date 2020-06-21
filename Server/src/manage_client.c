@@ -18,7 +18,7 @@ const command_manager_t commands[NBR_OF_COMMAND] = {
     {"Forward", forward, 1},
     {"Right", turn, 1},
     {"Left", turn, 1},
-    {"Look", look, 1},
+    {"Look", look, 0},
 };
 
 static void del_cli(client_t **head, int fd)
@@ -47,6 +47,7 @@ static void manage_message(char *msg, int *tri_force, client_t *clis, server_t *
 
     for (int i = 0; i < NBR_OF_COMMAND; i++) {
         if (str_in_str(commands[i].command, msg)) {
+            printf("Finding function ?\n");
             commands[i].func(sender_fd, clis, server, msg);
         }
     }
