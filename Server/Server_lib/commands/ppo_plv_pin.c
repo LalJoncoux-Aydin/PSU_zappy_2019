@@ -29,7 +29,8 @@ static void get_sub_commands(char *command, client_t *cli, int fd_cli)
     free(buff);
 }
 
-void ppo_plv_pin(int fd_cli, client_t *cli, server_t *server, char *command)
+void ppo_plv_pin(int fd_cli, client_t *cli,
+__attribute__((unused))server_t *server, char *command)
 {
     client_t *tmp = NULL;
     int nb = -1;
