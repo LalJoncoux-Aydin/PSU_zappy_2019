@@ -8,7 +8,7 @@
 #ifndef SERVERSTRUCT_H_
 #define SERVERSTRUCT_H_
 
-#define NBR_OF_COMMAND 15
+#define NBR_OF_COMMAND 12
 #define MESSAGE_SIZE 128
 #define NB_CLIENT 15
 
