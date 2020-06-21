@@ -37,7 +37,8 @@ class Network:
             return (msg)
         except Exception as e:
             print (e)
-            return (None)
+            print("\n\nDEAD BOY\n\n")
+            exit(0)
 
     def sendMsg(self, msg):
         try:
@@ -45,4 +46,5 @@ class Network:
             return (0)
         except Exception as e:
             print (e)
-            return (-1)
+            print("\n\nDEAD BOY\n\n")
+            exit(0)
