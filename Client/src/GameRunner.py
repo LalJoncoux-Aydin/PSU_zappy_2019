@@ -325,7 +325,8 @@ class GameRunner:
             self.startIncantation(self.checkElevation())
             self.moveForward(i)
             self.moveForward(i)
-            self.fork(i)
+            if (i == 0):
+                self.fork(0)
         return (0)
 
 #--------------------------------------------------------------------------------------------- Entry
