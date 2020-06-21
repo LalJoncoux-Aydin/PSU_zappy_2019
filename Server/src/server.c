@@ -65,7 +65,7 @@ int server(server_t *server_v)
         FD_ZERO(&read_fds);
         FD_SET(server_v->server_fd, &read_fds);
         maxfd = server_v->server_fd;
-        for (client_t *c = head; c; c = c->next, i++) {
+        for (client_t *c = head; c; c = c->next) {
             if (c->fd > 0)
                 FD_SET(c->fd, &read_fds);
             if (c->fd > maxfd)
