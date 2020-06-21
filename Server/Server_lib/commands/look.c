@@ -9,7 +9,6 @@
 
 static char *writing_element(tile_t *cell, char *send_look)
 {
-    strcat(send_look, "player");
     if (cell->q0 > 0) {
         for (int i = cell->q0; i > 0; i--)
             strcat(send_look, " food");
@@ -46,14 +45,15 @@ __attribute__((unused)) char *command)
 {
     char *buff = NULL;
 
-    buff = malloc(sizeof(char) * MESSAGE_SIZE * MESSAGE_SIZE);
+    buff = calloc(5000, sizeof(char));
     if (buff == NULL)
         error("Error : malloc fail\n");
     strcat(buff, "[");
+    strcat(buff, "player");
     for (int i = 0; i < 15; i++) {
         buff = writing_element(&server->map[cli->ai->y][cli->ai->x], buff);
         if (i != 14)
-            strcat(buff, ", ");
+            strcat(buff, ",");
     }
     strcat(buff, "]\n");
     printf("buff = %s\n", buff);
