@@ -22,7 +22,6 @@ char *command)
     sprintf(buff, "bct %d %d %d %d %d %d %d %d %d\n", x, y,
     tile->q0, tile->q1, tile->q2, tile->q3, tile->q4, tile->q5, tile->q6);
     send(fd_cli, buff, strlen(buff), 0);
-    
     if (DEBUG)
         printf("message send : %s", buff);
     free(buff);
