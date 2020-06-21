@@ -15,7 +15,7 @@ static void send_player_info(client_t *cli)
     send(cli->fd, size_map, strlen(size_map), 0);
 }
 
-static void get_team_name(client_t *cli)
+static void get_team_name(client_t *cli, server_t *server_v)
 {
     char *team = NULL;
 
@@ -24,9 +24,15 @@ static void get_team_name(client_t *cli)
         error("Error : malloc failed");
     send(cli->fd, "WELCOME\n", 8, 0);
     recv(cli->fd, team, 50, 0);
-    cli->ai->team = strdup(team);
+    for (int i = 0; server_v->teams_name[i] == NULL; i++) {
+        if (strcmp(server_v->teams_name[i], team) == 0) {
+            cli->ai->team = strdup(team);
+            if (cli->ai->team == NULL)
+                error("Error : malloc failed");
+        }
+    }
     if (cli->ai->team == NULL)
-        error("Error : malloc failed");
+        printf("Wrong team name\n");
     send_player_info(cli);
     free(team);
 }
@@ -65,7 +71,7 @@ static bool create_new_client_ia(client_t *cli, server_t *server_v)
         cli->ai->orientation = SOUTH;
     cli->ai->player_number = nbr_player++;
     cli->ai->level = 0;
-    get_team_name(cli);
+    get_team_name(cli, server_v);
     return true;
 }
 
