@@ -18,32 +18,59 @@ server_t *init_server(server_t *server_v)
     return server_v;
 }
 
-static void end_handler()
+static void end_handler(__attribute__((unused)))
 {
     printf("\n");
     exit(0);
 }
 
-int server(server_t *server_v)
+static int manage_event(int maxfd, fd_set *read_fds, client_t *head,
+server_t *server_v)
 {
-    int fd_max;
-    fd_set master;
+    int res = 0;
+
+    res = select(maxfd + 1, read_fds, NULL, NULL, NULL);
+    if (res < 0)
+        return 84;
+    if (FD_ISSET(server_v->server_fd, read_fds)) {
+        if (head == NULL) {
+            head = add_first_client(server_v);
+        } else
+            add_client(server_v, head);
+    }
+    for (client_t *c = head; c; c = c->next) {
+        if (FD_ISSET(c->fd, read_fds)) {
+            manage_client(c, server_v);
+        }
+    }
+    return 0;
+}
+
+static void update_maxfd(int fd, fd_set *read_fds)
+{
+    if (fd > 0)
+        FD_SET(fd, read_fds);
+}
+
+int server(server_t *server_v, client_t *head)
+{
     fd_set read_fds;
-    static client_t *head = NULL;
+    int maxfd = 0;
 
     server_v->server_fd = get_socket(server_v->port);
     if (server_v->server_fd == -1)
         return 84;
-    FD_ZERO(&master);
-    FD_ZERO(&read_fds);
-    FD_SET(server_v->server_fd , &master);
-    fd_max = server_v->server_fd;
     signal(SIGINT, end_handler);
     while (1) {
-        read_fds = master;
-        if (select(fd_max + 1, &read_fds, NULL, NULL, NULL) == -1)
-            error("Error : select failed");
-        manage_event(&master, server_v, &fd_max, &read_fds, head);
+        FD_ZERO(&read_fds);
+        FD_SET(server_v->server_fd, &read_fds);
+        maxfd = server_v->server_fd;
+        for (client_t *c = head; c; c = c->next) {
+            update_maxfd(c->fd, &read_fds);
+            maxfd = (c->fd > maxfd ? c->fd : maxfd);
+        }
+        if (manage_event(maxfd, &read_fds, head, server_v) == 84)
+            return 84;
     }
     return 0;
 }

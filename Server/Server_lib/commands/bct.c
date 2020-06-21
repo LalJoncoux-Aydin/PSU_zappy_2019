@@ -7,7 +7,8 @@
 
 #include "command.h"
 
-void bct(int fd_cli, client_t *clis, server_t *server, char *command)
+void bct(int fd_cli, __attribute__((unused))client_t *clis, server_t *server,
+char *command)
 {
     char *buff = malloc(50);
     int x = atoi(str_breaker(command, ' ', 2, 0));

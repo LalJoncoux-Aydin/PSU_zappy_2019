@@ -7,8 +7,9 @@
 
 CPPFLAGS	=	-iquote include
 
-SRC		=	manage_arg.c							\
-			manage_event.c						\
+SRC		=	manage_arg.c						\
+			get_team_name.c						\
+			add_client.c						\
 			create_client.c						\
 			manage_client.c						\
 			map.c								\

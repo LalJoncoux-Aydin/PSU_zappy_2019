@@ -10,21 +10,21 @@
 static void writing_element(tile_t *cell)
 {
     // If player
-    printf("player");
+    printf("player\n");
     for (int i = cell->q0; i > 0; i--)
-        printf(", food");
+        printf(", food\n");
     for (int i = cell->q1; i > 0; i--)
-        printf(", linemate");
+        printf(", linemate\n");
     for (int i = cell->q2; i > 0; i--)
-        printf(", deraumere");
+        printf(", deraumere\n");
     for (int i = cell->q3; i > 0; i--)
-        printf(", sibur");
+        printf(", sibur\n");
     for (int i = cell->q4; i > 0; i--)
-        printf(", mendiane");
+        printf(", mendiane\n");
     for (int i = cell->q5; i > 0; i--)
-        printf(", phiras");
+        printf(", phiras\n");
     for (int i = cell->q6; i > 0; i--)
-        printf(", thystame");
+        printf(", thystame\n");
 }
 //
 // static void wring_send()
@@ -35,19 +35,10 @@ static void writing_element(tile_t *cell)
 void look(int fd_cli, client_t *clis, server_t *server,
 __attribute__((unused)) char *command)
 {
-    char buff[MESSAGE_SIZE];
+//    char buff[MESSAGE_SIZE];
 
-    printf("Look");
-	// X Y cli --> Pos ia
-	// X Y server --> Max size
-    for (int y = 0; y < server->y; y++) {
-        for (int x = 0; x < server->x; x++) {
-            writing_element(&server->map[y][x]);
-            // tile = &(server->map[y][x]);
-            // sprintf(buff, "bct %d %d %d %d %d %d %d %d %d\n", x, y, tile->q0,
-            // tile->q1, tile->q2, tile->q3, tile->q4, tile->q5, tile->q6);
-            // res = str_concat(res, buff);
-        }
-    }
-//    send(fd_cli, buff, strlen(buff), 0);
+    printf("Look\n");
+    printf("ai y = %d\n", clis->fd);
+//    printf("ai y = %d\n", clis->ai->x);
+//    writing_element(&server->map[clis->ai->y][clis->ai->x]);
 }

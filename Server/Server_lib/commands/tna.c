@@ -7,7 +7,8 @@
 
 #include "command.h"
 
-void tna(int fd_cli, client_t *none, server_t *server, char *none_c)
+void tna(int fd_cli, __attribute__((unused))client_t *none, server_t *server,
+__attribute__((unused))char *none_c)
 {
     char *buff = malloc(50);
 

@@ -7,7 +7,8 @@
 
 #include "command.h"
 
-void mct(int fd_cli, client_t *clis, server_t *server, char *command)
+void mct(int fd_cli, __attribute__((unused))client_t *clis, server_t *server,
+__attribute__((unused))char *command)
 {
     char *buff = malloc(50);
     char *res = malloc(50);

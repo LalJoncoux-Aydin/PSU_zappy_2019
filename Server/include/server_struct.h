@@ -37,7 +37,7 @@ typedef struct ai_s {
     int level;
     inventory_t *invent;
     char *team;
-    struct ai_tpecific_s *next;
+    struct ai_s *next;
 } ai_t;
 
 typedef struct client_s {

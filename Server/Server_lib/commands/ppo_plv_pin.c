@@ -7,7 +7,8 @@
 
 #include "command.h"
 
-void ppo_plv_pin(int fd_cli, client_t *clis, server_t *server, char *command)
+void ppo_plv_pin(int fd_cli, __attribute__((unused))client_t *clis,
+server_t *server, char *command)
 {
     char *buff = malloc(70);
     int nb = -1;

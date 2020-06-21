@@ -38,13 +38,11 @@ freq is the reciprocal of time unit for execution of actions\n"
 #include "tools.h"
 #include "get_socket.h"
 #include "manage_arg.h"
-#include "manage_event.h"
+#include "add_client.h"
 #include "map.h"
 #include "server_struct.h"
 
-void del_from_pfds(struct pollfd pfds[], int i, int *fd_count, client_t **head);
-
 server_t *init_server(server_t *server_v);
-int server(server_t *port);
+int server(server_t *server_v, client_t *head);
 
 #endif /* SERVER_H_ */
