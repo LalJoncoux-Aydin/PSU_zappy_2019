@@ -25,18 +25,23 @@ const command_manager_t commands[NBR_OF_COMMAND] = {
 static void manage_message(char *msg, client_t *cli, server_t *server)
 {
     client_t *tmp = NULL;
+    bool find = false;
 
     for (int i = 0; i < NBR_OF_COMMAND; i++) {
         if (str_in_str(commands[i].command, msg)) {
+            find = true;
             commands[i].func(cli->fd, cli, server, msg);
             return;
         } else if (strncmp(msg, "ppo", 3) == 0 || strncmp(msg, "plv", 3) == 0 ||
         strncmp(msg, "pin", 3) == 0) {
+            find = true;
             for (tmp = cli; tmp->prev != NULL; tmp = tmp->prev);
             ppo_plv_pin(cli->fd, tmp, server, msg);
             return;
         }
     }
+    if (find == false)
+        send(cli->fd, "suc\n", 4, 0);
 }
 
 void manage_client(client_t *cli, server_t *server_v)

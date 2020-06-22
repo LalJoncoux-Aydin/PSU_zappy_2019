@@ -8,17 +8,17 @@
 #ifndef SERVERSTRUCT_H_
 #define SERVERSTRUCT_H_
 
-#define NBR_OF_COMMAND 15
+#define NBR_OF_COMMAND 12
 #define MESSAGE_SIZE 128
 #define NB_CLIENT 15
 
 #include <stdbool.h>
 
-enum {
-    NORTH = 1,
-    EAST,
-    SOUTH,
-    WEST
+enum _orientation {
+    NORTH = 0,
+    SOUTH = 1,
+    EAST = 2,
+    WEST = 3,
 };
 
 typedef struct ivent_s {
@@ -31,35 +31,21 @@ typedef struct ivent_s {
     int q6;
 } inventory_t;
 
-typedef struct ai_s {
-    int player_number;
-    int x;
-    int y;
-    int orientation;
-    int level;
-    inventory_t *invent;
-    char *team;
-    struct ai_s *next;
-} ai_t;
-
 typedef struct client_s {
     bool type;
     int fd;
-    char *user_name;
-    ai_t *ai;
+    char *team;
+    int id;
+    int x;
+    int y;
+    int look_x;
+    int look_y;
+    enum _orientation orientation;
+    int level;
+    inventory_t *invent;
     struct client_s *next;
     struct client_s *prev;
 } client_t;
-
-typedef struct tile_s {
-    int q0;
-    int q1;
-    int q2;
-    int q3;
-    int q4;
-    int q5;
-    int q6;
-} tile_t;
 
 typedef struct server_s {
     int server_fd;
@@ -69,7 +55,7 @@ typedef struct server_s {
     int nb_player;
     int x;
     int y;
-    tile_t **map;
+    inventory_t **map;
     int freq;
     client_t *head;
 } server_t;

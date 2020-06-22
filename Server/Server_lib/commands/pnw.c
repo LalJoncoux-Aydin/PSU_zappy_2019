@@ -14,7 +14,7 @@ void pnw(client_t *cli)
     buf = malloc(sizeof(char) * MESSAGE_SIZE);
     if (buf == NULL)
         error("Error : malloc failed\n");
-    sprintf(buf, "pnw %d %d %d %d %d %s\n", cli->ai->player_number, cli->ai->x,
-    cli->ai->y, cli->ai->orientation, cli->ai->level, cli->ai->team);
+    sprintf(buf, "pnw %d %d %d %d %d %s\n", cli->id, cli->x,
+    cli->y, cli->orientation, cli->level, cli->team);
     send(cli->fd, buf, strlen(buf), 0);
 }

@@ -7,8 +7,14 @@
 
 #include "command.h"
 
-static char *writing_element(tile_t *cell, char *send_look)
+static char *writing_element(inventory_t *cell, bool first)
 {
+    char send_look[MESSAGE_SIZE * MESSAGE_SIZE] = "";
+
+    if (first == false)
+        strcpy(send_look, ",");
+    else
+        strcpy(send_look, "[player");
     if (cell->q0 > 0) {
         for (int i = cell->q0; i > 0; i--)
             strcat(send_look, " food");
@@ -37,25 +43,74 @@ static char *writing_element(tile_t *cell, char *send_look)
         for (int i = cell->q6; i > 0; i--)
             strcat(send_look, " thystame");
     }
-    return send_look;
+    strcat(send_look, "\0");
+    return strdup(send_look);
+}
+
+static char *find_direction(char *res, bool first, inventory_t *cell)
+{
+    char *temp = NULL;
+
+    if (first == true) {
+        temp = writing_element(cell, first);
+        res = malloc(sizeof(char) * strlen(temp) + 1);
+        res = strcpy(res, temp);
+    } else {
+        temp = writing_element(cell, first);
+        res = realloc(res, strlen(res) + strlen(temp) + 2);
+        strcat(res, temp);
+    }
+    strcat(res, "\0");
+    free(temp);
+    return res;
+}
+
+static void next_look(client_t *cli, int i)
+{
+    if (i == 1 || i == 4 || i == 9) {
+        switch (cli->orientation) {
+        case(NORTH):
+            cli->look_y -= 1;
+            cli->look_x -= (i == 1 ? i : i + 1);
+            break;
+        case(SOUTH):
+            cli->look_y += 1;
+            cli->look_x -= (i == 1 ? i : i + 1);
+            break;
+        case(EAST):
+            cli->look_y -= (i == 1 ? i : i + 1);
+            cli->look_x += 1;
+            break;
+        case(WEST):
+            cli->look_y -= (i == 1 ? i : i + 1);
+            cli->look_x -= 1;
+            break;
+        }
+    } else if (cli->orientation == NORTH || cli->orientation == SOUTH) {
+        cli->look_x += 1;
+    } else if (cli->orientation == EAST || cli->orientation == WEST) {
+        cli->look_y += 1;
+    }
 }
 
 void look(int fd_cli, client_t *cli, server_t *server,
 __attribute__((unused)) char *command)
 {
-    char *buff = NULL;
+    char *res = "";
 
-    buff = calloc(5000, sizeof(char));
-    if (buff == NULL)
+    cli->look_x = cli->x;
+    cli->look_y = cli->y;
+    res = malloc(sizeof(char) * MESSAGE_SIZE);
+    if (res == NULL)
         error("Error : malloc fail\n");
-    strcat(buff, "[");
-    strcat(buff, "player");
-    for (int i = 0; i < 15; i++) {
-        buff = writing_element(&server->map[cli->ai->y][cli->ai->x], buff);
-        if (i != 14)
-            strcat(buff, ",");
+    res = find_direction(res, true, &server->map[cli->look_x][cli->look_y]);
+    for (int i = 1; i <= 15; i++) {
+        next_look(cli, i);
+        if (cli->look_y >= 0 && cli->look_y <= server->y
+        && cli->look_x >= 0 && cli->look_x <= server->x)
+            res = find_direction(res, false, &server->map[cli->look_x][cli->look_y]);
     }
-    strcat(buff, "]\n");
-    send(fd_cli, buff, strlen(buff), 0);
-    free(buff);
+    strcat(res, "]\0");
+    send(fd_cli, res, strlen(res), 0);
+    free(res);
 }
