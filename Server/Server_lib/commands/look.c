@@ -7,7 +7,7 @@
 
 #include "command.h"
 
-static char *writing_element(tile_t *cell, bool first)
+static char *writing_element(inventory_t *cell, bool first)
 {
     char send_look[MESSAGE_SIZE * MESSAGE_SIZE] = "";
 
@@ -47,7 +47,7 @@ static char *writing_element(tile_t *cell, bool first)
     return strdup(send_look);
 }
 
-static char *find_direction(char *res, bool first, tile_t *cell)
+static char *find_direction(char *res, bool first, inventory_t *cell)
 {
     char *temp = NULL;
 

@@ -47,16 +47,6 @@ typedef struct client_s {
     struct client_s *prev;
 } client_t;
 
-typedef struct tile_s {
-    int q0;
-    int q1;
-    int q2;
-    int q3;
-    int q4;
-    int q5;
-    int q6;
-} tile_t;
-
 typedef struct server_s {
     int server_fd;
     char *port;
@@ -65,7 +55,7 @@ typedef struct server_s {
     int nb_player;
     int x;
     int y;
-    tile_t **map;
+    inventory_t **map;
     int freq;
     client_t *head;
 } server_t;

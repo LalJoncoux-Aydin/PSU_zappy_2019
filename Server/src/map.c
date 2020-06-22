@@ -9,11 +9,11 @@
 
 bool create_map(server_t *server_v)
 {
-    server_v->map = malloc(sizeof(tile_t *) * (server_v->y + 1));
+    server_v->map = malloc(sizeof(inventory_t *) * (server_v->y + 1));
     if (server_v->map == NULL)
         return false;
     for (int y = 0; y < server_v->y; y++) {
-        server_v->map[y] = malloc(sizeof(tile_t) * (server_v->x + 1));
+        server_v->map[y] = malloc(sizeof(inventory_t) * (server_v->x + 1));
         if (server_v->map[y] == NULL) {
             free(server_v->map);
             return false;

@@ -12,7 +12,7 @@ __attribute__((unused))char *command)
 {
     char *buff = NULL;
     char *res = NULL;
-    tile_t *tile;
+    inventory_t *tile;
 
     buff = malloc(sizeof(char) * MESSAGE_SIZE);
     res = malloc(sizeof(char) * MESSAGE_SIZE);

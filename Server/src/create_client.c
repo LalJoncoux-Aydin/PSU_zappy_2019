@@ -40,7 +40,7 @@ static client_t *init_client(int fd, server_t *serv)
     cli->orientation = NORTH;
     cli->id += 1;
     serv->nb_player += 1;
-    cli->level = 0;
+    cli->level = 1;
     get_team_name(cli, serv);
     serv->head = cli;
     return cli;

@@ -13,7 +13,7 @@ char *command)
     char *buff = NULL;
     int x = atoi(str_breaker(command, ' ', 2, 0));
     int y = atoi(str_breaker(command, ' ', 3, 0));
-    tile_t *tile;
+    inventory_t *tile;
 
     buff = malloc(sizeof(char) * MESSAGE_SIZE);
     if (buff == NULL)

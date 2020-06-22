@@ -9,7 +9,7 @@
 
 void take(int fd_cli, client_t *cli, server_t *server, char *command)
 {
-    tile_t *ia_cell = &server->map[cli->y][cli->x];
+    inventory_t *ia_cell = &server->map[cli->y][cli->x];
     char *type_obj = NULL;
 
     type_obj = str_breaker(command, ' ', 2, 0);
