@@ -35,7 +35,7 @@ server_t *server_v)
     res = select(*maxfd + 1, read_fds, NULL, NULL, NULL);
     if (res < 0)
         return NULL;
-    if (FD_ISSET(server_v->server_fd, read_fds)) {
+    if (FD_ISSET(server_v->server_fd, read_fds) && server_v->nb_player < NB_CLIENT) {
         if (head == NULL) {
             head = add_first_client(server_v);
             if (head->fd > 0)

@@ -38,8 +38,7 @@ static client_t *init_client(int fd, server_t *serv)
     cli->x = get_rand_num(0, serv->x, 100);
     cli->y = get_rand_num(0, serv->y, 100);
     cli->orientation = NORTH;
-    cli->id += 1;
-    serv->nb_player += 1;
+    cli->id = serv->nb_player + 1;
     cli->level = 1;
     get_team_name(cli, serv);
     serv->head = cli;
