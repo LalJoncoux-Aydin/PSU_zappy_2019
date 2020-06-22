@@ -67,19 +67,29 @@ static char *find_direction(char *res, bool first, tile_t *cell)
 
 static void next_look(client_t *cli, int i)
 {
-    switch (cli->ai->orientation) {
-    case(NORTH):
-        cli->ai->look_y -= 1;
-        break;
-    case(SOUTH):
-        cli->ai->look_y += 1;
-        break;
-    case(EAST):
+    if (i == 1 || i == 4 || i == 9) {
+        switch (cli->ai->orientation) {
+        case(NORTH):
+            cli->ai->look_y -= 1;
+            cli->ai->look_x -= (i == 1 ? i : i + 1);
+            break;
+        case(SOUTH):
+            cli->ai->look_y += 1;
+            cli->ai->look_x -= (i == 1 ? i : i + 1);
+            break;
+        case(EAST):
+            cli->ai->look_y -= (i == 1 ? i : i + 1);
+            cli->ai->look_x += 1;
+            break;
+        case(WEST):
+            cli->ai->look_y -= (i == 1 ? i : i + 1);
+            cli->ai->look_x -= 1;
+            break;
+        }
+    } else if (cli->ai->orientation == NORTH || cli->ai->orientation == SOUTH) {
         cli->ai->look_x += 1;
-        break;
-    case(WEST):
-        cli->ai->look_x -= 1;
-        break;
+    } else if (cli->ai->orientation == EAST || cli->ai->orientation == WEST) {
+        cli->ai->look_y += 1;
     }
 }
 
@@ -94,7 +104,7 @@ __attribute__((unused)) char *command)
     if (res == NULL)
         error("Error : malloc fail\n");
     res = find_direction(res, true, &server->map[cli->ai->look_x][cli->ai->look_y]);
-    for (int i = 1; i < 15; i++) {
+    for (int i = 1; i <= 15; i++) {
         next_look(cli, i);
         if (cli->ai->look_y >= 0 && cli->ai->look_y <= server->y
         && cli->ai->look_x >= 0 && cli->ai->look_x <= server->x)
