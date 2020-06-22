@@ -2,7 +2,6 @@ CPPFLAGS	=	-iquote ../../include
 
 SRC		=	bct.c			\
 			forward.c		\
-			get_ai_by_nb.c	\
 			look.c			\
 			mct.c			\
 			msz.c			\

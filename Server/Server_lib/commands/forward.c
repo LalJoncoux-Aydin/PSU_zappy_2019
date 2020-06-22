@@ -9,22 +9,22 @@
 
 static void set_move(client_t *cli, server_t *server)
 {
-    switch (cli->ai->orientation) {
+    switch (cli->orientation) {
     case NORTH :
-        if (cli->ai->y > 0)
-            cli->ai->y -= 1;
+        if (cli->y > 0)
+            cli->y -= 1;
         break;
     case SOUTH :
-        if (cli->ai->y < server->y)
-            cli->ai->y += 1;
+        if (cli->y < server->y)
+            cli->y += 1;
         break;
     case EAST :
-        if (cli->ai->x < server->x)
-            cli->ai->x += 1;
+        if (cli->x < server->x)
+            cli->x += 1;
         break;
     case WEST :
-        if (cli->ai->x > 0)
-            cli->ai->x -= 1;
+        if (cli->x > 0)
+            cli->x -= 1;
         break;
     }
 }

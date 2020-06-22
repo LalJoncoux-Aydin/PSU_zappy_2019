@@ -15,15 +15,15 @@ static void get_sub_commands(char *command, client_t *cli, int fd_cli)
     if (buff == NULL)
         error("Error : malloc failed\n");
     if (str_in_str("ppo", command))
-        sprintf(buff, "ppo %d %d %d %d\n", cli->ai->player_number, cli->ai->x,
-        cli->ai->y, cli->ai->orientation);
+        sprintf(buff, "ppo %d %d %d %d\n", cli->id, cli->x,
+        cli->y, cli->orientation);
     if (str_in_str("plv", command))
-        sprintf(buff, "plv %d %d\n", cli->ai->player_number, cli->ai->level);
+        sprintf(buff, "plv %d %d\n", cli->id, cli->level);
     if (str_in_str("pin", command)) {
         sprintf(buff, "pin %d %d %d %d %d %d %d %d %d %d\n",
-        cli->ai->player_number, cli->ai->x, cli->ai->y, cli->ai->invent->q0,
-        cli->ai->invent->q1, cli->ai->invent->q2, cli->ai->invent->q3,
-        cli->ai->invent->q4, cli->ai->invent->q5, cli->ai->invent->q6);
+        cli->id, cli->x, cli->y, cli->invent->q0,
+        cli->invent->q1, cli->invent->q2, cli->invent->q3,
+        cli->invent->q4, cli->invent->q5, cli->invent->q6);
     }
     send(fd_cli, buff, strlen(buff), 0);
     free(buff);

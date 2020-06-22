@@ -9,18 +9,18 @@
 
 static void set_orientation(client_t *cli, bool _dir, int fd_cli)
 {
-    switch (cli->ai->orientation) {
+    switch (cli->orientation) {
     case NORTH :
-        cli->ai->orientation = (_dir == LEFT_DIR ? WEST : EAST);
+        cli->orientation = (_dir == LEFT_DIR ? WEST : EAST);
         break;
     case SOUTH :
-        cli->ai->orientation = (_dir == LEFT_DIR ? EAST : WEST);
+        cli->orientation = (_dir == LEFT_DIR ? EAST : WEST);
         break;
     case EAST :
-        cli->ai->orientation = (_dir == LEFT_DIR ? NORTH : SOUTH);
+        cli->orientation = (_dir == LEFT_DIR ? NORTH : SOUTH);
         break;
     case WEST :
-        cli->ai->orientation = (_dir == LEFT_DIR ? SOUTH : NORTH);
+        cli->orientation = (_dir == LEFT_DIR ? SOUTH : NORTH);
         break;
     }
     send(fd_cli, "ok\n", 3, 0);

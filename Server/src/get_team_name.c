@@ -11,7 +11,7 @@ void send_player_info(client_t *cli)
 {
     char size_map[MESSAGE_SIZE];
 
-    sprintf(size_map, "%d\n%d %d\n", NB_CLIENT, cli->ai->x, cli->ai->y);
+    sprintf(size_map, "%d\n%d %d\n", NB_CLIENT, cli->x, cli->y);
     send(cli->fd, size_map, strlen(size_map), 0);
 }
 
@@ -26,7 +26,7 @@ void get_team_name(client_t *cli, server_t *server_v)
     recv(cli->fd, team, 50, 0);
     for (int i = 0; server_v->teams_name[i] != NULL; i++) {
         if (strcmp(server_v->teams_name[i], team)) {
-            cli->ai->team = strdup(team);
+            cli->team = strdup(team);
         }
     }
     if (strncmp(team, "GRAPHIQUE\n", 9) == 0) {
@@ -35,7 +35,7 @@ void get_team_name(client_t *cli, server_t *server_v)
         return;
     }
     cli->type = false;
-    if (cli->ai->team == NULL)
+    if (cli->team == NULL)
         error("Wrong team name\n");
     send_player_info(cli);
     free(team);

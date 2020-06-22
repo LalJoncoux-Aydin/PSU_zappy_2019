@@ -9,7 +9,7 @@
 
 void take(int fd_cli, client_t *cli, server_t *server, char *command)
 {
-    tile_t *ia_cell = &server->map[cli->ai->y][cli->ai->x];
+    tile_t *ia_cell = &server->map[cli->y][cli->x];
     char *type_obj = NULL;
 
     type_obj = str_breaker(command, ' ', 2, 0);
@@ -19,7 +19,7 @@ void take(int fd_cli, client_t *cli, server_t *server, char *command)
         if (ia_cell->q0 > 0) {
             send(fd_cli, "ok\n", 3, 0);
             ia_cell->q0 -= 1;
-            cli->ai->invent->q0 += 1;
+            cli->invent->q0 += 1;
         } else
             send(fd_cli, "ko\n", 3, 0);
     }
@@ -27,7 +27,7 @@ void take(int fd_cli, client_t *cli, server_t *server, char *command)
         if (ia_cell->q1 > 0) {
             send(fd_cli, "ok\n", 3, 0);
             ia_cell->q1 -= 1;
-            cli->ai->invent->q1 += 1;
+            cli->invent->q1 += 1;
         } else
             send(fd_cli, "ko\n", 3, 0);
     }
@@ -35,7 +35,7 @@ void take(int fd_cli, client_t *cli, server_t *server, char *command)
         if (ia_cell->q2 > 0) {
             send(fd_cli, "ok\n", 3, 0);
             ia_cell->q2 -= 1;
-            cli->ai->invent->q2 += 1;
+            cli->invent->q2 += 1;
         } else
             send(fd_cli, "ko\n", 3, 0);
     }
@@ -43,7 +43,7 @@ void take(int fd_cli, client_t *cli, server_t *server, char *command)
         if (ia_cell->q3 > 0) {
             send(fd_cli, "ok\n", 3, 0);
             ia_cell->q3 -= 1;
-            cli->ai->invent->q3 += 1;
+            cli->invent->q3 += 1;
         } else
             send(fd_cli, "ko\n", 3, 0);
     }
@@ -51,7 +51,7 @@ void take(int fd_cli, client_t *cli, server_t *server, char *command)
         if (ia_cell->q4 > 0) {
             send(fd_cli, "ok\n", 3, 0);
             ia_cell->q4 -= 1;
-            cli->ai->invent->q4 += 1;
+            cli->invent->q4 += 1;
         } else
             send(fd_cli, "ko\n", 3, 0);
     }
@@ -59,7 +59,7 @@ void take(int fd_cli, client_t *cli, server_t *server, char *command)
         if (ia_cell->q5 > 0) {
             send(fd_cli, "ok\n", 3, 0);
             ia_cell->q5 -= 1;
-            cli->ai->invent->q5 += 1;
+            cli->invent->q5 += 1;
         } else
             send(fd_cli, "ko\n", 3, 0);
     }
@@ -67,7 +67,7 @@ void take(int fd_cli, client_t *cli, server_t *server, char *command)
         if (ia_cell->q6 > 0) {
             send(fd_cli, "ok\n", 3, 0);
             ia_cell->q6 -= 1;
-            cli->ai->invent->q6 += 1;
+            cli->invent->q6 += 1;
         } else
             send(fd_cli, "ko\n", 3, 0);
     }

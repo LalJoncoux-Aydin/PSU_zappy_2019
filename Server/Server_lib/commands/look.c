@@ -68,28 +68,28 @@ static char *find_direction(char *res, bool first, tile_t *cell)
 static void next_look(client_t *cli, int i)
 {
     if (i == 1 || i == 4 || i == 9) {
-        switch (cli->ai->orientation) {
+        switch (cli->orientation) {
         case(NORTH):
-            cli->ai->look_y -= 1;
-            cli->ai->look_x -= (i == 1 ? i : i + 1);
+            cli->look_y -= 1;
+            cli->look_x -= (i == 1 ? i : i + 1);
             break;
         case(SOUTH):
-            cli->ai->look_y += 1;
-            cli->ai->look_x -= (i == 1 ? i : i + 1);
+            cli->look_y += 1;
+            cli->look_x -= (i == 1 ? i : i + 1);
             break;
         case(EAST):
-            cli->ai->look_y -= (i == 1 ? i : i + 1);
-            cli->ai->look_x += 1;
+            cli->look_y -= (i == 1 ? i : i + 1);
+            cli->look_x += 1;
             break;
         case(WEST):
-            cli->ai->look_y -= (i == 1 ? i : i + 1);
-            cli->ai->look_x -= 1;
+            cli->look_y -= (i == 1 ? i : i + 1);
+            cli->look_x -= 1;
             break;
         }
-    } else if (cli->ai->orientation == NORTH || cli->ai->orientation == SOUTH) {
-        cli->ai->look_x += 1;
-    } else if (cli->ai->orientation == EAST || cli->ai->orientation == WEST) {
-        cli->ai->look_y += 1;
+    } else if (cli->orientation == NORTH || cli->orientation == SOUTH) {
+        cli->look_x += 1;
+    } else if (cli->orientation == EAST || cli->orientation == WEST) {
+        cli->look_y += 1;
     }
 }
 
@@ -98,17 +98,17 @@ __attribute__((unused)) char *command)
 {
     char *res = "";
 
-    cli->ai->look_x = cli->ai->x;
-    cli->ai->look_y = cli->ai->y;
+    cli->look_x = cli->x;
+    cli->look_y = cli->y;
     res = malloc(sizeof(char) * MESSAGE_SIZE);
     if (res == NULL)
         error("Error : malloc fail\n");
-    res = find_direction(res, true, &server->map[cli->ai->look_x][cli->ai->look_y]);
+    res = find_direction(res, true, &server->map[cli->look_x][cli->look_y]);
     for (int i = 1; i <= 15; i++) {
         next_look(cli, i);
-        if (cli->ai->look_y >= 0 && cli->ai->look_y <= server->y
-        && cli->ai->look_x >= 0 && cli->ai->look_x <= server->x)
-            res = find_direction(res, false, &server->map[cli->ai->look_x][cli->ai->look_y]);
+        if (cli->look_y >= 0 && cli->look_y <= server->y
+        && cli->look_x >= 0 && cli->look_x <= server->x)
+            res = find_direction(res, false, &server->map[cli->look_x][cli->look_y]);
     }
     strcat(res, "]\0");
     send(fd_cli, res, strlen(res), 0);

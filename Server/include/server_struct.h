@@ -31,8 +31,11 @@ typedef struct ivent_s {
     int q6;
 } inventory_t;
 
-typedef struct ai_s {
-    int player_number;
+typedef struct client_s {
+    bool type;
+    int fd;
+    char *team;
+    int id;
     int x;
     int y;
     int look_x;
@@ -40,15 +43,6 @@ typedef struct ai_s {
     enum _orientation orientation;
     int level;
     inventory_t *invent;
-    char *team;
-    struct ai_s *next;
-} ai_t;
-
-typedef struct client_s {
-    bool type;
-    int fd;
-    char *user_name;
-    ai_t *ai;
     struct client_s *next;
     struct client_s *prev;
 } client_t;
