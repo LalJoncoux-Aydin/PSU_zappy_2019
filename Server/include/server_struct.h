@@ -14,11 +14,11 @@
 
 #include <stdbool.h>
 
-enum {
-    NORTH = 1,
-    EAST,
-    SOUTH,
-    WEST
+enum _orientation {
+    NORTH = 0,
+    EAST = 1,
+    SOUTH = 2,
+    WEST = 3,
 };
 
 typedef struct ivent_s {
@@ -35,7 +35,9 @@ typedef struct ai_s {
     int player_number;
     int x;
     int y;
-    int orientation;
+    int look_x;
+    int look_y;
+    enum _orientation orientation;
     int level;
     inventory_t *invent;
     char *team;

@@ -15,7 +15,6 @@ void take(int fd_cli, client_t *cli, server_t *server, char *command)
     type_obj = str_breaker(command, ' ', 2, 0);
     if (type_obj == NULL)
         error("Error : Malloc fail");
-    printf("TYPE OBJ = %s\n", type_obj);
     if (strncmp(type_obj, "food\n", 4) == 0) {
         if (ia_cell->q0 > 0) {
             send(fd_cli, "ok\n", 3, 0);

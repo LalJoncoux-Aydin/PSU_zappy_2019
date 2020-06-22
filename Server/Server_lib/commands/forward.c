@@ -36,9 +36,7 @@ __attribute__((unused))char *command)
 
     buff = malloc(sizeof(char) * MESSAGE_SIZE);
     if (buff == NULL)
-        exit(84);
-    if (!cli->ai || !buff)
-        return error("Error");
+        error("Error : malloc failed\n");
     set_move(cli, server);
     send(fd_cli, "ok\n", 3, 0);
 }

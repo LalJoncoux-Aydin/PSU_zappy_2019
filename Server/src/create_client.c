@@ -39,6 +39,7 @@ static client_t *init_client_ia(client_t *cli, server_t *server_v)
         cli->ai->orientation = NORTH;
     else
         cli->ai->orientation = SOUTH;
+    printf("orientation : %d\n", cli->ai->orientation);
     cli->ai->player_number = nbr_player++;
     cli->ai->level = 0;
     get_team_name(cli, server_v);
