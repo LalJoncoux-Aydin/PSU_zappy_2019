@@ -9,14 +9,10 @@
 
 void elevation(int fd_cli, client_t *clis, server_t *server, char *command)
 {
-    char *buff = NULL;
+    bool elev = false;
 
-    fd_cli = fd_cli;
-    clis = clis;
-    server = server;
-    command = command;
-    buff = malloc(sizeof(char) * MESSAGE_SIZE);
-    strcpy(buff, "Elevation underway\0");
-    send(fd_cli, buff, strlen(buff), 0);
-    free(buff);
+    if (elev == false)
+        send(fd_cli, "ko\n", 3, 0);
+    else
+        send(fd_cli, "Elevation underway\nCurrent level: k\n", 37, 0);
 }
